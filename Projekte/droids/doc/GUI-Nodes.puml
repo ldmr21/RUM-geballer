@@ -1,0 +1,112 @@
+@startuml
+'https://plantuml.com/use-case-diagram
+skinparam title {
+   FontName Arial
+}
+skinparam class {
+   BackgroundColor Yellow
+   BorderColor Black
+   FontName Arial
+   ArrowColor Black
+}
+skinparam usecase {
+   BackgroundColor LightGray
+   BorderColor Black
+   FontName Arial
+   ArrowColor Black
+}
+skinparam note {
+   BackgroundColor LightYellow
+   BorderColor Gray
+   FontName Arial
+   ArrowColor Black
+}
+skinparam package {
+   BorderColor Gray
+   BackgroundColor WhiteSmoke
+   Style node
+}
+skinparam Shadowing true
+skinparam defaultTextAlignment center
+
+title = GUI Node Structure
+
+(SimpleApplication::guiNode) as guiNode
+(DroidsApp::droidsGuiNode) as droidsGuiNode #LightBlue
+(guiNode) --> (droidsGuiNode)
+note top of (droidsGuiNode) : Szeneknoten von\nLegacyApplication::\nguiViewPort
+
+package MenuState {
+   (menuGuiNode) as guiOverlay
+   (droidsGuiNode) ..> guiOverlay
+
+   (mainDialog-\nContainer) as mainDialog
+   (loadDialog-\nContainer) as loadDialog
+   (saveDialog-\nContainer) as saveDialog
+   (error-\nContainer) as errorDialog
+}
+guiOverlay ..> mainDialog
+guiOverlay ..> loadDialog
+guiOverlay ..> saveDialog
+guiOverlay ..> errorDialog
+mainDialog -[hidden]- loadDialog
+loadDialog -[hidden]- saveDialog
+mainDialog -[hidden]- errorDialog
+
+package TextOverlay {
+   (overlay-\nGuiNode) as overlayGuiNode
+   (top-\nText) as topText
+   (bottom-\nText) as bottomText
+   (center-\nText) as centerText
+}
+
+droidsGuiNode ..> overlayGuiNode
+overlayGuiNode --> topText
+overlayGuiNode --> centerText
+overlayGuiNode --> bottomText
+centerText -[hidden]- topText
+centerText -[hidden]- bottomText
+
+package RadarView {
+   (radar-\nGuiNode) as radarGuiNode #LightBlue
+   (radar-\nNode) as radarNode
+   (center-\nNode) as centerNode
+   (itemNode) as itemNode
+   (back-\nground) as background
+   note right of radarGuiNode: Szeneknoten\nvon\nradarGuiVP
+}
+note bottom of itemNode: enthält Darstellung\ndes Modells
+guiNode --> radarGuiNode
+radarGuiNode ..> radarNode
+radarNode --> centerNode
+radarNode --> background
+centerNode --> itemNode
+
+package DebugView {
+   (debug-\nGuiNode) as debugGuiNode #LightBlue
+   (debug-\nNode) as debugNode
+   (center-\nNode) as dcenterNode
+   package Observation\nView {
+        (segments-\nNode) as ditemNode
+        note bottom of ditemNode: enthält Darstellung\nder Observation
+   }
+   package Map\nView {
+        (turn-\nNode) as turnNode
+        (observer-\nNode) as observerNode
+        note bottom of observerNode: enthält Darstellung des\nObservationTracker
+   }
+   (back-\nground) as dbackground
+   note right of debugGuiNode: Szeneknoten\nvon\ndebugGuiVP
+   note left of dcenterNode: enthält Linien als\nweitere Knoten
+   guiNode --> debugGuiNode
+   debugGuiNode ..> debugNode
+   debugNode --> dcenterNode
+   debugNode --> dbackground
+   dcenterNode -[hidden]- ditemNode
+   dcenterNode ..> ditemNode
+   dcenterNode -[hidden]- ditemNode
+   dcenterNode ..> turnNode
+   turnNode --> observerNode
+}
+
+@enduml

@@ -1,0 +1,51 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+'skinparam Shadowing true
+skinparam title {
+   FontName Arial
+}
+
+title = Navigation to target
+autonumber "<font color=blue> 0:"
+hide footbox
+
+[-> ":GameInput" ++: navigateTo(target)
+
+":GameInput" -> ":Droid" ++: getNavigator
+create "nav:DroidsNavigator"
+":Droid" -> "nav:DroidsNavigator": new
+return nav
+":GameInput" -> ":Droid" ++: getModel
+return model
+":GameInput" -> "model:DroidsModel" ++: getExecutor
+return exc
+":GameInput" -> "exc:ThreadPoolExecutor" ++: submit(task)
+participant ":Thread"
+create "fut: Future<List<Segment>>"
+"exc:ThreadPoolExecutor" -> "fut: Future<List<Segment>>"
+"exc:ThreadPoolExecutor" ->> ":Thread" ++: workOn(task)
+"exc:ThreadPoolExecutor" --> ":GameInput"--: fut
+":GameInput" -->[ --
+":Thread" -> "nav:DroidsNavigator" ++:findPathTo(target)
+'note over "nav:DroidsNavigator": Längere dauernde\nPfadberechnung
+
+loop bei jedem Frame bis die Pfadberechnung\n abgeschlossen ist und fut einen Wert \n erhalten hat
+[-> ":GameInput" ++: update(delta)
+note over ":GameInput": schaut nach, ob\nfut einen Wert hat
+return
+end
+
+return path
+":Thread" -> "fut: Future<List<Segment>>" ++: set(path)
+return
+deactivate ":Thread"
+'note across: bis der nächste Frame gezeichnet wird
+[-> ":GameInput" ++: update(delta)
+'note right: fut muss von :Thread seinen Wert erhalten haben
+":GameInput" -> "fut: Future<List<Segment>>" ++: get
+return path
+":GameInput" -> ":Droid" ++: setPath(path)
+return
+return
+@enduml

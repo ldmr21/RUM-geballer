@@ -1,0 +1,88 @@
+{
+  "width": 10,
+  "height": 10,
+  "items": [
+    {
+      "type": "droid",
+      "id": "id1",
+      "level": "Level 1",
+      "destroyed": false,
+      "x": 6.0,
+      "y": 2.0,
+      "angle": 2.5,
+      "radius": 0.45,
+      "lives": 4,
+      "reloadTime": 1.0,
+      "flag": null
+    },
+    {
+      "type": "maze",
+      "id": "id2",
+      "level": "Level 1",
+      "destroyed": false,
+      "coords": [
+        1.85,
+        5.15,
+        1.85,
+        4.85,
+        8.15,
+        4.85,
+        8.15,
+        5.15
+      ]
+    },
+    {
+      "type": "obstacle",
+      "id": "id3",
+      "level": "Level 1",
+      "destroyed": false,
+      "x": 5.0,
+      "y": 2.0,
+      "angle": -0.044790745,
+      "radius": 0.45
+    },
+    {
+      "type": "obstacle",
+      "id": "id4",
+      "level": "Level 1",
+      "destroyed": false,
+      "x": 5.0,
+      "y": 8.0,
+      "angle": -0.044790745,
+      "radius": 0.45
+    },
+    {
+      "type": "enemy",
+      "id": "id5",
+      "level": "Level 1",
+      "destroyed": false,
+      "x": 4.0,
+      "y": 8.0,
+      "angle": 1.666596,
+      "radius": 0.45,
+      "lives": 4,
+      "reloadTime": 1.0,
+      "flag": null
+    },
+    {
+      "type": "flag",
+      "id": "id6",
+      "level": "Level 1",
+      "destroyed": false,
+      "x": 4.0,
+      "y": 2.0,
+      "angle": 3.0,
+      "radius": 0.45
+    },
+    {
+      "type": "exit",
+      "id": "id7",
+      "level": "Level 1",
+      "destroyed": false,
+      "x": 1.0,
+      "y": 9.0,
+      "angle": -2.9638963,
+      "radius": 1.0
+    }
+  ]
+}

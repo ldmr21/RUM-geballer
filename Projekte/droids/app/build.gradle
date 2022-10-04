@@ -1,0 +1,29 @@
+import org.gradle.internal.os.OperatingSystem
+
+plugins {
+    id 'application'
+}
+
+description = 'Droids app (view & controller)'
+
+dependencies {
+    implementation "org.jmonkeyengine:jme3-lwjgl3:$jmeVer"
+    implementation "org.jmonkeyengine:jme3-plugins:$jmeVer"
+    implementation "org.jmonkeyengine:jme3-testdata:$jmeVer"
+    implementation 'com.simsilica:lemur:1.16.0'
+    //implementation 'com.simsilica:lemur-proto:1.13.0'
+    implementation 'org.codehaus.groovy:groovy-jsr223:3.0.11'
+    implementation 'org.slf4j:slf4j-nop:1.7.36'
+
+    implementation project(":graphics")
+    implementation project(":droids:model")
+}
+
+application {
+    if (OperatingSystem.current().isMacOsX())
+        applicationDefaultJvmArgs = ['-XstartOnFirstThread']
+    else
+        applicationDefaultJvmArgs = []
+    mainClass = 'pp.droids.DroidsApp'
+    applicationName = 'droids'
+}

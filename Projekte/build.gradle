@@ -1,0 +1,36 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+defaultTasks 'clean', 'installDist'
+
+description = 'ProgProj Projects'
+
+subprojects {
+    apply plugin: 'java'
+
+    repositories {
+        mavenCentral()
+    }
+
+    group = 'de.unibw.pp'
+    version = '1.0'
+
+    sourceCompatibility = 16
+    targetCompatibility = 16
+
+    compileJava.options.encoding = 'UTF-8'
+
+    test {
+        useJUnit()
+    }
+
+    dependencies {
+        testImplementation 'junit:junit:4.13'
+    }
+}
+
+project.ext {
+    jmeVer = '3.5.2-stable'
+}

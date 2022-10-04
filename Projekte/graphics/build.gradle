@@ -1,0 +1,11 @@
+plugins {
+    id 'java-library'
+}
+
+description = 'Auxiliary graphics classes'
+
+dependencies {
+    api "org.jmonkeyengine:jme3-core:$jmeVer"
+
+    api project(':common')
+}

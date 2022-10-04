@@ -1,0 +1,96 @@
+{
+  "width": 25,
+  "height": 15,
+  "items": [
+    {
+      "level": "Level",
+      "type": "droid",
+      "lives": 40,
+      "x": 12,
+      "y": 7,
+      "angle": 0
+    },
+    {
+      "level": "Level",
+      "type": "obstacle",
+      "x": 9,
+      "y": 9
+    },
+    {
+      "level": "Level",
+      "type": "obstacle",
+      "x": 4,
+      "y": 8
+    },
+    {
+      "level": "Level",
+      "type": "obstacle",
+      "x": 22,
+      "y": 7
+    },
+    {
+      "level": "Level",
+      "type": "obstacle",
+      "x": 1,
+      "y": 8
+    },
+    {
+      "level": "Level",
+      "type": "obstacle",
+      "x": 2,
+      "y": 12
+    },
+    {
+      "level": "Level",
+      "type": "enemy",
+      "lives": 4,
+      "x": 13,
+      "y": 12
+    },
+    {
+      "level": "Level",
+      "type": "enemy",
+      "lives": 4,
+      "x": 10,
+      "y": 11
+    },
+    {
+      "level": "Level",
+      "type": "enemy",
+      "lives": 4,
+      "x": 4,
+      "y": 9
+    },
+    {
+      "level": "Level",
+      "type": "enemy",
+      "lives": 4,
+      "x": 12,
+      "y": 10
+    },
+    {
+      "level": "Level",
+      "type": "enemy",
+      "lives": 4,
+      "x": 21,
+      "y": 12
+    },
+    {
+      "level": "Level",
+      "type": "rocket",
+      "x": 9,
+      "y": 7,
+      "targetX": 0,
+      "targetY": 7
+    },
+    {
+      "level": "Level",
+      "type": "rocket",
+      "x": 9,
+      "y": 5,
+      "targetX": 0,
+      "targetY": 5
+    }
+  ]
+}
+

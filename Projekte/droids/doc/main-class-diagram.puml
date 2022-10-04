@@ -1,0 +1,108 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+skinparam linetype ortho
+skinparam Shadowing true
+skinparam nodesep 40
+skinparam ranksep 40
+skinparam title {
+   FontName Arial
+}
+skinparam package {
+   Style rectangle
+   BorderColor Gray
+}
+skinparam class {
+   BackgroundColor LightGoldenRodYellow
+   BorderColor DarkRed
+   FontName Arial
+   ArrowColor Black
+}
+'skinparam groupInheritance 2
+
+hide empty members
+'hide circle
+
+title = Main Class Diagram
+
+namespace app #F8F8FF {
+   abstract class SimpleApplication
+   abstract class AbstractAppState
+   abstract class ModelViewSynchronizer
+
+   AbstractAppState <|-[#DarkRed]- DebugView
+   AbstractAppState <|-[#DarkRed]- MenuState
+   AbstractAppState <|-[#DarkRed]- TextOverlay
+   AbstractAppState <|-[#DarkRed]- GameInput
+   AbstractAppState <|-[#DarkRed]- GameSound
+   AbstractAppState <|-[#DarkRed]- RadarView
+   AbstractAppState <|-[#DarkRed]- GameState
+   ModelViewSynchronizer --> GameState
+
+   class DroidsApp #Gold {
+   {static} main(String[])
+   }
+
+   DroidsApp -[#DarkRed]-|> SimpleApplication
+   GameInput --> DroidsApp
+   GameSound --> DroidsApp
+   GameState --> DroidsApp
+   MenuState --> DroidsApp
+   TextOverlay --> DroidsApp
+   RadarView --> DroidsApp
+   DebugView --> DroidsApp
+   MenuState -[hidden]- GameInput
+   GameInput -[hidden]- GameSound
+   GameSound -[hidden]- TextOverlay
+   DebugView -[hidden]- GameState
+   GameState -[hidden] GameSound
+   DroidsApp -l-> DroidsAppConfig
+}
+
+namespace model #F8FFF8 {
+   interface Debugee
+   DroidsModel --> DroidsConfig
+   app.GameState -> DroidsModel
+   app.GameState --> app.ModelViewSynchronizer
+   app.RadarView --> app.ModelViewSynchronizer
+   DroidsModel --> DroidsMap
+
+   interface Iterable<Item>
+   Iterable <|.. MapLevel
+   MapLevel --> DroidsMap
+   abstract class Item
+   abstract class BoundedItem
+   abstract class DamageReceiver
+   abstract class FlagCaptor
+   abstract class Shooter
+   MapLevel <- Item
+   Item <|-[#DarkRed]-- BoundedItem
+   Item <|-[#DarkRed] Maze
+   DroidsModel <--- Item
+   BoundedItem <|-[#DarkRed]- Flag
+   BoundedItem <|-[#DarkRed]- Exit
+   BoundedItem <|-[#DarkRed]- DamageReceiver
+   BoundedItem <|-[#DarkRed]- Rocket
+   BoundedItem <|-[#DarkRed]-- Projectile
+   BoundedItem <|-[#DarkRed]--- Obstacle
+   DamageReceiver <|-[#DarkRed]- FlagCaptor
+   Flag <- FlagCaptor
+   FlagCaptor <|-[#DarkRed]- Shooter
+   Shooter <|-[#DarkRed]- Enemy
+   Shooter <|-[#DarkRed]- Droid
+   Debugee <|....[#DarkRed].. Droid
+   DroidsMap ----> "1" Droid
+   DroidsMap -> "*" Item
+   DroidsConfig <|-[#DarkRed] app.DroidsAppConfig
+}
+
+namespace npc #Snow {
+   interface NonPlayerCharacter
+   NonPlayerCharacter <-- NonPlayerCharacterBehavior
+}
+
+npc.NonPlayerCharacter <|.[#DarkRed]. model.Enemy
+model.Enemy --> npc.NonPlayerCharacterBehavior
+app.SimpleApplication -[hidden]- npc.NonPlayerCharacter
+app.DebugView -> model.Debugee
+@enduml

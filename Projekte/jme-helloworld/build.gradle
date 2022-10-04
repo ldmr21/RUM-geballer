@@ -1,0 +1,56 @@
+import org.gradle.internal.os.OperatingSystem
+
+plugins {
+    id 'application'
+}
+
+description = 'Hello world examples for jME'
+
+group 'jme3-helloworld'
+version '1.0'
+
+dependencies {
+    implementation "org.jmonkeyengine:jme3-lwjgl3:$jmeVer"
+    implementation "org.jmonkeyengine:jme3-plugins:$jmeVer"
+    implementation "org.jmonkeyengine:jme3-testdata:$jmeVer"
+    implementation "org.jmonkeyengine:jme3-jogg:$jmeVer"
+    implementation "org.jmonkeyengine:jme3-jbullet:$jmeVer"
+}
+
+def jvmArgs() {
+    if (OperatingSystem.current().isMacOsX())
+        return ['-XstartOnFirstThread']
+    else
+        return []
+}
+
+// creates the "main" hello world application
+application {
+    mainClassName = "jme3test.helloworld.HelloJME3"
+    applicationName = "HelloJME3"
+    applicationDefaultJvmArgs = jvmArgs()
+}
+
+task createAllStartScripts() {
+    // just a placeholder
+}
+
+// creates the other hello world applications
+['HelloAnimation', 'HelloAssets', 'HelloAudio', 'HelloCollision',
+ 'HelloEffects', 'HelloInput', 'HelloLoop', 'HelloMaterial', 'HelloNode',
+ 'HelloPhysics', 'HelloPicking', 'HelloTerrain', 'HelloTerrainCollision'
+].each() { className ->
+    def t = tasks.create(name: className + 'StartScript', type: CreateStartScripts) {
+        mainClassName = 'jme3test.helloworld.' + className
+        applicationName = className
+        classpath = startScripts.classpath
+        outputDir = startScripts.outputDir
+        defaultJvmOpts = jvmArgs()
+    }
+    applicationDistribution.into("bin") {
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+        from(t)
+        fileMode = 0755
+    }
+    createAllStartScripts.dependsOn(t)
+}

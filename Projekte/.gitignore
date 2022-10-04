@@ -1,0 +1,26 @@
+# Gradle
+.gradle
+build
+
+# VSC
+bin
+
+# IntelliJ
+*.iml
+.idea
+out
+
+# Eclipse
+.classpath
+.project
+
+# Libraries
+*.so
+*.dylib
+*.dll
+*.jar
+*.class
+
+.DS_Store
+!gradle/wrapper/gradle-wrapper.jar
+

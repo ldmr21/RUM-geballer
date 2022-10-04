@@ -1,0 +1,15 @@
+plugins {
+    id 'application'
+}
+
+description = 'Droids converter for resources'
+
+dependencies {
+    implementation "org.jmonkeyengine:jme3-lwjgl:$jmeVer"
+    implementation "org.jmonkeyengine:jme3-plugins:$jmeVer"
+    implementation "org.jmonkeyengine:jme3-testdata:$jmeVer"
+}
+
+application {
+    mainClass = 'pp.droids.exporter.ModelExporter'
+}

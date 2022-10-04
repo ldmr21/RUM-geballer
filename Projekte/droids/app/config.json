@@ -1,0 +1,18 @@
+{
+  "resolution width": 800,
+  "resolution height": 600,
+  "window title": "Droids game",
+  "show statistics": false,
+  "overlay bottom color": {
+    "red": 1,
+    "green": 0,
+    "blue": 1,
+    "alpha": 0.5
+  },
+  "map width": 30,
+  "map height": 25,
+  "number of levels": 2,
+  "number of enemies": 2,
+  "number of obstacles": 10,
+  "viewing area": 120
+}

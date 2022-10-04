@@ -1,0 +1,11 @@
+plugins {
+    id 'java-library'
+}
+
+description = 'Droids model'
+
+dependencies {
+    api 'com.fasterxml.jackson.core:jackson-databind:2.13.2'
+    api project(':common')
+    api project(':droids:npc')
+}

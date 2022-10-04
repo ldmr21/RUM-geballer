@@ -1,0 +1,8 @@
+include(':droids:app')
+include(':droids:model')
+include(':droids:npc')
+include(':droids:converter')
+include(':droids:assignments')
+include(':common')
+include(':graphics')
+include(':jme-helloworld')

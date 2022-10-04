@@ -1,0 +1,44 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+'set namespaceSeparator none
+skinparam linetype ortho
+skinparam Shadowing true
+skinparam title {
+   FontName Arial
+}
+skinparam package {
+   Style rectangle
+   BorderColor Gray
+}
+skinparam class {
+   BackgroundColor LightGoldenRodYellow
+   BorderColor DarkRed
+   FontName Arial
+   ArrowColor Black
+}
+hide empty members
+'hide circle
+
+title = Class Diagram of Externalizables
+
+class ExternalMap
+abstract class ExternalItem
+abstract class ExternalBoundedItem
+abstract class ExternalShooter
+ExternalMap --> "*" ExternalItem
+ExternalItem <|-[#DarkRed]- ExternalBoundedItem
+ExternalItem <|-[#DarkRed]- ExternalMaze
+ExternalBoundedItem <|-[#DarkRed]- ExternalShooter
+ExternalShooter <|-[#DarkRed]- ExternalDroid
+ExternalShooter <|-[#DarkRed]- ExternalEnemy
+ExternalBoundedItem <|-[#DarkRed]- ExternalObstacle
+ExternalBoundedItem <|-[#DarkRed]- ExternalRocket
+ExternalBoundedItem <|-[#DarkRed]- ExternalExit
+ExternalBoundedItem <|-[#DarkRed]- ExternalFlag
+ExternalDroid -[hidden]- ExternalEnemy
+ExternalObstacle -[hidden]- ExternalRocket
+ExternalRocket -[hidden]- ExternalExit
+ExternalFlag -[hidden]- ExternalExit
+
+@enduml
