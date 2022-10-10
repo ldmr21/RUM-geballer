@@ -170,7 +170,7 @@ public interface SegmentLike {
      */
     default float quotientDist(Position pos, float q) {
         final float dx = (1f - q) * from().getX() + q * to().getX() - pos.getX();
-        final float dy = (1f - q) * from().getY() + q * to().getX() - pos.getY();
+        final float dy = (1f - q) * from().getY() + q * to().getY() - pos.getY();
         return sqrt(dx * dx + dy * dy);
     }
 
