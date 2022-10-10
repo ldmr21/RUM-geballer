@@ -42,6 +42,7 @@ class GameInput extends AbstractAppState {
     private static final String RADAR_MAP = "RADAR";
     private static final String NAVIGATE = "NAVIGATE";
     private static final String DEBUG = "DEBUG";
+    private static final String MUSIC = "MUSIC"; //7b Step3: die Musik mit Keytrigger wird eingeführt.
 
     private DroidsApp app;
     private Future<List<Segment>> futurePath;
@@ -59,6 +60,7 @@ class GameInput extends AbstractAppState {
         super.initialize(stateManager, app);
         this.app = (DroidsApp) app;
         final InputManager inputManager = app.getInputManager();
+        inputManager.addMapping(MUSIC, new KeyTrigger(KeyInput.KEY_B)); //Step4: der Keytrigger wird der Taste "M" zugewiesen
         inputManager.addMapping(SHOOT, new KeyTrigger(KeyInput.KEY_SPACE));
         inputManager.addMapping(LEFT, new KeyTrigger(KeyInput.KEY_A), new KeyTrigger(KeyInput.KEY_LEFT));
         inputManager.addMapping(RIGHT, new KeyTrigger(KeyInput.KEY_D), new KeyTrigger(KeyInput.KEY_RIGHT));
@@ -94,7 +96,7 @@ class GameInput extends AbstractAppState {
     private void enableState() {
         final InputManager inputManager = app.getInputManager();
         inputManager.addListener(analogListener, SHOOT, LEFT, RIGHT, FORWARD, BACKWARD);
-        inputManager.addListener(actionListener, MUTE, RADAR_MAP, NAVIGATE, DEBUG);
+        inputManager.addListener(actionListener, MUTE, RADAR_MAP, NAVIGATE, DEBUG, MUSIC);
     }
 
     /**
@@ -127,6 +129,7 @@ class GameInput extends AbstractAppState {
     private final ActionListener actionListener = (name, isPressed, tpf) -> {
         if (isPressed && app != null) {
             switch (name) {
+                case MUSIC -> toggleMusic(); //Step6: die Aktion wird dem ein und ausschalten zugewiesen. (mit der Taste "M")
                 case MUTE -> toggleMuted();
                 case RADAR_MAP -> toggleRadarMap();
                 case NAVIGATE -> navigate();
@@ -157,6 +160,17 @@ class GameInput extends AbstractAppState {
     private void toggleMuted() {
         final GameSound sound = app.getStateManager().getState(GameSound.class);
         sound.setEnabled(!sound.isEnabled());
+    }
+
+    //Step5: Methode um Musik an und aus zu stellen
+    //Es wird auf die GameSound klasse zugegriffen und mit dem Getter die Musik verändert.
+    private void toggleMusic(){
+        final GameSound music = app.getStateManager().getState(GameSound.class);
+        if(music.getBackground_music().getVolume() > 0){
+        music.getBackground_music().setVolume(0);
+        }
+        else
+            music.getBackground_music().setVolume(1);
     }
 
     /**

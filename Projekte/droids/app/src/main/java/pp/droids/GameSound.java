@@ -28,10 +28,13 @@ public class GameSound extends AbstractAppState {
     private static final Preferences PREFS = Prefs.getPreferences(GameSound.class);
     private static final String ENABLED_PREF = "enabled"; //NON-NLS
 
+    private AudioNode background_music;
     private DroidsApp app;
     private AudioNode gunSound;
     private AudioNode killedSound;
     private AudioNode hitSound;
+
+
 
     /**
      * Shows, if sound is enabled in the preferences.
@@ -67,9 +70,18 @@ public class GameSound extends AbstractAppState {
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
         this.app = (DroidsApp) app;
+        background_music = loadSound("Sound/Music/JAZZ.wav");//7b step1: background music eingefügt/definiert
+        background_music.setLooping(true); //Musik loopt
+        background_music.setVolume(1); //Die Lautstärke der WAV datei "JAZZ" wird auf den Wert eins gesetzt um diese im hintergrund hören zu können.
+        background_music.setPositional(false);//keine bestimmte Position/Stereo sound
+        background_music.play(); // Musik muss gestartet werden
         gunSound = loadSound("Sound/Effects/Gun.wav"); //NON-NLS
         killedSound = loadSound("Sound/Effects/killed.wav"); //NON-NLS
         hitSound = loadSound("Sound/Effects/hit.wav"); //NON-NLS
+    }
+    //7b Step 2: Getter wird initialisiert, um die Hintergrundmusik i anderen klassen verändern zu können
+    public AudioNode getBackground_music(){
+        return background_music;
     }
 
     /**
