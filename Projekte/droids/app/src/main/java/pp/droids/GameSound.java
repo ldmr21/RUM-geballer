@@ -70,7 +70,7 @@ public class GameSound extends AbstractAppState {
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
         this.app = (DroidsApp) app;
-        background_music = loadSound("Sound/Music/JAZZ.wav");//7b step1: background music eingefügt/definiert
+        background_music = loadSound("Sound/Music/PIRATES.wav");//7b step1: background music eingefügt/definiert
         background_music.setLooping(true); //Musik loopt
         background_music.setVolume(1); //Die Lautstärke der WAV datei "JAZZ" wird auf den Wert eins gesetzt um diese im hintergrund hören zu können.
         background_music.setPositional(false);//keine bestimmte Position/Stereo sound
