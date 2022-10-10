@@ -24,6 +24,9 @@ import java.util.logging.LogManager;
  * <code>DroidsApp</code> extends the class {@link com.jme3.app.SimpleApplication}.
  * This is the main class of the game.
  */
+
+//Ich bin Dennis und hab nen harten Pimmel und so
+
 public class DroidsApp extends SimpleApplication {
     private static final Logger LOGGER = System.getLogger(DroidsApp.class.getName());
     private static final String CONFIG_JSON = "config.json";

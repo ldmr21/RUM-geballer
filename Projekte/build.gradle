@@ -34,3 +34,5 @@ subprojects {
 project.ext {
     jmeVer = '3.5.2-stable'
 }
+sourceCompatibility = JavaVersion.VERSION_16
+targetCompatibility = JavaVersion.VERSION_16
