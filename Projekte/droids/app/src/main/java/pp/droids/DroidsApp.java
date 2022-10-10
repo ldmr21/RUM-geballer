@@ -31,7 +31,7 @@ public class DroidsApp extends SimpleApplication {
     private final DroidsAppConfig config;
     private final Node droidsGuiNode = new Node();
     private Draw draw;
-
+// Hallo, Dennis!
     static {
         // Configure logging
         LogManager manager = LogManager.getLogManager();
