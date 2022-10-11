@@ -82,7 +82,7 @@ public class GameSound extends AbstractAppState {
         killedSound = loadSound("Sound/Effects/killed.wav"); //NON-NLS
         hitSound = loadSound("Sound/Effects/hit.wav"); //NON-NLS
     }
-    /**7b Step 2: Getter, um die Hintergrundmusik abrufen zu können
+    /**Getter, um die Hintergrundmusik abrufen zu können
      * @return background_music vom Typ AudioNode
      */
     public AudioNode getBackground_music(){
