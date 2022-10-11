@@ -1,5 +1,6 @@
 package pp.droids.model;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import pp.util.Position;
 import pp.util.Segment;
 import pp.util.map.Observation;
@@ -7,6 +8,9 @@ import pp.util.map.ObservationMap;
 import pp.util.navigation.Navigable;
 import pp.util.navigation.Navigator;
 
+import java.io.File;
+import java.io.IOException;
+import java.lang.System.Logger.Level;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -24,6 +28,8 @@ import static pp.util.FloatMath.sin;
  * Represents a droid
  */
 public class Droid extends Shooter implements Navigable<Segment>, Debugee {
+
+
     /**
      * A private enum containing states for moving forward, backwards or not moving.
      */
@@ -37,7 +43,7 @@ public class Droid extends Shooter implements Navigable<Segment>, Debugee {
     /**
      * The number of lives of the droid.
      */
-    private static final int LIVES = 40;
+    //private final int LIVES = config.getlives();
 
     /**
      * The standard bounding radius of a droid.
@@ -112,8 +118,9 @@ public class Droid extends Shooter implements Navigable<Segment>, Debugee {
      *
      * @param model the game model that has this droid.
      */
+
     public Droid(DroidsModel model) {
-        this(model, BOUNDING_RADIUS, LIVES, STANDARD_RELOAD_TIME);
+        this(model, BOUNDING_RADIUS, model.getConfig().getLives(), STANDARD_RELOAD_TIME);
     }
 
     /**
@@ -379,4 +386,19 @@ public class Droid extends Shooter implements Navigable<Segment>, Debugee {
     public void accept(VoidVisitor v) {
         v.visit(this);
     }
+
+//    private static DroidsConfig loadConfig() {
+//        final File file = new File(CONFIG_JSON);
+//        if (file.exists())
+//            try {
+//                final DroidsConfig conf = new ObjectMapper().readValue(file, DroidsConfig.class);
+//                LOGGER.log(Level.INFO, "read config from {0}", file.getAbsolutePath()); //NON-NLS
+//                return conf;
+//            }
+//            catch (IOException e) {
+//                LOGGER.log(Level.WARNING, "when trying to read " + file.getAbsolutePath(), e); //NON-NLS
+//            }
+//        LOGGER.log(Level.INFO, "using default configuration"); //NON-NLS
+//        return new DroidsConfig();
+//    }
 }

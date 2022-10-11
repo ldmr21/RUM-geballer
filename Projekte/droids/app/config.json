@@ -14,5 +14,6 @@
   "number of levels": 2,
   "number of enemies": 2,
   "number of obstacles": 10,
-  "viewing area": 120
+  "viewing area": 120,
+  "number of lives": 20
 }

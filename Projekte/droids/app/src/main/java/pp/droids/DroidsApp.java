@@ -25,7 +25,6 @@ import java.util.logging.LogManager;
  * This is the main class of the game.
  */
 
-//Ich bin Dennis und hab nen harten Pimmel und so
 
 public class DroidsApp extends SimpleApplication {
     private static final Logger LOGGER = System.getLogger(DroidsApp.class.getName());
@@ -34,7 +33,7 @@ public class DroidsApp extends SimpleApplication {
     private final DroidsAppConfig config;
     private final Node droidsGuiNode = new Node();
     private Draw draw;
-// Hallo, Dennis!
+
     static {
         // Configure logging
         LogManager manager = LogManager.getLogManager();

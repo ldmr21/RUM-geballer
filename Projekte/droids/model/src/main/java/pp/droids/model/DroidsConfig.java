@@ -137,4 +137,15 @@ public class DroidsConfig {
     public float getViewingArea() {
         return viewingArea * DEG_TO_RAD;
     }
+
+    /**
+     *
+     */
+    @JsonProperty("number of lives") //NON-NLS
+    private int lives = 10;
+
+    @JsonIgnore
+    public int getLives() {
+        return lives;
+    }
 }
