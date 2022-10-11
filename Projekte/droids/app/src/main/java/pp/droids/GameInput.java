@@ -42,9 +42,9 @@ class GameInput extends AbstractAppState {
     private static final String RADAR_MAP = "RADAR";
     private static final String NAVIGATE = "NAVIGATE";
     private static final String DEBUG = "DEBUG";
-    /**7b Step3: die Musik mit Keytrigger wird eingeführt.
-     * @param MUSIC initialize the music String for the Keytrigger
-     * */
+    /**
+     *app states werden um MUSIC erweitert
+     */
     private static final String MUSIC = "MUSIC";
 
     private DroidsApp app;
@@ -55,6 +55,8 @@ class GameInput extends AbstractAppState {
      * <p>
      * It overrides {@link com.jme3.app.state.AbstractAppState#initialize(com.jme3.app.state.AppStateManager, com.jme3.app.Application)}
      *
+     * Keytrigger für MUSIC wird der Taste "B" zugewiesen
+     *
      * @param stateManager The state manager
      * @param app          The application
      */
@@ -63,8 +65,6 @@ class GameInput extends AbstractAppState {
         super.initialize(stateManager, app);
         this.app = (DroidsApp) app;
         final InputManager inputManager = app.getInputManager();
-        /**Step4: der Keytrigger wird der Taste "B" zugewiesen
-         */
         inputManager.addMapping(MUSIC, new KeyTrigger(KeyInput.KEY_B));
         inputManager.addMapping(SHOOT, new KeyTrigger(KeyInput.KEY_SPACE));
         inputManager.addMapping(LEFT, new KeyTrigger(KeyInput.KEY_A), new KeyTrigger(KeyInput.KEY_LEFT));
@@ -130,11 +130,12 @@ class GameInput extends AbstractAppState {
 
     /**
      * Receives input events and calls th corresponding method.
+     *
+     * Der Aktion MUSIC wird die Methode toggleMusic() zugewiesen
      */
     private final ActionListener actionListener = (name, isPressed, tpf) -> {
         if (isPressed && app != null) {
             switch (name) {
-                /**Step6: die Aktion wird dem ein und ausschalten zugewiesen. (mit der Taste "B") */
                 case MUSIC -> toggleMusic();
                 case MUTE -> toggleMuted();
                 case RADAR_MAP -> toggleRadarMap();
@@ -168,7 +169,7 @@ class GameInput extends AbstractAppState {
         sound.setEnabled(!sound.isEnabled());
     }
 
-    /**Step5: Methode um Musik an und aus zu stellen
+    /**Methode um Musik an und aus zu stellen
      * Es wird auf die GameSound klasse zugegriffen und mit dem Getter die Musik verändert.
      */
     private void toggleMusic(){
