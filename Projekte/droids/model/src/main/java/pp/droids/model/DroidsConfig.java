@@ -148,4 +148,9 @@ public class DroidsConfig {
     public int getLives() {
         return lives;
     }
+
+    @JsonIgnore
+    public int dinge() {
+        return 42069;
+    }
 }
