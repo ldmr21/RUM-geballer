@@ -137,4 +137,9 @@ public class DroidsConfig {
     public float getViewingArea() {
         return viewingArea * DEG_TO_RAD;
     }
+
+    @JsonIgnore
+    public int dinge() {
+        return 42069;
+    }
 }
