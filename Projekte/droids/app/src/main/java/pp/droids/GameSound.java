@@ -28,6 +28,7 @@ public class GameSound extends AbstractAppState {
     private static final Preferences PREFS = Prefs.getPreferences(GameSound.class);
     private static final String ENABLED_PREF = "enabled"; //NON-NLS
 
+    /** background_music initalize AudioNode for background music */
     private AudioNode background_music;
     private DroidsApp app;
     private AudioNode gunSound;
@@ -62,6 +63,8 @@ public class GameSound extends AbstractAppState {
     /**
      * Initializes different sounds.
      * It overrides {@link com.jme3.app.state.AbstractAppState#initialize(com.jme3.app.state.AppStateManager, com.jme3.app.Application)}
+     * Backgroundmusic wird definiert, die Lautstärke auf eins gesetzt, die Audiodatei wird dauerhaft wiederholt und sie soll Global hörbar sein.
+     *
      *
      * @param stateManager The state manager
      * @param app          The application
@@ -71,15 +74,17 @@ public class GameSound extends AbstractAppState {
         super.initialize(stateManager, app);
         this.app = (DroidsApp) app;
         background_music = loadSound("Sound/Music/PIRATES.wav");//7b step1: background music eingefügt/definiert
-        background_music.setLooping(true); //Musik loopt
-        background_music.setVolume(1); //Die Lautstärke der WAV datei "JAZZ" wird auf den Wert eins gesetzt um diese im hintergrund hören zu können.
-        background_music.setPositional(false);//keine bestimmte Position/Stereo sound
-        background_music.play(); // Musik muss gestartet werden
+        background_music.setLooping(true);
+        background_music.setVolume(1);
+        background_music.setPositional(false);
+        background_music.play();
         gunSound = loadSound("Sound/Effects/Gun.wav"); //NON-NLS
         killedSound = loadSound("Sound/Effects/killed.wav"); //NON-NLS
         hitSound = loadSound("Sound/Effects/hit.wav"); //NON-NLS
     }
-    //7b Step 2: Getter wird initialisiert, um die Hintergrundmusik i anderen klassen verändern zu können
+    /**7b Step 2: Getter wird initialisiert, um die Hintergrundmusik i anderen klassen verändern zu können
+     * @return background_music from type AudioNode
+     */
     public AudioNode getBackground_music(){
         return background_music;
     }
