@@ -151,6 +151,6 @@ public class DroidsConfig {
 
     @JsonIgnore
     public int dinge() {
-        return 42069;
+        return 42;
     }
 }
