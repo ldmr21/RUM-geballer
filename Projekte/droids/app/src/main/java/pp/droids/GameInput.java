@@ -47,6 +47,10 @@ class GameInput extends AbstractAppState {
      */
     private static final String MUSIC = "MUSIC";
 
+    //Schritt nach links/rechts
+    private static final String MOVELEFT = "MOVELEFT";
+    private static final String MOVERIGHT = "MOVERIGHT";
+
     private DroidsApp app;
     private Future<List<Segment>> futurePath;
 
@@ -75,6 +79,8 @@ class GameInput extends AbstractAppState {
         inputManager.addMapping(MUTE, new KeyTrigger(KeyInput.KEY_M));
         inputManager.addMapping(RADAR_MAP, new KeyTrigger(KeyInput.KEY_R));
         inputManager.addMapping(NAVIGATE, new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
+        inputManager.addMapping(MOVELEFT, new KeyTrigger(KeyInput.KEY_Q));
+        inputManager.addMapping(MOVERIGHT, new KeyTrigger(KeyInput.KEY_E));
         if (isEnabled()) enableState();
     }
 
@@ -100,7 +106,7 @@ class GameInput extends AbstractAppState {
      */
     private void enableState() {
         final InputManager inputManager = app.getInputManager();
-        inputManager.addListener(analogListener, SHOOT, LEFT, RIGHT, FORWARD, BACKWARD);
+        inputManager.addListener(analogListener, SHOOT, LEFT, RIGHT, FORWARD, BACKWARD, MOVELEFT, MOVERIGHT);
         inputManager.addListener(actionListener, MUTE, RADAR_MAP, NAVIGATE, DEBUG, MUSIC);
     }
 
@@ -124,6 +130,8 @@ class GameInput extends AbstractAppState {
                 case RIGHT -> getDroid().turnRight();
                 case FORWARD -> getDroid().goForward();
                 case BACKWARD -> getDroid().goBackward();
+                case MOVELEFT -> getDroid().stepLeft();
+                case MOVERIGHT -> getDroid().stepRight();
                 default -> { /* do nothing */}
             }
     };

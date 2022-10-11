@@ -20,6 +20,7 @@ import java.util.Set;
 
 import static pp.util.Angle.normalizeAngle;
 import static pp.util.FloatMath.FLT_EPSILON;
+import static pp.util.FloatMath.PI;
 import static pp.util.FloatMath.atan2;
 import static pp.util.FloatMath.cos;
 import static pp.util.FloatMath.sin;
@@ -34,6 +35,11 @@ public class Droid extends Shooter implements Navigable<Segment>, Debugee {
      * A private enum containing states for moving forward, backwards or not moving.
      */
     private enum ForwardState {STOP, FORWARD, BACKWARD}
+
+    /**
+     * A private enum containing states for side stepping left, right or not moving.
+     */
+    private enum SidestepState {STOP, LEFT, RIGHT}
 
     /**
      * A private enum containing states for moving left, right or not moving.
@@ -54,6 +60,11 @@ public class Droid extends Shooter implements Navigable<Segment>, Debugee {
      * The forward speed of the droid in length units per second.
      */
     private static final float FORWARD_SPEED = 4f;
+
+    /**
+     * The side speed of the droid in length units per second.
+     */
+    private static final float SIDE_SPEED = 4f;
 
     /**
      * The categories of all entities that are collected in observation maps.
@@ -84,6 +95,11 @@ public class Droid extends Shooter implements Navigable<Segment>, Debugee {
      * The current forward state of the droid.
      */
     private ForwardState forwardState;
+
+    /**
+     * The current sidestep state of the droid.
+     */
+    private SidestepState sidestepState;
 
     /**
      * Maps each level to an ObservationMap of its own.
@@ -134,6 +150,7 @@ public class Droid extends Shooter implements Navigable<Segment>, Debugee {
     private void resetState() {
         forwardState = ForwardState.STOP;
         turnState = TurnState.STOP;
+        sidestepState = SidestepState.STOP;
     }
 
     /**
@@ -153,6 +170,26 @@ public class Droid extends Shooter implements Navigable<Segment>, Debugee {
         forwardState = switch (forwardState) {
             case BACKWARD, STOP -> ForwardState.BACKWARD;
             case FORWARD -> ForwardState.STOP;
+        };
+    }
+
+    /**
+     * Handles a step left command.
+     */
+    public void stepLeft(){
+        sidestepState = switch(sidestepState){
+            case LEFT, STOP -> SidestepState.LEFT;
+            case RIGHT -> SidestepState.STOP;
+        };
+    }
+
+    /**
+     * Handles a step right command.
+     */
+    public void stepRight(){
+        sidestepState = switch(sidestepState){
+            case RIGHT, STOP -> SidestepState.RIGHT;
+            case LEFT -> SidestepState.STOP;
         };
     }
 
@@ -202,6 +239,17 @@ public class Droid extends Shooter implements Navigable<Segment>, Debugee {
     }
 
     /**
+     * Returns the specific side speed of the droid.
+     */
+    private float getSideSpeed() {
+        return switch (sidestepState) {
+            case RIGHT -> SIDE_SPEED;
+            case LEFT -> -SIDE_SPEED;
+            case STOP -> 0f;
+        };
+    }
+
+    /**
      * Returns the specific turn speed of the droid.
      */
     private float getTurnSpeed() {
@@ -221,6 +269,11 @@ public class Droid extends Shooter implements Navigable<Segment>, Debugee {
         if (getSpeed() != 0f) {
             setPosAvoidingCollisions(getX() + getSpeed() * delta * cos(getRotation()),
                                      getY() + getSpeed() * delta * sin(getRotation()));
+            path.clear();
+        }
+        if (getSideSpeed() != 0f) {
+            setPosAvoidingCollisions(getX() + getSideSpeed() * delta * cos(getRotation() - PI/2),
+                                     getY() + getSideSpeed() * delta * sin(getRotation() - PI/2));
             path.clear();
         }
         if (getTurnSpeed() != 0f) {
