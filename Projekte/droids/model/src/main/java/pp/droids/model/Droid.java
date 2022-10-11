@@ -41,11 +41,6 @@ public class Droid extends Shooter implements Navigable<Segment>, Debugee {
     private enum TurnState {STOP, LEFT, RIGHT}
 
     /**
-     * The number of lives of the droid.
-     */
-    //private final int LIVES = config.getlives();
-
-    /**
      * The standard bounding radius of a droid.
      */
     public static final float BOUNDING_RADIUS = .45f;
@@ -114,13 +109,13 @@ public class Droid extends Shooter implements Navigable<Segment>, Debugee {
     }
 
     /**
-     * Creates a droid with standard parameters.
+     * Creates a droid with standard parameters and variable numbers of lives.
      *
      * @param model the game model that has this droid.
      */
 
     public Droid(DroidsModel model) {
-        this(model, BOUNDING_RADIUS, model.getConfig().getLives(), STANDARD_RELOAD_TIME);
+        this(model, BOUNDING_RADIUS, model.getConfig().getDroidLives(), STANDARD_RELOAD_TIME);
     }
 
     /**
@@ -387,18 +382,4 @@ public class Droid extends Shooter implements Navigable<Segment>, Debugee {
         v.visit(this);
     }
 
-//    private static DroidsConfig loadConfig() {
-//        final File file = new File(CONFIG_JSON);
-//        if (file.exists())
-//            try {
-//                final DroidsConfig conf = new ObjectMapper().readValue(file, DroidsConfig.class);
-//                LOGGER.log(Level.INFO, "read config from {0}", file.getAbsolutePath()); //NON-NLS
-//                return conf;
-//            }
-//            catch (IOException e) {
-//                LOGGER.log(Level.WARNING, "when trying to read " + file.getAbsolutePath(), e); //NON-NLS
-//            }
-//        LOGGER.log(Level.INFO, "using default configuration"); //NON-NLS
-//        return new DroidsConfig();
-//    }
 }
