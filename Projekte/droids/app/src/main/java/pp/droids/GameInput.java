@@ -54,7 +54,7 @@ class GameInput extends AbstractAppState {
      * Adds key trigger to different states.
      * <p>
      * It overrides {@link com.jme3.app.state.AbstractAppState#initialize(com.jme3.app.state.AppStateManager, com.jme3.app.Application)}
-     *
+     * <p>
      * Keytrigger für MUSIC wird der Taste "B" zugewiesen
      *
      * @param stateManager The state manager
@@ -130,7 +130,7 @@ class GameInput extends AbstractAppState {
 
     /**
      * Receives input events and calls th corresponding method.
-     *
+     * <p>
      * Der Aktion MUSIC wird die Methode toggleMusic() zugewiesen
      */
     private final ActionListener actionListener = (name, isPressed, tpf) -> {
@@ -169,8 +169,8 @@ class GameInput extends AbstractAppState {
         sound.setEnabled(!sound.isEnabled());
     }
 
-    /**Methode um Musik an und aus zu stellen
-     * Es wird auf die GameSound klasse zugegriffen und mit dem Getter die Musik verändert.
+    /**
+     * Methode um Musik an und aus zu stellen. Es wird auf die GameSound klasse zugegriffen und mit dem Getter die Musik verändert.
      */
     private void toggleMusic(){
         final GameSound music = app.getStateManager().getState(GameSound.class);

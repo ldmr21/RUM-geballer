@@ -63,8 +63,8 @@ public class GameSound extends AbstractAppState {
     /**
      * Initializes different sounds.
      * It overrides {@link com.jme3.app.state.AbstractAppState#initialize(com.jme3.app.state.AppStateManager, com.jme3.app.Application)}
+     * <p>
      * Backgroundmusic wird definiert, die Lautstärke auf eins gesetzt, die Audiodatei wird dauerhaft wiederholt und sie soll Global hörbar sein.
-     *
      *
      * @param stateManager The state manager
      * @param app          The application
