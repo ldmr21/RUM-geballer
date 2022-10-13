@@ -141,7 +141,7 @@ public class DroidsConfig {
     /**
      *
      */
-    @JsonProperty("number of lives") //NON-NLS
+    @JsonProperty("lives") //NON-NLS
     private int lives = 10;
 
     @JsonIgnore

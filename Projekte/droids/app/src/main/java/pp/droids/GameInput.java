@@ -92,6 +92,7 @@ class GameInput extends AbstractAppState {
                 enableState();
             else
                 disableState();
+
         }
     }
 
@@ -108,9 +109,13 @@ class GameInput extends AbstractAppState {
      * Disables a GameInput.
      */
     private void disableState() {
+        final GameSound music = app.getStateManager().getState(GameSound.class);
         final InputManager inputManager = app.getInputManager();
         inputManager.removeListener(actionListener);
         inputManager.removeListener(analogListener);
+        //if(music.isEnabled()) {
+        //    inputManager.addListener(actionListener, MUSIC);
+        //}
     }
 
     /**
@@ -177,7 +182,18 @@ class GameInput extends AbstractAppState {
         music.getBackground_music().setVolume(0);
         }
         else
-            music.getBackground_music().setVolume(1);
+            music.getBackground_music().setVolume(.5f);
+    }
+
+    private void setMusicOn(){
+        final GameSound music = app.getStateManager().getState(GameSound.class);
+        music.getBackground_music().play();
+        music.getBackground_music().setVolume(.5f);
+    }
+
+    private void setMusicOff(){
+        final GameSound music = app.getStateManager().getState(GameSound.class);
+        music.getBackground_music().setVolume(0);
     }
 
     /**
