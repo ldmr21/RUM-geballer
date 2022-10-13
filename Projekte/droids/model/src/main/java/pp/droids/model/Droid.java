@@ -271,8 +271,8 @@ public class Droid extends Shooter implements Navigable<Segment>, Debugee {
             setPos(getX() + 1 ,getY());
         }
         if(getY() <= 0){
-        resetState();
-        setPos(getX() ,getY() + 1);
+            resetState();
+            setPos(getX() ,getY() + 1);
         }
 
         if(getX() >= model.getDroidsMap().getXMax()){
@@ -281,10 +281,9 @@ public class Droid extends Shooter implements Navigable<Segment>, Debugee {
         }
 
         if(getY() >= model.getDroidsMap().getYMax()) {
-        resetState();
-        setPos(getX() ,getY() - 1);
+            resetState();
+            setPos(getX() ,getY() - 1);
         }
-
         if (getSpeed() != 0f) {
             setPosAvoidingCollisions(getX() + getSpeed() * delta * cos(getRotation()),
                                      getY() + getSpeed() * delta * sin(getRotation()));
