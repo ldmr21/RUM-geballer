@@ -145,7 +145,7 @@ public class DroidsConfig {
     private int lives = 10;
 
     /**
-     * @return gibt Anazhl der Lebens des Droids zurück
+     * @return gibt Anzahl der Leben des Droids zurück
      */
     @JsonIgnore
     public int getDroidLives() {
