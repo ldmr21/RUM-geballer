@@ -42,10 +42,19 @@ class GameInput extends AbstractAppState {
     private static final String RADAR_MAP = "RADAR";
     private static final String NAVIGATE = "NAVIGATE";
     private static final String DEBUG = "DEBUG";
-    /**7b Step3: die Musik mit Keytrigger wird eingeführt.
-     * @param MUSIC initialize the music String for the Keytrigger
-     * */
+    /**
+     *app states werden um MUSIC erweitert
+     */
     private static final String MUSIC = "MUSIC";
+
+    //Schritt nach links/rechts
+    private static final String MOVELEFT = "MOVELEFT";
+    private static final String MOVERIGHT = "MOVERIGHT";
+
+    /**
+     * switch between first and third person
+     */
+    private static final String CAMMODE = "CAMMODE";
 
     private DroidsApp app;
     private Future<List<Segment>> futurePath;
@@ -54,6 +63,8 @@ class GameInput extends AbstractAppState {
      * Adds key trigger to different states.
      * <p>
      * It overrides {@link com.jme3.app.state.AbstractAppState#initialize(com.jme3.app.state.AppStateManager, com.jme3.app.Application)}
+     * <p>
+     * Keytrigger für MUSIC wird der Taste "B" zugewiesen
      *
      * @param stateManager The state manager
      * @param app          The application
@@ -63,8 +74,6 @@ class GameInput extends AbstractAppState {
         super.initialize(stateManager, app);
         this.app = (DroidsApp) app;
         final InputManager inputManager = app.getInputManager();
-        /**Step4: der Keytrigger wird der Taste "B" zugewiesen
-         */
         inputManager.addMapping(MUSIC, new KeyTrigger(KeyInput.KEY_B));
         inputManager.addMapping(SHOOT, new KeyTrigger(KeyInput.KEY_SPACE));
         inputManager.addMapping(LEFT, new KeyTrigger(KeyInput.KEY_A), new KeyTrigger(KeyInput.KEY_LEFT));
@@ -75,6 +84,9 @@ class GameInput extends AbstractAppState {
         inputManager.addMapping(MUTE, new KeyTrigger(KeyInput.KEY_M));
         inputManager.addMapping(RADAR_MAP, new KeyTrigger(KeyInput.KEY_R));
         inputManager.addMapping(NAVIGATE, new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
+        inputManager.addMapping(MOVELEFT, new KeyTrigger(KeyInput.KEY_Q));
+        inputManager.addMapping(MOVERIGHT, new KeyTrigger(KeyInput.KEY_E));
+        inputManager.addMapping(CAMMODE, new KeyTrigger(KeyInput.KEY_V));
         if (isEnabled()) enableState();
     }
 
@@ -101,8 +113,8 @@ class GameInput extends AbstractAppState {
      */
     private void enableState() {
         final InputManager inputManager = app.getInputManager();
-        inputManager.addListener(analogListener, SHOOT, LEFT, RIGHT, FORWARD, BACKWARD);
-        inputManager.addListener(actionListener, MUTE, RADAR_MAP, NAVIGATE, DEBUG, MUSIC);
+        inputManager.addListener(analogListener, SHOOT, LEFT, RIGHT, FORWARD, BACKWARD, MOVELEFT, MOVERIGHT);
+        inputManager.addListener(actionListener, MUTE, RADAR_MAP, NAVIGATE, DEBUG, MUSIC, CAMMODE);
     }
 
     /**
@@ -129,22 +141,26 @@ class GameInput extends AbstractAppState {
                 case RIGHT -> getDroid().turnRight();
                 case FORWARD -> getDroid().goForward();
                 case BACKWARD -> getDroid().goBackward();
+                case MOVELEFT -> getDroid().stepLeft();
+                case MOVERIGHT -> getDroid().stepRight();
                 default -> { /* do nothing */}
             }
     };
 
     /**
      * Receives input events and calls th corresponding method.
+     * <p>
+     * Der Aktion MUSIC wird die Methode toggleMusic() zugewiesen
      */
     private final ActionListener actionListener = (name, isPressed, tpf) -> {
         if (isPressed && app != null) {
             switch (name) {
-                /**Step6: die Aktion wird dem ein und ausschalten zugewiesen. (mit der Taste "B") */
                 case MUSIC -> toggleMusic();
                 case MUTE -> toggleMuted();
                 case RADAR_MAP -> toggleRadarMap();
                 case NAVIGATE -> navigate();
                 case DEBUG -> toggleDebugView();
+                case CAMMODE -> toggleCameraMode();
                 default -> { /* empty */ }
             }
         }
@@ -173,8 +189,8 @@ class GameInput extends AbstractAppState {
         sound.setEnabled(!sound.isEnabled());
     }
 
-    /**Step5: Methode um Musik an und aus zu stellen
-     * Es wird auf die GameSound klasse zugegriffen und mit dem Getter die Musik verändert.
+    /**
+     * Methode um Musik an und aus zu stellen. Es wird auf die GameSound klasse zugegriffen und mit dem Getter die Musik verändert.
      */
     private void toggleMusic(){
         final GameSound music = app.getStateManager().getState(GameSound.class);
@@ -194,6 +210,13 @@ class GameInput extends AbstractAppState {
     private void setMusicOff(){
         final GameSound music = app.getStateManager().getState(GameSound.class);
         music.getBackground_music().setVolume(0);
+    }
+    /**
+     * Methode um zwischen 1st- und 3rd-Person-Ansicht zu wechseln
+     */
+    private void toggleCameraMode(){
+        final GameState camera = app.getStateManager().getState(GameState.class);
+        camera.switchCamStates();
     }
 
     /**

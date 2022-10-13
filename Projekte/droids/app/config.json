@@ -13,8 +13,7 @@
   "map height": 25,
   "number of levels": 2,
   "number of enemies": 2,
-  "number of obstacles": 5,
+  "number of obstacles": 10,
   "viewing area": 120,
-
-  "lives": 20
+  "number of lives": 20
 }
