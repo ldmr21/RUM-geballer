@@ -58,8 +58,8 @@ public class GameSound extends AbstractAppState {
     public void setEnabled(boolean enabled) {
         if (isEnabled() == enabled) return;
         super.setEnabled(enabled);
-        if(enabled) background_music.setVolume(.5f);
-        else background_music.setVolume(0);
+        //if(enabled) background_music.setVolume(.5f);
+        //else background_music.setVolume(0);
         LOGGER.log(Level.INFO, "Sound enabled: {0}", enabled); //NON-NLS
         PREFS.put(ENABLED_PREF, String.valueOf(enabled));
     }

@@ -125,9 +125,7 @@ class GameInput extends AbstractAppState {
         final InputManager inputManager = app.getInputManager();
         inputManager.removeListener(actionListener);
         inputManager.removeListener(analogListener);
-        //if(music.isEnabled()) {
-        //    inputManager.addListener(actionListener, MUSIC);
-        //}
+        inputManager.addListener(actionListener, MUSIC);
     }
 
     /**
