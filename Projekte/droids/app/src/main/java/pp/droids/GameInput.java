@@ -51,6 +51,11 @@ class GameInput extends AbstractAppState {
     private static final String MOVELEFT = "MOVELEFT";
     private static final String MOVERIGHT = "MOVERIGHT";
 
+    /**
+     * switch between first and third person
+     */
+    private static final String CAMMODE = "CAMMODE";
+
     private DroidsApp app;
     private Future<List<Segment>> futurePath;
 
@@ -81,6 +86,7 @@ class GameInput extends AbstractAppState {
         inputManager.addMapping(NAVIGATE, new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
         inputManager.addMapping(MOVELEFT, new KeyTrigger(KeyInput.KEY_Q));
         inputManager.addMapping(MOVERIGHT, new KeyTrigger(KeyInput.KEY_E));
+        inputManager.addMapping(CAMMODE, new KeyTrigger(KeyInput.KEY_V));
         if (isEnabled()) enableState();
     }
 
@@ -107,7 +113,7 @@ class GameInput extends AbstractAppState {
     private void enableState() {
         final InputManager inputManager = app.getInputManager();
         inputManager.addListener(analogListener, SHOOT, LEFT, RIGHT, FORWARD, BACKWARD, MOVELEFT, MOVERIGHT);
-        inputManager.addListener(actionListener, MUTE, RADAR_MAP, NAVIGATE, DEBUG, MUSIC);
+        inputManager.addListener(actionListener, MUTE, RADAR_MAP, NAVIGATE, DEBUG, MUSIC, CAMMODE);
     }
 
     /**
@@ -149,6 +155,7 @@ class GameInput extends AbstractAppState {
                 case RADAR_MAP -> toggleRadarMap();
                 case NAVIGATE -> navigate();
                 case DEBUG -> toggleDebugView();
+                case CAMMODE -> toggleCameraMode();
                 default -> { /* empty */ }
             }
         }
@@ -187,6 +194,13 @@ class GameInput extends AbstractAppState {
         }
         else
             music.getBackground_music().setVolume(1);
+    }
+    /**
+     * Methode um zwischen 1st- und 3rd-Person-Ansicht zu wechseln
+     */
+    private void toggleCameraMode(){
+        final GameState camera = app.getStateManager().getState(GameState.class);
+        camera.switchCamStates();
     }
 
     /**

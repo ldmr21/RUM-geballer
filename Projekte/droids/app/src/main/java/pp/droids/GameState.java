@@ -54,6 +54,10 @@ public class GameState extends AbstractAppState {
      */
     private static final float BEHIND_DROID = 2f;
     /**
+     * Distance of the camera position in front of the droid
+     */
+    private static final float FRONT_DROID = 0.75f;
+    /**
      * Height of the camera position above ground
      */
     private static final float ABOVE_GROUND = 2f;
@@ -62,11 +66,22 @@ public class GameState extends AbstractAppState {
      */
     private static final float INCLINATION = 0.5f;
 
+    private static final float DROID_HEIGHT = 1.25f;
+
+    /**
+     * A private enum containing states for the camera.
+     */
+    private enum CamState {FIRST, THIRD}
+
     private DroidsApp app;
     private final Node viewNode = new Node("view"); //NON-NLS
     private final Node itemNode = new Node("items"); //NON-NLS
     private DroidsModel model;
     private final ModelViewSynchronizer synchronizer = new MainSynchronizer(this, itemNode);
+    /**
+     * Droids camera starts with third person state
+     */
+    private CamState camState = CamState.THIRD;
 
     /**
      * Returns the droids app.
@@ -145,18 +160,41 @@ public class GameState extends AbstractAppState {
         final Droid droid = model.getDroidsMap().getDroid();
         final Camera camera = app.getCamera();
         final float angle = droid.getRotation();
-        final float cos = BEHIND_DROID * cos(angle);
-        final float sin = BEHIND_DROID * sin(angle);
-        final float x = droid.getX() - cos;
-        final float y = droid.getY() - sin;
-        camera.setLocation(new Vector3f(modelToViewX(x, y),
-                                        modelToViewY(x, y) + ABOVE_GROUND,
-                                        modelToViewZ(x, y)));
-        camera.getRotation().lookAt(new Vector3f(modelToViewX(cos, sin),
-                                                 modelToViewY(cos, sin) - INCLINATION,
-                                                 modelToViewZ(cos, sin)),
-                                    Vector3f.UNIT_Y);
+        final float cos;
+        final float sin;
+        if(camState == CamState.FIRST){
+            cos = FRONT_DROID * cos(angle);
+            sin = FRONT_DROID * sin(angle);
+            final float x = droid.getX() - cos;
+            final float y = droid.getY() - sin;
+            camera.setLocation(new Vector3f(modelToViewX(x, y),
+                                            modelToViewY(x, y) + DROID_HEIGHT,
+                                            modelToViewZ(x, y)));
+            camera.getRotation().lookAt(new Vector3f(modelToViewX(cos, sin),
+                                                     modelToViewY(cos, sin),
+                                                     modelToViewZ(cos, sin)),
+                                        Vector3f.UNIT_Y);
+        }else{
+            cos = BEHIND_DROID * cos(angle);
+            sin = BEHIND_DROID * sin(angle);
+            final float x = droid.getX() - cos;
+            final float y = droid.getY() - sin;
+            camera.setLocation(new Vector3f(modelToViewX(x, y),
+                                            modelToViewY(x, y) + ABOVE_GROUND,
+                                            modelToViewZ(x, y)));
+            camera.getRotation().lookAt(new Vector3f(modelToViewX(cos, sin),
+                                                     modelToViewY(cos, sin) - INCLINATION,
+                                                     modelToViewZ(cos, sin)),
+                                        Vector3f.UNIT_Y);
+        }
         camera.update();
+    }
+
+    public void switchCamStates(){
+        camState = switch (camState) {
+            case FIRST -> CamState.THIRD;
+            case THIRD -> CamState.FIRST;
+        };
     }
 
     /**
