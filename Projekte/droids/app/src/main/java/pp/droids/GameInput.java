@@ -60,7 +60,7 @@ class GameInput extends AbstractAppState {
         super.initialize(stateManager, app);
         this.app = (DroidsApp) app;
         final InputManager inputManager = app.getInputManager();
-        inputManager.addMapping(MUSIC, new KeyTrigger(KeyInput.KEY_B)); //Step4: der Keytrigger wird der Taste "M" zugewiesen
+        inputManager.addMapping(MUSIC, new KeyTrigger(KeyInput.KEY_M)); //Step4: der Keytrigger wird der Taste "M" zugewiesen
         inputManager.addMapping(SHOOT, new KeyTrigger(KeyInput.KEY_SPACE));
         inputManager.addMapping(LEFT, new KeyTrigger(KeyInput.KEY_A), new KeyTrigger(KeyInput.KEY_LEFT));
         inputManager.addMapping(RIGHT, new KeyTrigger(KeyInput.KEY_D), new KeyTrigger(KeyInput.KEY_RIGHT));

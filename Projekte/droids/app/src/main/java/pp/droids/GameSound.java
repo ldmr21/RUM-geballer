@@ -4,6 +4,7 @@ import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.audio.AudioData;
+import com.jme3.audio.AudioData.DataType;
 import com.jme3.audio.AudioNode;
 import pp.droids.model.DamageReceiver;
 import pp.droids.model.DroidsModel;
@@ -13,6 +14,8 @@ import pp.droids.model.Projectile;
 import pp.droids.model.Shooter;
 import pp.droids.notifications.GameEventAdapter;
 import pp.util.Prefs;
+
+
 
 import java.lang.System.Logger;
 import java.lang.System.Logger.Level;
@@ -70,7 +73,7 @@ public class GameSound extends AbstractAppState {
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
         this.app = (DroidsApp) app;
-        background_music = loadSound("Sound/Music/JAZZ.wav");//7b step1: background music eingefügt/definiert
+        background_music = new AudioNode(app.getAssetManager(),"Sound/Music/jazzy.ogg", DataType.Stream);//7b step1: background music eingefügt/definiert
         background_music.setLooping(true); //Musik loopt
         background_music.setVolume(1); //Die Lautstärke der WAV datei "JAZZ" wird auf den Wert eins gesetzt um diese im hintergrund hören zu können.
         background_music.setPositional(false);//keine bestimmte Position/Stereo sound
@@ -91,10 +94,10 @@ public class GameSound extends AbstractAppState {
      * @return sound from type AudioNode
      */
     private AudioNode loadSound(String name) {
-        final AudioNode sound = new AudioNode(app.getAssetManager(), name,
-                                              AudioData.DataType.Buffer);
+        final AudioNode sound = new AudioNode(app.getAssetManager(), name, DataType.Buffer);
         sound.setLooping(false);
         sound.setPositional(false);
+        sound.setVolume(5);
         return sound;
     }
 

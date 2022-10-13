@@ -47,7 +47,7 @@ public class Droid extends Shooter implements Navigable<Segment>, Debugee {
     /**
      * The turn speed of the droid in radians per second.
      */
-    private static final float TURN_SPEED = 3.5f;
+    private static final float TURN_SPEED = 2.5f;
 
     /**
      * The forward speed of the droid in length units per second.
@@ -113,7 +113,7 @@ public class Droid extends Shooter implements Navigable<Segment>, Debugee {
      * @param model the game model that has this droid.
      */
     public Droid(DroidsModel model) {
-        this(model, BOUNDING_RADIUS, LIVES, STANDARD_RELOAD_TIME);
+        this(model, BOUNDING_RADIUS, model.getConfig().getLives() , STANDARD_RELOAD_TIME);
     }
 
     /**
