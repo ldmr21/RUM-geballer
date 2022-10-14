@@ -79,6 +79,7 @@ public class MenuState extends AbstractAppState {
 
     /**
      * Enables the menu state by updating the sound model, the radar view model and the debug view model and shows the main dialog container.
+     * Wenn MenuState aktiviert ist, wird der Maus-Pointer sichtbar.
      */
     private void enableState() {
         final InputManager inputManager = app.getInputManager();

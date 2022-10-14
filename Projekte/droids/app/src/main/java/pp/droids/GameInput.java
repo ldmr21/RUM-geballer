@@ -51,15 +51,13 @@ class GameInput extends AbstractAppState {
      */
     private static final String MUSIC = "MUSIC";
 
-    //Schritt nach links/rechts
+    /**
+     * App states werden um MOVELEFT, MOVERIGHT, CAMMODE,
+     * CAMERA_UP und CAMERA_DOWN erweitert
+     */
     private static final String MOVELEFT = "MOVELEFT";
     private static final String MOVERIGHT = "MOVERIGHT";
-
-    /**
-     * switch between first and third person
-     */
     private static final String CAMMODE = "CAMMODE";
-
     private static final String CAMERA_UP = "CAMERA_UP";
     private static final String CAMERA_DOWN = "CAMERA_DOWN";
 
@@ -71,7 +69,11 @@ class GameInput extends AbstractAppState {
      * <p>
      * It overrides {@link com.jme3.app.state.AbstractAppState#initialize(com.jme3.app.state.AppStateManager, com.jme3.app.Application)}
      * <p>
-     * Keytrigger für MUSIC wird der Taste "B" zugewiesen
+     * Keytrigger für MUSIC wird der Taste "B" zugewiesen.
+     * Keytrigger für MOVELEFT wird der taste "Q" und für MOVERIGHT wird der Taste "E" zugewiesen.
+     * MouseAxisTrigger für die Drehung LEFT und RIGHT wird Mouse XAxis zugewiesen.
+     * MouseAxisTrigger für CAMERA_UP und CAMERA_DOWN wird die Maus-Y-achse zugewiesen.
+     * Keytrigger für CAMMODE wird der Taste "V" zugewiesen.
      *
      * @param stateManager The state manager
      * @param app          The application
@@ -81,12 +83,6 @@ class GameInput extends AbstractAppState {
         super.initialize(stateManager, app);
         this.app = (DroidsApp) app;
         final InputManager inputManager = app.getInputManager();
-        /*inputManager.deleteMapping(CameraInput.FLYCAM_RISE);
-        inputManager.deleteMapping(CameraInput.FLYCAM_LOWER);
-        inputManager.deleteMapping(CameraInput.FLYCAM_LEFT);
-        inputManager.deleteMapping(CameraInput.FLYCAM_RIGHT);
-        inputManager.deleteTrigger(CameraInput.FLYCAM_FORWARD, new KeyTrigger(KeyInput.KEY_W));
-        inputManager.deleteTrigger(CameraInput.FLYCAM_BACKWARD, new KeyTrigger(KeyInput.KEY_S));*/
         inputManager.addMapping(MUSIC, new KeyTrigger(KeyInput.KEY_B));
         inputManager.addMapping(SHOOT, new KeyTrigger(KeyInput.KEY_SPACE));
         inputManager.addMapping(LEFT, new KeyTrigger(KeyInput.KEY_A), new KeyTrigger(KeyInput.KEY_LEFT), new MouseAxisTrigger(MouseInput.AXIS_X, true));
@@ -142,6 +138,11 @@ class GameInput extends AbstractAppState {
 
     /**
      * Receives analog events and calls the corresponding method for that droid.
+     * Der Aktion MOVELEFT wird die Methode stepLeft(),
+     * MOVERIGHT wird die Methode stepRight(),
+     * CAMERA_UP wird die Methode rotateUP()
+     * und CAMERA_DOWN wird die Methode rotateDown() zugewiesen.
+     *
      */
     private final AnalogListener analogListener = (name, value, tpf) -> {
         if (app != null)
@@ -163,6 +164,8 @@ class GameInput extends AbstractAppState {
      * Receives input events and calls th corresponding method.
      * <p>
      * Der Aktion MUSIC wird die Methode toggleMusic() zugewiesen
+     * und der Aktion CAMMODE wird die Methode toggleCameraMode() zugewiesen
+     *
      */
     private final ActionListener actionListener = (name, isPressed, tpf) -> {
         if (isPressed && app != null) {
