@@ -4,6 +4,7 @@ import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
+import com.jme3.input.InputManager;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
@@ -56,7 +57,7 @@ public class GameState extends AbstractAppState {
     /**
      * Distance of the camera position in front of the droid
      */
-    private static final float FRONT_DROID = 0.75f;
+    private static final float FRONT_DROID = 0.25f;
     /**
      * Height of the camera position above ground
      */
@@ -65,13 +66,21 @@ public class GameState extends AbstractAppState {
      * How much the camera looks down
      */
     private static final float INCLINATION = 0.5f;
-
+    /**
+     * Die Höhe des Droidsmodels
+     */
     private static final float DROID_HEIGHT = 1.25f;
+
+    private static final float ROTATE_SPEED = 0.005f;
+
+    private static final float DECLINE_SPEED = 0.03f;
 
     /**
      * A private enum containing states for the camera.
      */
     private enum CamState {FIRST, THIRD}
+
+    private enum UpState{UP, DOWN, STOP}
 
     private DroidsApp app;
     private final Node viewNode = new Node("view"); //NON-NLS
@@ -82,6 +91,19 @@ public class GameState extends AbstractAppState {
      * Droids camera starts with third person state
      */
     private CamState camState = CamState.THIRD;
+
+    /**
+     * Camera Y-Axis state
+     */
+    private UpState upState = UpState.STOP;
+
+    private float camCurrentAngle = 0f;
+    private final float camMaxAngle = 0.5f;
+    private final float camMinAngle = -0.5f;
+
+    private float camCurrentHeight = 0f;
+    private final float camMaxHeight = 0f;
+    private final float camMinHeight = -1.5f;
 
     /**
      * Returns the droids app.
@@ -136,7 +158,7 @@ public class GameState extends AbstractAppState {
         setupLights();
         createLagoonSky();
         reset();
-
+        resetCamera();
         if (isEnabled()) enableState(true);
     }
 
@@ -154,6 +176,49 @@ public class GameState extends AbstractAppState {
     }
 
     /**
+     * Reset the camera's direction when switching between 1st and 3rd person.
+     *
+     */
+    private void resetCamera(){
+        camCurrentAngle = 0f;
+        camCurrentHeight = 0f;
+        }
+
+    public void rotateUp(){
+        upState = switch (upState){
+            case UP, STOP -> UpState.UP;
+            case DOWN -> UpState.STOP;
+        };
+    }
+
+    public void rotateDown(){
+        upState = switch (upState){
+            case DOWN, STOP -> UpState.DOWN;
+            case UP -> UpState.STOP;
+        };
+    }
+
+    private float getDeclineSpeed(){
+        return switch (upState){
+            case UP -> -DECLINE_SPEED;
+            case DOWN -> DECLINE_SPEED;
+            case STOP -> 0f;
+        };
+    }
+
+    private float getRotateSpeed() {
+        return switch (upState) {
+            case UP -> ROTATE_SPEED;
+            case DOWN -> -ROTATE_SPEED;
+            case STOP -> 0f;
+        };
+    }
+
+    private float ensureRange(float value, float min, float max) {
+        return Math.min(Math.max(value, min), max);
+    }
+
+    /**
      * Adjusts the camera to see through the droid's eyes.
      */
     private void adjustCamera() {
@@ -162,7 +227,9 @@ public class GameState extends AbstractAppState {
         final float angle = droid.getRotation();
         final float cos;
         final float sin;
+
         if(camState == CamState.FIRST){
+            camCurrentAngle = ensureRange(camCurrentAngle + getRotateSpeed(), camMinAngle, camMaxAngle);
             cos = FRONT_DROID * cos(angle);
             sin = FRONT_DROID * sin(angle);
             final float x = droid.getX() - cos;
@@ -171,23 +238,26 @@ public class GameState extends AbstractAppState {
                                             modelToViewY(x, y) + DROID_HEIGHT,
                                             modelToViewZ(x, y)));
             camera.getRotation().lookAt(new Vector3f(modelToViewX(cos, sin),
-                                                     modelToViewY(cos, sin),
+                                                     camCurrentAngle,
                                                      modelToViewZ(cos, sin)),
                                         Vector3f.UNIT_Y);
         }else{
+            camCurrentHeight = ensureRange(camCurrentHeight + getDeclineSpeed(), camMinHeight, camMaxHeight);
+            camCurrentAngle = ensureRange(camCurrentAngle + getRotateSpeed() * 3, 0, 2 * camMaxAngle);
             cos = BEHIND_DROID * cos(angle);
             sin = BEHIND_DROID * sin(angle);
             final float x = droid.getX() - cos;
             final float y = droid.getY() - sin;
             camera.setLocation(new Vector3f(modelToViewX(x, y),
-                                            modelToViewY(x, y) + ABOVE_GROUND,
+                                            camCurrentHeight + ABOVE_GROUND,
                                             modelToViewZ(x, y)));
             camera.getRotation().lookAt(new Vector3f(modelToViewX(cos, sin),
-                                                     modelToViewY(cos, sin) - INCLINATION,
+                                                     camCurrentAngle - INCLINATION,
                                                      modelToViewZ(cos, sin)),
                                         Vector3f.UNIT_Y);
         }
         camera.update();
+        upState = UpState.STOP;
     }
 
     public void switchCamStates(){
@@ -195,6 +265,7 @@ public class GameState extends AbstractAppState {
             case FIRST -> CamState.THIRD;
             case THIRD -> CamState.FIRST;
         };
+        resetCamera();
     }
 
     /**
@@ -234,8 +305,10 @@ public class GameState extends AbstractAppState {
      * Permits a game state.
      */
     private void enableState(boolean enabled) {
+        final InputManager inputManager = app.getInputManager();
         getTextOverlay().setEnabled(enabled);
         getGameInput().setEnabled(enabled);
+        inputManager.setCursorVisible(false);
     }
 
     /**

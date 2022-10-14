@@ -5,12 +5,15 @@ import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
+import com.jme3.input.CameraInput;
+import com.jme3.input.FlyByCamera;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
 import com.jme3.input.MouseInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.AnalogListener;
 import com.jme3.input.controls.KeyTrigger;
+import com.jme3.input.controls.MouseAxisTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector3f;
@@ -22,6 +25,7 @@ import pp.util.Segment;
 
 import java.lang.System.Logger;
 import java.lang.System.Logger.Level;
+import java.security.Key;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -56,6 +60,9 @@ class GameInput extends AbstractAppState {
      */
     private static final String CAMMODE = "CAMMODE";
 
+    private static final String CAMERA_UP = "CAMERA_UP";
+    private static final String CAMERA_DOWN = "CAMERA_DOWN";
+
     private DroidsApp app;
     private Future<List<Segment>> futurePath;
 
@@ -74,10 +81,16 @@ class GameInput extends AbstractAppState {
         super.initialize(stateManager, app);
         this.app = (DroidsApp) app;
         final InputManager inputManager = app.getInputManager();
+        /*inputManager.deleteMapping(CameraInput.FLYCAM_RISE);
+        inputManager.deleteMapping(CameraInput.FLYCAM_LOWER);
+        inputManager.deleteMapping(CameraInput.FLYCAM_LEFT);
+        inputManager.deleteMapping(CameraInput.FLYCAM_RIGHT);
+        inputManager.deleteTrigger(CameraInput.FLYCAM_FORWARD, new KeyTrigger(KeyInput.KEY_W));
+        inputManager.deleteTrigger(CameraInput.FLYCAM_BACKWARD, new KeyTrigger(KeyInput.KEY_S));*/
         inputManager.addMapping(MUSIC, new KeyTrigger(KeyInput.KEY_B));
         inputManager.addMapping(SHOOT, new KeyTrigger(KeyInput.KEY_SPACE));
-        inputManager.addMapping(LEFT, new KeyTrigger(KeyInput.KEY_A), new KeyTrigger(KeyInput.KEY_LEFT));
-        inputManager.addMapping(RIGHT, new KeyTrigger(KeyInput.KEY_D), new KeyTrigger(KeyInput.KEY_RIGHT));
+        inputManager.addMapping(LEFT, new KeyTrigger(KeyInput.KEY_A), new KeyTrigger(KeyInput.KEY_LEFT), new MouseAxisTrigger(MouseInput.AXIS_X, true));
+        inputManager.addMapping(RIGHT, new KeyTrigger(KeyInput.KEY_D), new KeyTrigger(KeyInput.KEY_RIGHT), new MouseAxisTrigger(MouseInput.AXIS_X, false));
         inputManager.addMapping(FORWARD, new KeyTrigger(KeyInput.KEY_W), new KeyTrigger(KeyInput.KEY_UP));
         inputManager.addMapping(BACKWARD, new KeyTrigger(KeyInput.KEY_S), new KeyTrigger(KeyInput.KEY_DOWN));
         inputManager.addMapping(DEBUG, new KeyTrigger(KeyInput.KEY_P));
@@ -87,6 +100,8 @@ class GameInput extends AbstractAppState {
         inputManager.addMapping(MOVELEFT, new KeyTrigger(KeyInput.KEY_Q));
         inputManager.addMapping(MOVERIGHT, new KeyTrigger(KeyInput.KEY_E));
         inputManager.addMapping(CAMMODE, new KeyTrigger(KeyInput.KEY_V));
+        inputManager.addMapping(CAMERA_UP, new MouseAxisTrigger(MouseInput.AXIS_Y, false));
+        inputManager.addMapping(CAMERA_DOWN, new MouseAxisTrigger(MouseInput.AXIS_Y, true));
         if (isEnabled()) enableState();
     }
 
@@ -112,7 +127,7 @@ class GameInput extends AbstractAppState {
      */
     private void enableState() {
         final InputManager inputManager = app.getInputManager();
-        inputManager.addListener(analogListener, SHOOT, LEFT, RIGHT, FORWARD, BACKWARD, MOVELEFT, MOVERIGHT);
+        inputManager.addListener(analogListener, SHOOT, LEFT, RIGHT, FORWARD, BACKWARD, MOVELEFT, MOVERIGHT, CAMERA_UP, CAMERA_DOWN);
         inputManager.addListener(actionListener, MUTE, RADAR_MAP, NAVIGATE, DEBUG, MUSIC, CAMMODE);
     }
 
@@ -138,6 +153,8 @@ class GameInput extends AbstractAppState {
                 case BACKWARD -> getDroid().goBackward();
                 case MOVELEFT -> getDroid().stepLeft();
                 case MOVERIGHT -> getDroid().stepRight();
+                case CAMERA_UP -> getGameState().rotateUp();
+                case CAMERA_DOWN -> getGameState().rotateDown();
                 default -> { /* do nothing */}
             }
     };
