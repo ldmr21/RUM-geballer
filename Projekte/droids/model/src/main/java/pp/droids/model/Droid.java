@@ -1,5 +1,6 @@
 package pp.droids.model;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import pp.util.Position;
 import pp.util.Segment;
 import pp.util.map.Observation;
@@ -7,6 +8,9 @@ import pp.util.map.ObservationMap;
 import pp.util.navigation.Navigable;
 import pp.util.navigation.Navigator;
 
+import java.io.File;
+import java.io.IOException;
+import java.lang.System.Logger.Level;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -16,6 +20,7 @@ import java.util.Set;
 
 import static pp.util.Angle.normalizeAngle;
 import static pp.util.FloatMath.FLT_EPSILON;
+import static pp.util.FloatMath.PI;
 import static pp.util.FloatMath.atan2;
 import static pp.util.FloatMath.cos;
 import static pp.util.FloatMath.sin;
@@ -24,20 +29,22 @@ import static pp.util.FloatMath.sin;
  * Represents a droid
  */
 public class Droid extends Shooter implements Navigable<Segment>, Debugee {
+
+
     /**
      * A private enum containing states for moving forward, backwards or not moving.
      */
     private enum ForwardState {STOP, FORWARD, BACKWARD}
 
     /**
+     * A private enum containing states for side stepping left, right or not moving.
+     */
+    private enum SidestepState {STOP, LEFT, RIGHT}
+
+    /**
      * A private enum containing states for moving left, right or not moving.
      */
     private enum TurnState {STOP, LEFT, RIGHT}
-
-    /**
-     * The number of lives of the droid.
-     */
-    private static final int LIVES = 40;
 
     /**
      * The standard bounding radius of a droid.
@@ -47,12 +54,17 @@ public class Droid extends Shooter implements Navigable<Segment>, Debugee {
     /**
      * The turn speed of the droid in radians per second.
      */
-    private static final float TURN_SPEED = 2.5f;
+    private static final float TURN_SPEED = 3.5f;
 
     /**
      * The forward speed of the droid in length units per second.
      */
     private static final float FORWARD_SPEED = 4f;
+
+    /**
+     * The side speed of the droid in length units per second.
+     */
+    private static final float SIDE_SPEED = 4f;
 
     /**
      * The categories of all entities that are collected in observation maps.
@@ -85,6 +97,11 @@ public class Droid extends Shooter implements Navigable<Segment>, Debugee {
     private ForwardState forwardState;
 
     /**
+     * The current sidestep state of the droid.
+     */
+    private SidestepState sidestepState;
+
+    /**
      * Maps each level to an ObservationMap of its own.
      */
     private final Map<MapLevel, ObservationMap> observationMap = new HashMap<>();
@@ -108,12 +125,13 @@ public class Droid extends Shooter implements Navigable<Segment>, Debugee {
     }
 
     /**
-     * Creates a droid with standard parameters.
+     * Creates a droid with standard parameters and variable numbers of lives.
      *
      * @param model the game model that has this droid.
      */
+
     public Droid(DroidsModel model) {
-        this(model, BOUNDING_RADIUS, model.getConfig().getLives() , STANDARD_RELOAD_TIME);
+        this(model, BOUNDING_RADIUS, model.getConfig().getDroidLives(), STANDARD_RELOAD_TIME);
     }
 
     /**
@@ -127,11 +145,12 @@ public class Droid extends Shooter implements Navigable<Segment>, Debugee {
     }
 
     /**
-     * Sets both forward state and turn state of the droid to stop.
+     * Sets forward state, turn state and side step state of the droid to stop.
      */
     private void resetState() {
         forwardState = ForwardState.STOP;
         turnState = TurnState.STOP;
+        sidestepState = SidestepState.STOP;
     }
 
     /**
@@ -151,6 +170,26 @@ public class Droid extends Shooter implements Navigable<Segment>, Debugee {
         forwardState = switch (forwardState) {
             case BACKWARD, STOP -> ForwardState.BACKWARD;
             case FORWARD -> ForwardState.STOP;
+        };
+    }
+
+    /**
+     * Handles a step left command.
+     */
+    public void stepLeft(){
+        sidestepState = switch(sidestepState){
+            case LEFT, STOP -> SidestepState.LEFT;
+            case RIGHT -> SidestepState.STOP;
+        };
+    }
+
+    /**
+     * Handles a step right command.
+     */
+    public void stepRight(){
+        sidestepState = switch(sidestepState){
+            case RIGHT, STOP -> SidestepState.RIGHT;
+            case LEFT -> SidestepState.STOP;
         };
     }
 
@@ -200,6 +239,17 @@ public class Droid extends Shooter implements Navigable<Segment>, Debugee {
     }
 
     /**
+     * Returns the specific side speed of the droid.
+     */
+    private float getSideSpeed() {
+        return switch (sidestepState) {
+            case RIGHT -> SIDE_SPEED;
+            case LEFT -> -SIDE_SPEED;
+            case STOP -> 0f;
+        };
+    }
+
+    /**
      * Returns the specific turn speed of the droid.
      */
     private float getTurnSpeed() {
@@ -212,13 +262,37 @@ public class Droid extends Shooter implements Navigable<Segment>, Debugee {
 
     /**
      * Actually moves the droid
+     * Die Methode kann nun die SideStep-Bewegung berechnen und den Droid bewegen.
      *
      * @param delta time in seconds since the last update call
      */
     private void updateMovement(float delta) {
+        if(getX() <= 0){
+            resetState();
+            setPos(getX() + 1 ,getY());
+        }
+        if(getY() <= 0){
+            resetState();
+            setPos(getX() ,getY() + 1);
+        }
+
+        if(getX() >= model.getDroidsMap().getXMax()){
+            resetState();
+            setPos(getX() - 1 ,getY());
+        }
+
+        if(getY() >= model.getDroidsMap().getYMax()) {
+            resetState();
+            setPos(getX() ,getY() - 1);
+        }
         if (getSpeed() != 0f) {
             setPosAvoidingCollisions(getX() + getSpeed() * delta * cos(getRotation()),
                                      getY() + getSpeed() * delta * sin(getRotation()));
+            path.clear();
+        }
+        if (getSideSpeed() != 0f) {
+            setPosAvoidingCollisions(getX() + getSideSpeed() * delta * cos(getRotation() - PI/2),
+                                     getY() + getSideSpeed() * delta * sin(getRotation() - PI/2));
             path.clear();
         }
         if (getTurnSpeed() != 0f) {
@@ -379,4 +453,5 @@ public class Droid extends Shooter implements Navigable<Segment>, Debugee {
     public void accept(VoidVisitor v) {
         v.visit(this);
     }
+
 }

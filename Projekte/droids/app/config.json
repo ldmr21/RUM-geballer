@@ -2,7 +2,7 @@
   "resolution width": 800,
   "resolution height": 600,
   "window title": "Droids game",
-  "show statistics": true,
+  "show statistics": false,
   "overlay bottom color": {
     "red": 1,
     "green": 0,
@@ -15,6 +15,5 @@
   "number of enemies": 2,
   "number of obstacles": 10,
   "viewing area": 120,
-  "lives": 15
-
+  "number of droid lives": 20
 }

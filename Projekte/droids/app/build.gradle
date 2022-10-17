@@ -10,7 +10,7 @@ dependencies {
     implementation "org.jmonkeyengine:jme3-lwjgl3:$jmeVer"
     implementation "org.jmonkeyengine:jme3-plugins:$jmeVer"
     implementation "org.jmonkeyengine:jme3-testdata:$jmeVer"
-    implementation "org.jmonkeyengine:jme3-jogg:$jmeVer"        //7b Implementierung der Library fuer das Laden von OGG Dateien, danach musste man das gradle refreshen
+    implementation "org.jmonkeyengine:jme3-jogg:$jmeVer"
     implementation 'com.simsilica:lemur:1.16.0'
     //implementation 'com.simsilica:lemur-proto:1.13.0'
     implementation 'org.codehaus.groovy:groovy-jsr223:3.0.11'

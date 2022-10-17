@@ -70,7 +70,5 @@ class BoundedItemOverlapVisitor implements Visitor<Boolean> {
     }
 
     @Override
-    public Boolean visit(Dog dog) {
-        return overlap(dog);
-    }
+    public Boolean visit(Dog dog){return overlap(dog);}
 }

@@ -22,8 +22,6 @@ import pp.util.TypedSegment;
 
 import java.text.MessageFormat;
 
-import static pp.droids.model.Category.DOG;
-
 /**
  * This class synchronizes the radar.
  */
@@ -34,6 +32,7 @@ class RadarSynchronizer extends ModelViewSynchronizer implements Visitor<Spatial
     public static final String OBSTACLE = "Obstacle"; //NON-NLS
     public static final String FLAG = "Flag"; //NON-NLS
     public static final String EXIT = "Exit"; //NON-NLS
+
     public static final String DOG = "Dog";
 
     public RadarSynchronizer(GameState gameState, Node root) {
@@ -149,7 +148,7 @@ class RadarSynchronizer extends ModelViewSynchronizer implements Visitor<Spatial
     }
 
     @Override
-    public Spatial visit(Dog dog) {
+    public Spatial visit(Dog dog){
         return getPicture(dog, DOG);
     }
 }

@@ -74,7 +74,5 @@ class ExternalizerVisitor implements VoidVisitor {
     }
 
     @Override
-    public void visit(Dog dog) {
-        items.add(new ExternalDog(dog, idMap));
-    }
+    public void  visit(Dog dog){items.add(new ExternalDog(dog, idMap));}
 }

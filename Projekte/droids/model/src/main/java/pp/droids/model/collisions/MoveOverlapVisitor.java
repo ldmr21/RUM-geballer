@@ -61,7 +61,5 @@ public class MoveOverlapVisitor implements Visitor<Visitor<Boolean>> {
     }
 
     @Override
-    public Visitor<Boolean> visit(Dog dog) {
-        return new MoveBoundedItemVisitor(dog, to);
-    }
+    public Visitor<Boolean> visit(Dog dog){return new MoveBoundedItemVisitor(dog, to);}
 }

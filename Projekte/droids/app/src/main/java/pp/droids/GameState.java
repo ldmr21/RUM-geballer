@@ -4,6 +4,7 @@ import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
+import com.jme3.input.InputManager;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
@@ -54,6 +55,10 @@ public class GameState extends AbstractAppState {
      */
     private static final float BEHIND_DROID = 2f;
     /**
+     * Distance of the camera position in front of the droid
+     */
+    private static final float FRONT_DROID = 0.1f;
+    /**
      * Height of the camera position above ground
      */
     private static final float ABOVE_GROUND = 2f;
@@ -61,12 +66,56 @@ public class GameState extends AbstractAppState {
      * How much the camera looks down
      */
     private static final float INCLINATION = 0.5f;
+    /**
+     * Die Höhe des Droidsmodels
+     */
+    private static final float DROID_HEIGHT = 1.25f;
+    /**
+     * Rotation speed of the camera in Y-Axis
+     */
+    private static final float ROTATE_SPEED = 0.002f;
+    /**
+     * Camera transformation speed in Y-Axis
+     */
+    private static final float DECLINE_SPEED = 0.03f;
+
+    /**
+     * A private enum containing states for the camera.
+     */
+    private enum CamState {FIRST, THIRD}
+    /**
+     * A private enum containing states for the change of Y-Axis of the camera.
+     */
+    private enum UpState{UP, DOWN, STOP}
 
     private DroidsApp app;
     private final Node viewNode = new Node("view"); //NON-NLS
     private final Node itemNode = new Node("items"); //NON-NLS
     private DroidsModel model;
     private final ModelViewSynchronizer synchronizer = new MainSynchronizer(this, itemNode);
+
+    /**
+     * Droids camera starts with third person state
+     */
+    private CamState camState = CamState.THIRD;
+    /**
+     * Camera Y-Axis state starts with STOP
+     */
+    private UpState upState = UpState.STOP;
+    /**
+     * private variables containing camera's current angle in Y-Axis
+     * and limiting the angle in a range
+     */
+    private float camCurrentAngle = 0f;
+    private final float camMaxAngle = 0.2f;
+    private final float camMinAngle = -0.2f;
+    /**
+     * private variables containing camera's current Height in Y-Axis
+     * and limiting it in a range
+     */
+    private float camCurrentHeight = 0f;
+    private final float camMaxHeight = 0f;
+    private final float camMinHeight = -1.5f;
 
     /**
      * Returns the droids app.
@@ -112,6 +161,7 @@ public class GameState extends AbstractAppState {
         app.getRootNode().attachChild(viewNode);
         viewNode.attachChild(itemNode);
         app.getStateManager().getState(GameSound.class).register(model);
+        app.getStateManager().getState(GameMusic.class).register(model);
         model.addGameEventListener(new GameEventAdapter() {
             @Override
             public void mapChanged(DroidsMap oldMap, DroidsMap newMap) {
@@ -121,7 +171,7 @@ public class GameState extends AbstractAppState {
         setupLights();
         createLagoonSky();
         reset();
-
+        resetCamera();
         if (isEnabled()) enableState(true);
     }
 
@@ -139,24 +189,122 @@ public class GameState extends AbstractAppState {
     }
 
     /**
+     * Reset the camera's direction when switching between 1st and 3rd person.
+     *
+     */
+    private void resetCamera(){
+        camCurrentAngle = 0f;
+        camCurrentHeight = 0f;
+        }
+
+    /**
+     * Handles a rotateUp command.
+     */
+    public void rotateUp(){
+        upState = switch (upState){
+            case UP, STOP -> UpState.UP;
+            case DOWN -> UpState.STOP;
+        };
+    }
+
+    /**
+     * Handles a rotateDown command.
+     */
+    public void rotateDown(){
+        upState = switch (upState){
+            case DOWN, STOP -> UpState.DOWN;
+            case UP -> UpState.STOP;
+        };
+    }
+
+    /**
+     * return a specific decline speed of the camera.
+     * @return decline speed
+     */
+    private float getDeclineSpeed(){
+        return switch (upState){
+            case UP -> -DECLINE_SPEED;
+            case DOWN -> DECLINE_SPEED;
+            case STOP -> 0f;
+        };
+    }
+
+    /**
+     * return a specific rotation speed of the camera.
+     * @return rotate speed
+     */
+    private float getRotateSpeed() {
+        return switch (upState) {
+            case UP -> ROTATE_SPEED;
+            case DOWN -> -ROTATE_SPEED;
+            case STOP -> 0f;
+        };
+    }
+
+    /**
+     * limiting the value to the lower and upper limit
+     * @param value the main value
+     * @param min the lower limit
+     * @param max the upper limit
+     * @return the value in range(min, max)
+     */
+    private float ensureRange(float value, float min, float max) {
+        return Math.min(Math.max(value, min), max);
+    }
+
+    /**
      * Adjusts the camera to see through the droid's eyes.
+     * Die Methode wurde so erweitert, dass sie die beiden camState verhandeln kann.
+     * Und durch die Mausbewegung kann sie nun die Kamera nach oben und unten steuern.
      */
     private void adjustCamera() {
         final Droid droid = model.getDroidsMap().getDroid();
         final Camera camera = app.getCamera();
         final float angle = droid.getRotation();
-        final float cos = BEHIND_DROID * cos(angle);
-        final float sin = BEHIND_DROID * sin(angle);
-        final float x = droid.getX() - cos;
-        final float y = droid.getY() - sin;
-        camera.setLocation(new Vector3f(modelToViewX(x, y),
-                                        modelToViewY(x, y) + ABOVE_GROUND,
-                                        modelToViewZ(x, y)));
-        camera.getRotation().lookAt(new Vector3f(modelToViewX(cos, sin),
-                                                 modelToViewY(cos, sin) - INCLINATION,
-                                                 modelToViewZ(cos, sin)),
-                                    Vector3f.UNIT_Y);
+        final float cos;
+        final float sin;
+
+        if(camState == CamState.FIRST){
+            camCurrentAngle = ensureRange(camCurrentAngle + getRotateSpeed(), camMinAngle, camMaxAngle);
+            cos = FRONT_DROID * cos(angle);
+            sin = FRONT_DROID * sin(angle);
+            final float x = droid.getX() - cos;
+            final float y = droid.getY() - sin;
+            camera.setLocation(new Vector3f(modelToViewX(x, y),
+                                            modelToViewY(x, y) + DROID_HEIGHT,
+                                            modelToViewZ(x, y)));
+            camera.getRotation().lookAt(new Vector3f(modelToViewX(cos, sin),
+                                                     camCurrentAngle,
+                                                     modelToViewZ(cos, sin)),
+                                        Vector3f.UNIT_Y);
+        }else{
+            camCurrentHeight = ensureRange(camCurrentHeight + getDeclineSpeed(), camMinHeight, camMaxHeight);
+            camCurrentAngle = ensureRange(camCurrentAngle + getRotateSpeed() * 3, 0, 2 * camMaxAngle);
+            cos = BEHIND_DROID * cos(angle);
+            sin = BEHIND_DROID * sin(angle);
+            final float x = droid.getX() - cos;
+            final float y = droid.getY() - sin;
+            camera.setLocation(new Vector3f(modelToViewX(x, y),
+                                            camCurrentHeight + ABOVE_GROUND,
+                                            modelToViewZ(x, y)));
+            camera.getRotation().lookAt(new Vector3f(modelToViewX(cos, sin),
+                                                     camCurrentAngle - INCLINATION,
+                                                     modelToViewZ(cos, sin)),
+                                        Vector3f.UNIT_Y);
+        }
         camera.update();
+        upState = UpState.STOP;
+    }
+
+    /**
+     * Handles a switch camera state command.
+     */
+    public void switchCamStates(){
+        camState = switch (camState) {
+            case FIRST -> CamState.THIRD;
+            case THIRD -> CamState.FIRST;
+        };
+        resetCamera();
     }
 
     /**
@@ -194,10 +342,13 @@ public class GameState extends AbstractAppState {
 
     /**
      * Permits a game state.
+     * Nun wenn GameState aktiviert ist, wird der Maus-Pointer unsichtbar.
      */
     private void enableState(boolean enabled) {
+        final InputManager inputManager = app.getInputManager();
         getTextOverlay().setEnabled(enabled);
         getGameInput().setEnabled(enabled);
+        inputManager.setCursorVisible(false);
     }
 
     /**

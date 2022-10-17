@@ -73,7 +73,5 @@ public class CollisionPredicate implements Visitor<Boolean>, Predicate<Item> {
     }
 
     @Override
-    public Boolean visit(Dog dog) {
-        return Boolean.TRUE;
-    }
+    public Boolean visit(Dog dog){return Boolean.FALSE;}
 }

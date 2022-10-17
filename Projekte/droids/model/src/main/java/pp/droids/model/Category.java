@@ -57,6 +57,11 @@ public class Category {
     public static final String EXIT = "EXIT";
 
     /**
+     * The category used for the dog.
+     */
+    public static final String DOG = "DOG";
+
+    /**
      * The category indicating that this triangle is out of the observer's viewing area.
      */
     public static final String OUT_OF_VIEWING_AREA = Triangle.OUT_OF_VIEWING_AREA;

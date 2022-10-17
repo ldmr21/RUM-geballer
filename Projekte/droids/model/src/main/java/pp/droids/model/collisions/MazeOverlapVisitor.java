@@ -69,7 +69,5 @@ class MazeOverlapVisitor implements Visitor<Boolean> {
     }
 
     @Override
-    public Boolean visit(Dog dog) {
-        return overlap(maze, dog);
-    }
+    public Boolean visit(Dog dog){return overlap(maze, dog);}
 }

@@ -184,7 +184,5 @@ class SegmentCollector implements VoidVisitor {
     }
 
     @Override
-    public void visit(Dog dog) {
-        add(dog);
-    }
+    public void visit(Dog dog){add(dog);}
 }

@@ -60,7 +60,7 @@ public class MainSynchronizer extends ModelViewSynchronizer implements Visitor<S
     private static final ColorRGBA EXIT_COLOR = new ColorRGBA(0.5f, 1f, 1f, 0.5f);
     public static final float EXIT_HEIGHT = 2.5f;
     public static final String DOG_MODEL = "Models/Dog/Dog.j3o";
-    public final String DOG = "DOG";
+    public static final String DOG = "DOG";
 
     /**
      * Constructor of the synchronizer.
@@ -239,14 +239,4 @@ public class MainSynchronizer extends ModelViewSynchronizer implements Visitor<S
         cylGeom.setShadowMode(ShadowMode.CastAndReceive);
         return cylGeom;
     }
-/*
-    @Override
-    public Spatial visit(Dog dog){
-        final Spatial spatial = gameState.getApp().getAssetManager().loadModel(DOG_MODEL);
-        spatial.addControl(new DogControl(dog));
-        spatial.setName(DOG);
-        return spatial;
-    }
-
- */
 }

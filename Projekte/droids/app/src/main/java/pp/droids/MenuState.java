@@ -3,6 +3,7 @@ package pp.droids;
 import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
+import com.jme3.input.InputManager;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
@@ -51,6 +52,7 @@ public class MenuState extends AbstractAppState {
     private Container saveDialogContainer;
     private Container currentDialog;
     private SoundModel soundModel;
+    private MusicModel musicModel;
     private RadarViewModel radarViewModel;
     private DebugViewModel debugViewModel;
     private final Node menuGuiNode = new Node("gui.menu");
@@ -71,21 +73,25 @@ public class MenuState extends AbstractAppState {
         BaseStyles.loadGlassStyle();
         GuiGlobals.getInstance().getStyles().setDefaultStyle("glass"); //NON-NLS
         soundModel = new SoundModel();
+        musicModel = new MusicModel();
         radarViewModel = new RadarViewModel();
         debugViewModel = new DebugViewModel();
-
         if (isEnabled()) enableState();
     }
 
     /**
      * Enables the menu state by updating the sound model, the radar view model and the debug view model and shows the main dialog container.
+     * Wenn MenuState aktiviert ist, wird der Maus-Pointer sichtbar.
      */
     private void enableState() {
+        final InputManager inputManager = app.getInputManager();
         app.getDroidsGuiNode().attachChild(menuGuiNode);
         soundModel.update();
+        musicModel.update();
         radarViewModel.update();
         debugViewModel.update();
         showDialog(mainDialog());
+        inputManager.setCursorVisible(true);
     }
 
     /**
@@ -146,7 +152,8 @@ public class MenuState extends AbstractAppState {
             final Button loadBtn = mainDialogContainer.addChild(new Button(BUNDLE.getString("menu.map.load")));
             final Button saveBtn = mainDialogContainer.addChild(new Button(BUNDLE.getString("menu.map.save")));
             final Button continueBtn = mainDialogContainer.addChild(new Button(BUNDLE.getString("menu.return-to-game")));
-            mainDialogContainer.addChild(new Checkbox(BUNDLE.getString("menu.sound-enabled"), soundModel));
+            mainDialogContainer.addChild(new Checkbox(BUNDLE.getString("menu.sound-enabled"), soundModel)); //Checkbox für Sounds
+            mainDialogContainer.addChild(new Checkbox(BUNDLE.getString("menu.music-enabled"), musicModel)); //Checkbox für Musik
             mainDialogContainer.addChild(new Checkbox(BUNDLE.getString("menu.radar-view-enabled"), radarViewModel));
             mainDialogContainer.addChild(new Checkbox(BUNDLE.getString("menu.debug-view-enabled"), debugViewModel));
             final Button stopBtn = mainDialogContainer.addChild(new Button(BUNDLE.getString("menu.quit")));
@@ -308,6 +315,15 @@ public class MenuState extends AbstractAppState {
     }
 
     /**
+     * Method to get the music class.
+     *
+     * @return music class.
+     */
+    private GameMusic getMusic() {
+        return app.getStateManager().getState(GameMusic.class);
+    }
+
+    /**
      * Method to get the radar view class.
      *
      * @return radar view class
@@ -342,6 +358,26 @@ public class MenuState extends AbstractAppState {
         public void setChecked(boolean state) {
             super.setChecked(state);
             getSound().setEnabled(state);
+        }
+    }
+
+    /**
+     * The class simplifies saving and changing the music.
+     * It extends {@link com.simsilica.lemur.DefaultCheckboxModel}.
+     */
+    public class MusicModel extends DefaultCheckboxModel {
+        public MusicModel() {
+            super(getMusic().isEnabled());
+        }
+
+        public void update() {
+            setChecked(getMusic().isEnabled());
+        }
+
+        @Override
+        public void setChecked(boolean state) {
+            super.setChecked(state);
+            getMusic().setEnabled(state);
         }
     }
 

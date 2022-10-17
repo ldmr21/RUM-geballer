@@ -159,4 +159,6 @@ public class DroidsAppConfig extends DroidsConfig {
     public ColorRGBA getBottomColor() {
         return bottomColor.getColor();
     }
+
+
 }

@@ -4,7 +4,6 @@ import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.audio.AudioData;
-import com.jme3.audio.AudioData.DataType;
 import com.jme3.audio.AudioNode;
 import pp.droids.model.DamageReceiver;
 import pp.droids.model.DroidsModel;
@@ -14,8 +13,6 @@ import pp.droids.model.Projectile;
 import pp.droids.model.Shooter;
 import pp.droids.notifications.GameEventAdapter;
 import pp.util.Prefs;
-
-
 
 import java.lang.System.Logger;
 import java.lang.System.Logger.Level;
@@ -30,8 +27,6 @@ public class GameSound extends AbstractAppState {
     private static final Logger LOGGER = System.getLogger(GameSound.class.getName());
     private static final Preferences PREFS = Prefs.getPreferences(GameSound.class);
     private static final String ENABLED_PREF = "enabled"; //NON-NLS
-
-    private AudioNode background_music;
     private DroidsApp app;
     private AudioNode gunSound;
     private AudioNode killedSound;
@@ -65,7 +60,6 @@ public class GameSound extends AbstractAppState {
     /**
      * Initializes different sounds.
      * It overrides {@link com.jme3.app.state.AbstractAppState#initialize(com.jme3.app.state.AppStateManager, com.jme3.app.Application)}
-     *
      * @param stateManager The state manager
      * @param app          The application
      */
@@ -73,18 +67,9 @@ public class GameSound extends AbstractAppState {
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
         this.app = (DroidsApp) app;
-        background_music = new AudioNode(app.getAssetManager(),"Sound/Music/jazzy.ogg", DataType.Stream);//7b step1: background music eingefügt/definiert
-        background_music.setLooping(true); //Musik loopt
-        background_music.setVolume(1); //Die Lautstärke der WAV datei "JAZZ" wird auf den Wert eins gesetzt um diese im hintergrund hören zu können.
-        background_music.setPositional(false);//keine bestimmte Position/Stereo sound
-        background_music.play(); // Musik muss gestartet werden
         gunSound = loadSound("Sound/Effects/Gun.wav"); //NON-NLS
         killedSound = loadSound("Sound/Effects/killed.wav"); //NON-NLS
         hitSound = loadSound("Sound/Effects/hit.wav"); //NON-NLS
-    }
-    //7b Step 2: Getter wird initialisiert, um die Hintergrundmusik i anderen klassen verändern zu können
-    public AudioNode getBackground_music(){
-        return background_music;
     }
 
     /**
@@ -94,10 +79,10 @@ public class GameSound extends AbstractAppState {
      * @return sound from type AudioNode
      */
     private AudioNode loadSound(String name) {
-        final AudioNode sound = new AudioNode(app.getAssetManager(), name, DataType.Buffer);
+        final AudioNode sound = new AudioNode(app.getAssetManager(), name,
+                                              AudioData.DataType.Buffer);
         sound.setLooping(false);
         sound.setPositional(false);
-        sound.setVolume(5);
         return sound;
     }
 

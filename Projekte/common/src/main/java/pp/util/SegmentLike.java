@@ -165,12 +165,14 @@ public interface SegmentLike {
      * of the specified position from the intersection point of the ray with the straight line determined by the
      * end points of this segment. Returns {@linkplain Float#NaN} if there is no intersection.
      *
+     * Ich habe die Getter-Methode von from().getX in float dy auf from().getY() geändert.
+     *
      * @param pos the specified position
      * @param q   the specified quotient
      */
     default float quotientDist(Position pos, float q) {
         final float dx = (1f - q) * from().getX() + q * to().getX() - pos.getX();
-        final float dy = (1f - q) * from().getY() + q * to().getX() - pos.getY();
+        final float dy = (1f - q) * from().getY() + q * to().getY() - pos.getY();
         return sqrt(dx * dx + dy * dy);
     }
 
