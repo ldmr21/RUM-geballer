@@ -39,4 +39,6 @@ public interface GameEventListener {
      * @param hittingItem the item giving damage
      */
     void hit(DamageReceiver damaged, Item hittingItem);
+
+    void background_music();
 }

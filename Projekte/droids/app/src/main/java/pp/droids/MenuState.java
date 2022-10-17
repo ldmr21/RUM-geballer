@@ -51,6 +51,7 @@ public class MenuState extends AbstractAppState {
     private Container saveDialogContainer;
     private Container currentDialog;
     private SoundModel soundModel;
+    private MusicModel musicModel;
     private RadarViewModel radarViewModel;
     private DebugViewModel debugViewModel;
     private final Node menuGuiNode = new Node("gui.menu");
@@ -71,6 +72,7 @@ public class MenuState extends AbstractAppState {
         BaseStyles.loadGlassStyle();
         GuiGlobals.getInstance().getStyles().setDefaultStyle("glass"); //NON-NLS
         soundModel = new SoundModel();
+        musicModel = new MusicModel();
         radarViewModel = new RadarViewModel();
         debugViewModel = new DebugViewModel();
 
@@ -83,6 +85,7 @@ public class MenuState extends AbstractAppState {
     private void enableState() {
         app.getDroidsGuiNode().attachChild(menuGuiNode);
         soundModel.update();
+        musicModel.update();
         radarViewModel.update();
         debugViewModel.update();
         showDialog(mainDialog());
@@ -147,6 +150,7 @@ public class MenuState extends AbstractAppState {
             final Button saveBtn = mainDialogContainer.addChild(new Button(BUNDLE.getString("menu.map.save")));
             final Button continueBtn = mainDialogContainer.addChild(new Button(BUNDLE.getString("menu.return-to-game")));
             mainDialogContainer.addChild(new Checkbox(BUNDLE.getString("menu.sound-enabled"), soundModel));
+            mainDialogContainer.addChild(new Checkbox(BUNDLE.getString("menu.music-enabled"), musicModel));
             mainDialogContainer.addChild(new Checkbox(BUNDLE.getString("menu.radar-view-enabled"), radarViewModel));
             mainDialogContainer.addChild(new Checkbox(BUNDLE.getString("menu.debug-view-enabled"), debugViewModel));
             final Button stopBtn = mainDialogContainer.addChild(new Button(BUNDLE.getString("menu.quit")));
@@ -306,6 +310,9 @@ public class MenuState extends AbstractAppState {
     private GameSound getSound() {
         return app.getStateManager().getState(GameSound.class);
     }
+    private GameMusic getMusic() {
+        return app.getStateManager().getState(GameMusic.class);
+    }
 
     /**
      * Method to get the radar view class.
@@ -343,6 +350,24 @@ public class MenuState extends AbstractAppState {
             super.setChecked(state);
             getSound().setEnabled(state);
         }
+    }
+    public class MusicModel extends DefaultCheckboxModel {
+        public MusicModel() {
+            super(getMusic().isEnabled());
+        }
+
+        public void update() {
+            setChecked(getMusic().isEnabled());
+        }
+
+        @Override
+        public void setChecked(boolean state) {
+            super.setChecked(state);
+            getMusic().setEnabled(state);
+        }
+    }
+    public MusicModel getMusicModel(){
+        return musicModel;
     }
 
     /**

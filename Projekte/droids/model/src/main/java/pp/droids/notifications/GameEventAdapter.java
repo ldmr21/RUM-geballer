@@ -35,4 +35,7 @@ public class GameEventAdapter implements GameEventListener {
      */
     @Override
     public void hit(DamageReceiver damaged, Item hittingItem) { /* empty implementation */}
+
+    @Override
+    public void background_music(){}
 }

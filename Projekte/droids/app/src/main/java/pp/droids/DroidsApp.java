@@ -127,17 +127,21 @@ public class DroidsApp extends SimpleApplication {
             stateManager.attach(stats);
         }
         final GameState gameState = new GameState();
-        final MenuState menuState = new MenuState();
-        final TextOverlay textOverlay = new TextOverlay();
         final GameSound gameSound = new GameSound();
+        final GameMusic gameMusic = new GameMusic();
+
+        final TextOverlay textOverlay = new TextOverlay();
+
         final GameInput gameInput = new GameInput();
         final RadarView radarView = new RadarView();
         final DebugView debugView = new DebugView();
-        stateManager.attachAll(gameState, menuState, textOverlay, gameSound, gameInput, radarView, debugView);
+        final MenuState menuState = new MenuState();
+        stateManager.attachAll(gameState, menuState, textOverlay, gameSound, gameMusic, gameInput, radarView, debugView);
         gameState.setEnabled(false);
         textOverlay.setEnabled(false);
         gameInput.setEnabled(false);
         gameSound.setEnabled(GameSound.enabledInPreferences());
+        gameMusic.setEnabled(true);
         radarView.setEnabled(RadarView.enabledInPreferences());
         debugView.setEnabled(DebugView.enabledInPreferences());
     }

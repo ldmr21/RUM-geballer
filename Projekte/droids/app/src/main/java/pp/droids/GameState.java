@@ -127,6 +127,7 @@ public class GameState extends AbstractAppState {
         app.getRootNode().attachChild(viewNode);
         viewNode.attachChild(itemNode);
         app.getStateManager().getState(GameSound.class).register(model);
+        app.getStateManager().getState(GameMusic.class).register(model);
         model.addGameEventListener(new GameEventAdapter() {
             @Override
             public void mapChanged(DroidsMap oldMap, DroidsMap newMap) {
