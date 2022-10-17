@@ -110,6 +110,12 @@ class ToCodeVisitor implements Visitor {
         addItem(item);
     }
 
+    @Override
+    public void visit(ExternalDog item){
+        sb.append(format(Locale.US,"final Flag %s = new Flag(model);%n", item.id));
+        addItem(item);
+    }
+
     /**
      * Adds the specified (model) item to the map based on the information stored in the
      * specified external item.

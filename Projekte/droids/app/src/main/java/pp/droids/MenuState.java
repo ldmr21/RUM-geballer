@@ -3,6 +3,7 @@ package pp.droids;
 import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
+import com.jme3.input.InputManager;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
@@ -75,20 +76,22 @@ public class MenuState extends AbstractAppState {
         musicModel = new MusicModel();
         radarViewModel = new RadarViewModel();
         debugViewModel = new DebugViewModel();
-
         if (isEnabled()) enableState();
     }
 
     /**
      * Enables the menu state by updating the sound model, the radar view model and the debug view model and shows the main dialog container.
+     * Wenn MenuState aktiviert ist, wird der Maus-Pointer sichtbar.
      */
     private void enableState() {
+        final InputManager inputManager = app.getInputManager();
         app.getDroidsGuiNode().attachChild(menuGuiNode);
         soundModel.update();
         musicModel.update();
         radarViewModel.update();
         debugViewModel.update();
         showDialog(mainDialog());
+        inputManager.setCursorVisible(true);
     }
 
     /**

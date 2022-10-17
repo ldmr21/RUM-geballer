@@ -4,6 +4,7 @@ import com.jme3.material.Material;
 import com.jme3.material.RenderState;
 import com.jme3.material.RenderState.BlendMode;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Matrix3f;
 import com.jme3.math.Vector2f;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.Geometry;
@@ -14,6 +15,7 @@ import com.jme3.scene.shape.RectangleMesh;
 import com.jme3.util.TangentBinormalGenerator;
 import pp.droids.GameState;
 import pp.droids.ModelViewSynchronizer;
+import pp.droids.model.Dog;
 import pp.droids.model.Droid;
 import pp.droids.model.Enemy;
 import pp.droids.model.Exit;
@@ -57,6 +59,8 @@ public class MainSynchronizer extends ModelViewSynchronizer implements Visitor<S
     private static final String COLOR = "Color"; //NON-NLS
     private static final ColorRGBA EXIT_COLOR = new ColorRGBA(0.5f, 1f, 1f, 0.5f);
     public static final float EXIT_HEIGHT = 2.5f;
+    public static final String DOG_MODEL = "Models/Dog/Dog.j3o";
+    public static final String DOG = "DOG";
 
     /**
      * Constructor of the synchronizer.
@@ -203,6 +207,15 @@ public class MainSynchronizer extends ModelViewSynchronizer implements Visitor<S
         spatial.setShadowMode(ShadowMode.CastAndReceive);
         spatial.addControl(new FlagControl(flag));
         spatial.setName(FLAG);
+        return spatial;
+    }
+
+    @Override
+    public Spatial visit(Dog dog){
+        final Spatial spatial = gameState.getApp().getAssetManager().loadModel(DOG_MODEL);
+        spatial.setShadowMode(ShadowMode.CastAndReceive);
+        spatial.addControl(new DogControl(dog));
+        spatial.setName(DOG);
         return spatial;
     }
 

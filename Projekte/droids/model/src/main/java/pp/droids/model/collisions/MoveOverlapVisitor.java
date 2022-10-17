@@ -1,5 +1,6 @@
 package pp.droids.model.collisions;
 
+import pp.droids.model.Dog;
 import pp.droids.model.Droid;
 import pp.droids.model.Enemy;
 import pp.droids.model.Exit;
@@ -58,4 +59,7 @@ public class MoveOverlapVisitor implements Visitor<Visitor<Boolean>> {
     public Visitor<Boolean> visit(Exit exit) {
         return new MoveBoundedItemVisitor(exit, to);
     }
+
+    @Override
+    public Visitor<Boolean> visit(Dog dog){return new MoveBoundedItemVisitor(dog, to);}
 }

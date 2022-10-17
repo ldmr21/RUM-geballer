@@ -165,6 +165,8 @@ public interface SegmentLike {
      * of the specified position from the intersection point of the ray with the straight line determined by the
      * end points of this segment. Returns {@linkplain Float#NaN} if there is no intersection.
      *
+     * Ich habe die Getter-Methode von from().getX in float dy auf from().getY() geändert.
+     *
      * @param pos the specified position
      * @param q   the specified quotient
      */
