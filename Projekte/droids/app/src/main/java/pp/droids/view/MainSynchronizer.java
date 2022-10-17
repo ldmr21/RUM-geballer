@@ -58,7 +58,7 @@ public class MainSynchronizer extends ModelViewSynchronizer implements Visitor<S
     private static final String COLOR = "Color"; //NON-NLS
     private static final ColorRGBA EXIT_COLOR = new ColorRGBA(0.5f, 1f, 1f, 0.5f);
     public static final float EXIT_HEIGHT = 2.5f;
-    public static final String DOG_MODEL = "Models/Dog/10680_Dog_v2.j3o";
+    public static final String DOG_MODEL = "Models/Dog/Dog.j3o";
     public final String DOG = "DOG";
 
     /**

@@ -3,6 +3,7 @@ package pp.droids.exporter;
 import com.jme3.app.SimpleApplication;
 import com.jme3.export.JmeExporter;
 import com.jme3.export.binary.BinaryExporter;
+import com.jme3.material.Material;
 import com.jme3.math.FastMath;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
@@ -39,7 +40,7 @@ public class ModelExporter extends SimpleApplication {
         export(setUpRobot2(), new File("Robot2.j3o")); //NON-NLS
         export(setUpRock(), new File("Rock.j3o")); //NON-NLS
         export(setUpFlag(), new File("Flag.j3o")); //NON-NLS
-        export(setUpDog(), new File("10680_Dog_v2.obj"));       //7h dog initalisieren
+        export(setUpDog(), new File("Dog.j3o"));       //7h dog initalisieren
 
         stop();
     }
@@ -83,7 +84,7 @@ public class ModelExporter extends SimpleApplication {
     }
 
     private Spatial setUpDog(){                 //7h Dog obj rein
-        final Spatial dog = getAssetManager().loadModel("Models/Dog/10680_Dog_v2.obj"); //NON-NLS
+        final Spatial dog = getAssetManager().loadModel("Models/Dog/Dog.obj"); //NON-NLS
         dog.setLocalScale(0.05f);
         return dog;
     }
