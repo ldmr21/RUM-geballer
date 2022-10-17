@@ -86,6 +86,8 @@ public class ModelExporter extends SimpleApplication {
     private Spatial setUpDog(){                 //7h Dog obj rein
         final Spatial dog = getAssetManager().loadModel("Models/Dog/Dog.obj"); //NON-NLS
         dog.setLocalScale(0.05f);
+        Material mat_default = new Material(assetManager, "Common/MatDefs/Misc/ShowNormals.j3md");
+        dog.setMaterial(mat_default);
         return dog;
     }
 

@@ -4,6 +4,7 @@ import com.jme3.material.Material;
 import com.jme3.material.RenderState;
 import com.jme3.material.RenderState.BlendMode;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Matrix3f;
 import com.jme3.math.Vector2f;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.Geometry;
@@ -210,6 +211,15 @@ public class MainSynchronizer extends ModelViewSynchronizer implements Visitor<S
     }
 
     @Override
+    public Spatial visit(Dog dog){
+        final Spatial spatial = gameState.getApp().getAssetManager().loadModel(DOG_MODEL);
+        spatial.setShadowMode(ShadowMode.CastAndReceive);
+        spatial.addControl(new DogControl(dog));
+        spatial.setName(DOG);
+        return spatial;
+    }
+
+    @Override
     public Spatial visit(Exit exit) {
         return makeCylinder(exit, EXIT_HEIGHT, EXIT_COLOR);
     }
@@ -229,7 +239,7 @@ public class MainSynchronizer extends ModelViewSynchronizer implements Visitor<S
         cylGeom.setShadowMode(ShadowMode.CastAndReceive);
         return cylGeom;
     }
-
+/*
     @Override
     public Spatial visit(Dog dog){
         final Spatial spatial = gameState.getApp().getAssetManager().loadModel(DOG_MODEL);
@@ -237,4 +247,6 @@ public class MainSynchronizer extends ModelViewSynchronizer implements Visitor<S
         spatial.setName(DOG);
         return spatial;
     }
+
+ */
 }
