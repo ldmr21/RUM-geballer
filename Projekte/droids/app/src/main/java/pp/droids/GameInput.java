@@ -14,7 +14,6 @@ import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector3f;
-import pp.droids.MenuState.MusicModel;
 import pp.droids.model.Droid;
 import pp.droids.view.debug.DebugView;
 import pp.droids.view.radar.RadarView;
@@ -58,7 +57,6 @@ class GameInput extends AbstractAppState {
     private static final String CAMMODE = "CAMMODE";
 
     private DroidsApp app;
-    private MusicModel musicModel;
     private Future<List<Segment>> futurePath;
 
     /**
@@ -125,7 +123,6 @@ class GameInput extends AbstractAppState {
         final InputManager inputManager = app.getInputManager();
         inputManager.removeListener(actionListener);
         inputManager.removeListener(analogListener);
-        //inputManager.addListener(actionListener, MUSIC);
     }
 
     /**
@@ -188,7 +185,7 @@ class GameInput extends AbstractAppState {
     }
 
     /**
-     * Methode um Musik an und aus zu stellen. Es wird auf die GameSound klasse zugegriffen und mit dem Getter die Musik verändert.
+     * Methode um Musik über setEnable an und aus zu stellen. Es wird auf die GameMusic klasse zugegriffen welche wie GameSound funkioniert
      */
     private void toggleMusic(){
         final GameMusic music = app.getStateManager().getState(GameMusic.class);

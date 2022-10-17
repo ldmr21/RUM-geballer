@@ -116,6 +116,8 @@ public class DroidsApp extends SimpleApplication {
 
     /**
      * Initializes the States and disables them.
+     *<p>
+     *gameMusic wird enabled
      */
     private void setupStates() {
         stateManager.detach(stateManager.getState(StatsAppState.class));
@@ -129,9 +131,7 @@ public class DroidsApp extends SimpleApplication {
         final GameState gameState = new GameState();
         final GameSound gameSound = new GameSound();
         final GameMusic gameMusic = new GameMusic();
-
         final TextOverlay textOverlay = new TextOverlay();
-
         final GameInput gameInput = new GameInput();
         final RadarView radarView = new RadarView();
         final DebugView debugView = new DebugView();

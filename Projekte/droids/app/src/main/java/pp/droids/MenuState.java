@@ -149,8 +149,8 @@ public class MenuState extends AbstractAppState {
             final Button loadBtn = mainDialogContainer.addChild(new Button(BUNDLE.getString("menu.map.load")));
             final Button saveBtn = mainDialogContainer.addChild(new Button(BUNDLE.getString("menu.map.save")));
             final Button continueBtn = mainDialogContainer.addChild(new Button(BUNDLE.getString("menu.return-to-game")));
-            mainDialogContainer.addChild(new Checkbox(BUNDLE.getString("menu.sound-enabled"), soundModel));
-            mainDialogContainer.addChild(new Checkbox(BUNDLE.getString("menu.music-enabled"), musicModel));
+            mainDialogContainer.addChild(new Checkbox(BUNDLE.getString("menu.sound-enabled"), soundModel)); //Checkbox für Sounds
+            mainDialogContainer.addChild(new Checkbox(BUNDLE.getString("menu.music-enabled"), musicModel)); //Checkbox für Musik
             mainDialogContainer.addChild(new Checkbox(BUNDLE.getString("menu.radar-view-enabled"), radarViewModel));
             mainDialogContainer.addChild(new Checkbox(BUNDLE.getString("menu.debug-view-enabled"), debugViewModel));
             final Button stopBtn = mainDialogContainer.addChild(new Button(BUNDLE.getString("menu.quit")));
@@ -310,6 +310,12 @@ public class MenuState extends AbstractAppState {
     private GameSound getSound() {
         return app.getStateManager().getState(GameSound.class);
     }
+
+    /**
+     * Method to get the music class.
+     *
+     * @return music class.
+     */
     private GameMusic getMusic() {
         return app.getStateManager().getState(GameMusic.class);
     }
@@ -351,6 +357,11 @@ public class MenuState extends AbstractAppState {
             getSound().setEnabled(state);
         }
     }
+
+    /**
+     * The class simplifies saving and changing the music.
+     * It extends {@link com.simsilica.lemur.DefaultCheckboxModel}.
+     */
     public class MusicModel extends DefaultCheckboxModel {
         public MusicModel() {
             super(getMusic().isEnabled());
@@ -365,9 +376,6 @@ public class MenuState extends AbstractAppState {
             super.setChecked(state);
             getMusic().setEnabled(state);
         }
-    }
-    public MusicModel getMusicModel(){
-        return musicModel;
     }
 
     /**
