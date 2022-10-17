@@ -24,4 +24,6 @@ interface Visitor {
     void visit(ExternalExit item);
 
     void visit(ExternalFlag item);
+
+    void visit(ExternalDog item);
 }
