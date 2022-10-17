@@ -105,6 +105,12 @@ class ToCodeVisitor implements Visitor {
     }
 
     @Override
+    public void visit(ExternalDog item) {
+        sb.append(format(Locale.US, "final Dog %s = new Dog(model);%n", item.id)); //NON-NLS
+        addItem(item);
+    }
+
+    @Override
     public void visit(ExternalExit item) {
         sb.append(format(Locale.US, "final Exit %s = new Exit(model);%n", item.id)); //NON-NLS
         addItem(item);

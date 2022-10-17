@@ -1,5 +1,6 @@
 package pp.droids.model.external;
 
+import pp.droids.model.Dog;
 import pp.droids.model.Droid;
 import pp.droids.model.DroidsMap;
 import pp.droids.model.Enemy;
@@ -70,5 +71,10 @@ class ExternalizerVisitor implements VoidVisitor {
     @Override
     public void visit(Exit exit) {
         items.add(new ExternalExit(exit, idMap));
+    }
+
+    @Override
+    public void visit(Dog dog) {
+        items.add(new ExternalDog(dog, idMap));
     }
 }

@@ -1,6 +1,7 @@
 package pp.droids.model.external;
 
 import pp.droids.model.BoundedItem;
+import pp.droids.model.Dog;
 import pp.droids.model.Droid;
 import pp.droids.model.DroidsMap;
 import pp.droids.model.DroidsModel;
@@ -154,6 +155,12 @@ class ToModelVisitor implements Visitor {
         final Flag flag = new Flag(model);
         id2flag.put(item.id, flag);
         addItem(flag, item);
+    }
+
+    @Override
+    public void visit(ExternalDog item) {
+        final Dog dog = new Dog(model);
+        addItem(dog, item);
     }
 
     @Override
