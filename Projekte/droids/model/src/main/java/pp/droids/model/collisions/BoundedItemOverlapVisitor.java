@@ -1,6 +1,7 @@
 package pp.droids.model.collisions;
 
 import pp.droids.model.BoundedItem;
+import pp.droids.model.Dog;
 import pp.droids.model.Droid;
 import pp.droids.model.Enemy;
 import pp.droids.model.Exit;
@@ -66,5 +67,10 @@ class BoundedItemOverlapVisitor implements Visitor<Boolean> {
     @Override
     public Boolean visit(Exit exit) {
         return overlap(exit);
+    }
+
+    @Override
+    public Boolean visit(Dog dog) {
+        return overlap(dog);
     }
 }

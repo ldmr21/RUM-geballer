@@ -50,4 +50,6 @@ public interface Visitor<T> {
      * Visit method for any object of the type {@link pp.droids.model.Exit}.
      */
     T visit(Exit exit);
+
+    T visit(Dog dog);       //7h fuer dog
 }

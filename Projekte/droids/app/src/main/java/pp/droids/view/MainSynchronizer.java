@@ -14,6 +14,7 @@ import com.jme3.scene.shape.RectangleMesh;
 import com.jme3.util.TangentBinormalGenerator;
 import pp.droids.GameState;
 import pp.droids.ModelViewSynchronizer;
+import pp.droids.model.Dog;
 import pp.droids.model.Droid;
 import pp.droids.model.Enemy;
 import pp.droids.model.Exit;
@@ -57,6 +58,8 @@ public class MainSynchronizer extends ModelViewSynchronizer implements Visitor<S
     private static final String COLOR = "Color"; //NON-NLS
     private static final ColorRGBA EXIT_COLOR = new ColorRGBA(0.5f, 1f, 1f, 0.5f);
     public static final float EXIT_HEIGHT = 2.5f;
+    public static final String DOG_MODEL = "Models/Dog/10680_Dog_v2.j3o";
+    public final String DOG = "DOG";
 
     /**
      * Constructor of the synchronizer.
@@ -225,5 +228,13 @@ public class MainSynchronizer extends ModelViewSynchronizer implements Visitor<S
                                     modelToViewZ(item));
         cylGeom.setShadowMode(ShadowMode.CastAndReceive);
         return cylGeom;
+    }
+
+    @Override
+    public Spatial visit(Dog dog){
+        final Spatial spatial = gameState.getApp().getAssetManager().loadModel(DOG_MODEL);
+        spatial.addControl(new DogControl(dog));
+        spatial.setName(DOG);
+        return spatial;
     }
 }

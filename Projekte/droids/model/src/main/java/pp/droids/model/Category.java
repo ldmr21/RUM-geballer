@@ -65,4 +65,6 @@ public class Category {
      * The category indicating that this triangle provides an infinite view.
      */
     public static final String INFINITY = Triangle.INFINITY;
+
+    public static final String DOG = "DOG";
 }

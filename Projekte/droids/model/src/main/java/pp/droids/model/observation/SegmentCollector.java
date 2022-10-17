@@ -2,6 +2,7 @@ package pp.droids.model.observation;
 
 import pp.droids.model.BoundedItem;
 import pp.droids.model.Category;
+import pp.droids.model.Dog;
 import pp.droids.model.Droid;
 import pp.droids.model.DroidsMap;
 import pp.droids.model.Enemy;
@@ -180,5 +181,10 @@ class SegmentCollector implements VoidVisitor {
     @Override
     public void visit(Exit exit) {
         add(exit);
+    }
+
+    @Override
+    public void visit(Dog dog) {
+        add(dog);
     }
 }

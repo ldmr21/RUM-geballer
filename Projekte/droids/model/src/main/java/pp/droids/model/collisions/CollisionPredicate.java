@@ -1,5 +1,6 @@
 package pp.droids.model.collisions;
 
+import pp.droids.model.Dog;
 import pp.droids.model.Droid;
 import pp.droids.model.Enemy;
 import pp.droids.model.Exit;
@@ -69,5 +70,10 @@ public class CollisionPredicate implements Visitor<Boolean>, Predicate<Item> {
     @Override
     public Boolean visit(Exit exit) {
         return Boolean.FALSE;
+    }
+
+    @Override
+    public Boolean visit(Dog dog) {
+        return Boolean.TRUE;
     }
 }

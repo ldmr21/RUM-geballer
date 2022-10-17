@@ -39,6 +39,7 @@ public class ModelExporter extends SimpleApplication {
         export(setUpRobot2(), new File("Robot2.j3o")); //NON-NLS
         export(setUpRock(), new File("Rock.j3o")); //NON-NLS
         export(setUpFlag(), new File("Flag.j3o")); //NON-NLS
+        export(setUpDog(), new File("10680_Dog_v2.obj"));       //7h dog initalisieren
 
         stop();
     }
@@ -79,6 +80,12 @@ public class ModelExporter extends SimpleApplication {
         final Spatial rock = getAssetManager().loadModel("Models/Rock/Rock.obj"); //NON-NLS
         rock.setLocalScale(0.3f);
         return rock;
+    }
+
+    private Spatial setUpDog(){                 //7h Dog obj rein
+        final Spatial dog = getAssetManager().loadModel("Models/Dog/10680_Dog_v2.obj"); //NON-NLS
+        dog.setLocalScale(0.05f);
+        return dog;
     }
 
     private Node loadModel(String name, String nodeName, float scale) {

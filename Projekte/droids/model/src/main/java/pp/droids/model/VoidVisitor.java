@@ -50,4 +50,7 @@ public interface VoidVisitor {
      * Visit method for any object of the type {@link pp.droids.model.Exit}.
      */
     void visit(Exit exit);
+
+
+    void visit(Dog dog);
 }
