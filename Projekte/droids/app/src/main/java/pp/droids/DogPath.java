@@ -76,6 +76,9 @@ public class DogPath extends AbstractAppState implements Future{
         }
     }
 
+    /**
+     * Helping-function for navigation
+     */
     private void search(){
         if(cancelled){
             dog.setRotation(dog.getRotation() + PI * 0.01f);

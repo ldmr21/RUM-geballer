@@ -346,18 +346,19 @@ public class GameState extends AbstractAppState {
         if (isEnabled() == enabled) return;
         super.setEnabled(enabled);
         if (app != null) enableState(enabled);
-        dog = new DogPath();
     }
 
     /**
      * Permits a game state.
      * Nun wenn GameState aktiviert ist, wird der Maus-Pointer unsichtbar.
+     * Initializes the dogs for the random maps
      */
     private void enableState(boolean enabled) {
         final InputManager inputManager = app.getInputManager();
         getTextOverlay().setEnabled(enabled);
         getGameInput().setEnabled(enabled);
         inputManager.setCursorVisible(false);
+        dog.initialize(new AppStateManager(app), getApp());
     }
 
     /**
