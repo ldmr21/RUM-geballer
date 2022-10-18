@@ -5,12 +5,15 @@ import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
+import com.jme3.input.CameraInput;
+import com.jme3.input.FlyByCamera;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
 import com.jme3.input.MouseInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.AnalogListener;
 import com.jme3.input.controls.KeyTrigger;
+import com.jme3.input.controls.MouseAxisTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector3f;
@@ -22,6 +25,7 @@ import pp.util.Segment;
 
 import java.lang.System.Logger;
 import java.lang.System.Logger.Level;
+import java.security.Key;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -47,14 +51,15 @@ class GameInput extends AbstractAppState {
      */
     private static final String MUSIC = "MUSIC";
 
-    //Schritt nach links/rechts
+    /**
+     * App states werden um MOVELEFT, MOVERIGHT, CAMMODE,
+     * CAMERA_UP und CAMERA_DOWN erweitert
+     */
     private static final String MOVELEFT = "MOVELEFT";
     private static final String MOVERIGHT = "MOVERIGHT";
-
-    /**
-     * switch between first and third person
-     */
     private static final String CAMMODE = "CAMMODE";
+    private static final String CAMERA_UP = "CAMERA_UP";
+    private static final String CAMERA_DOWN = "CAMERA_DOWN";
 
     private DroidsApp app;
     private Future<List<Segment>> futurePath;
@@ -64,7 +69,11 @@ class GameInput extends AbstractAppState {
      * <p>
      * It overrides {@link com.jme3.app.state.AbstractAppState#initialize(com.jme3.app.state.AppStateManager, com.jme3.app.Application)}
      * <p>
-     * Keytrigger für MUSIC wird der Taste "B" zugewiesen
+     * Keytrigger für MUSIC wird der Taste "B" zugewiesen.
+     * Keytrigger für MOVELEFT wird der taste "Q" und für MOVERIGHT wird der Taste "E" zugewiesen.
+     * MouseAxisTrigger für die Drehung LEFT und RIGHT wird Mouse XAxis zugewiesen.
+     * MouseAxisTrigger für CAMERA_UP und CAMERA_DOWN wird die Maus-Y-achse zugewiesen.
+     * Keytrigger für CAMMODE wird der Taste "V" zugewiesen.
      *
      * @param stateManager The state manager
      * @param app          The application
@@ -76,8 +85,8 @@ class GameInput extends AbstractAppState {
         final InputManager inputManager = app.getInputManager();
         inputManager.addMapping(MUSIC, new KeyTrigger(KeyInput.KEY_B));
         inputManager.addMapping(SHOOT, new KeyTrigger(KeyInput.KEY_SPACE));
-        inputManager.addMapping(LEFT, new KeyTrigger(KeyInput.KEY_A), new KeyTrigger(KeyInput.KEY_LEFT));
-        inputManager.addMapping(RIGHT, new KeyTrigger(KeyInput.KEY_D), new KeyTrigger(KeyInput.KEY_RIGHT));
+        inputManager.addMapping(LEFT, new KeyTrigger(KeyInput.KEY_A), new KeyTrigger(KeyInput.KEY_LEFT), new MouseAxisTrigger(MouseInput.AXIS_X, true));
+        inputManager.addMapping(RIGHT, new KeyTrigger(KeyInput.KEY_D), new KeyTrigger(KeyInput.KEY_RIGHT), new MouseAxisTrigger(MouseInput.AXIS_X, false));
         inputManager.addMapping(FORWARD, new KeyTrigger(KeyInput.KEY_W), new KeyTrigger(KeyInput.KEY_UP));
         inputManager.addMapping(BACKWARD, new KeyTrigger(KeyInput.KEY_S), new KeyTrigger(KeyInput.KEY_DOWN));
         inputManager.addMapping(DEBUG, new KeyTrigger(KeyInput.KEY_P));
@@ -87,6 +96,8 @@ class GameInput extends AbstractAppState {
         inputManager.addMapping(MOVELEFT, new KeyTrigger(KeyInput.KEY_Q));
         inputManager.addMapping(MOVERIGHT, new KeyTrigger(KeyInput.KEY_E));
         inputManager.addMapping(CAMMODE, new KeyTrigger(KeyInput.KEY_V));
+        inputManager.addMapping(CAMERA_UP, new MouseAxisTrigger(MouseInput.AXIS_Y, false));
+        inputManager.addMapping(CAMERA_DOWN, new MouseAxisTrigger(MouseInput.AXIS_Y, true));
         if (isEnabled()) enableState();
     }
 
@@ -113,7 +124,7 @@ class GameInput extends AbstractAppState {
      */
     private void enableState() {
         final InputManager inputManager = app.getInputManager();
-        inputManager.addListener(analogListener, SHOOT, LEFT, RIGHT, FORWARD, BACKWARD, MOVELEFT, MOVERIGHT);
+        inputManager.addListener(analogListener, SHOOT, LEFT, RIGHT, FORWARD, BACKWARD, MOVELEFT, MOVERIGHT, CAMERA_UP, CAMERA_DOWN);
         inputManager.addListener(actionListener, MUTE, RADAR_MAP, NAVIGATE, DEBUG, MUSIC, CAMMODE);
     }
 
@@ -130,6 +141,11 @@ class GameInput extends AbstractAppState {
 
     /**
      * Receives analog events and calls the corresponding method for that droid.
+     * Der Aktion MOVELEFT wird die Methode stepLeft(),
+     * MOVERIGHT wird die Methode stepRight(),
+     * CAMERA_UP wird die Methode rotateUP()
+     * und CAMERA_DOWN wird die Methode rotateDown() zugewiesen.
+     *
      */
     private final AnalogListener analogListener = (name, value, tpf) -> {
         if (app != null)
@@ -141,6 +157,8 @@ class GameInput extends AbstractAppState {
                 case BACKWARD -> getDroid().goBackward();
                 case MOVELEFT -> getDroid().stepLeft();
                 case MOVERIGHT -> getDroid().stepRight();
+                case CAMERA_UP -> getGameState().rotateUp();
+                case CAMERA_DOWN -> getGameState().rotateDown();
                 default -> { /* do nothing */}
             }
     };
@@ -149,6 +167,8 @@ class GameInput extends AbstractAppState {
      * Receives input events and calls th corresponding method.
      * <p>
      * Der Aktion MUSIC wird die Methode toggleMusic() zugewiesen
+     * und der Aktion CAMMODE wird die Methode toggleCameraMode() zugewiesen
+     *
      */
     private final ActionListener actionListener = (name, isPressed, tpf) -> {
         if (isPressed && app != null) {

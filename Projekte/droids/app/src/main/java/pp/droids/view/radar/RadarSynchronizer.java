@@ -7,6 +7,7 @@ import com.jme3.ui.Picture;
 import pp.droids.GameState;
 import pp.droids.ModelViewSynchronizer;
 import pp.droids.model.BoundedItem;
+import pp.droids.model.Dog;
 import pp.droids.model.Droid;
 import pp.droids.model.Enemy;
 import pp.droids.model.Exit;
@@ -31,6 +32,8 @@ class RadarSynchronizer extends ModelViewSynchronizer implements Visitor<Spatial
     public static final String OBSTACLE = "Obstacle"; //NON-NLS
     public static final String FLAG = "Flag"; //NON-NLS
     public static final String EXIT = "Exit"; //NON-NLS
+
+    public static final String DOG = "Dog";
 
     public RadarSynchronizer(GameState gameState, Node root) {
         super(gameState, root);
@@ -142,5 +145,10 @@ class RadarSynchronizer extends ModelViewSynchronizer implements Visitor<Spatial
     @Override
     public Spatial visit(Exit exit) {
         return getPicture(exit, EXIT);
+    }
+
+    @Override
+    public Spatial visit(Dog dog){
+        return getPicture(dog, DOG);
     }
 }

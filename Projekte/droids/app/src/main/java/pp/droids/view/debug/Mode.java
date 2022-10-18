@@ -14,6 +14,7 @@ abstract class Mode {
             case Category.WALL -> ColorRGBA.White;
             case Category.OUTER_WALL -> ColorRGBA.Cyan;
             case Category.EXIT -> ColorRGBA.Orange;
+            case Category.DOG -> ColorRGBA.Green;
             default -> ColorRGBA.Yellow;
         };
     }

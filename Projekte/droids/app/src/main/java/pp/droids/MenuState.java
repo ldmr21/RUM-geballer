@@ -3,8 +3,7 @@ package pp.droids;
 import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
-import com.jme3.audio.AudioData.DataType;
-import com.jme3.audio.AudioNode;
+import com.jme3.input.InputManager;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
@@ -47,7 +46,6 @@ public class MenuState extends AbstractAppState {
      * Key for storing paths in preferences.
      */
     private static final String PATH_PREF = "path"; //NON-NLS
-
     private DroidsApp app;
     private Container mainDialogContainer;
     private Container loadDialogContainer;
@@ -76,19 +74,21 @@ public class MenuState extends AbstractAppState {
         soundModel = new SoundModel();
         radarViewModel = new RadarViewModel();
         debugViewModel = new DebugViewModel();
-
         if (isEnabled()) enableState();
     }
 
     /**
      * Enables the menu state by updating the sound model, the radar view model and the debug view model and shows the main dialog container.
+     * Wenn MenuState aktiviert ist, wird der Maus-Pointer sichtbar.
      */
     private void enableState() {
+        final InputManager inputManager = app.getInputManager();
         app.getDroidsGuiNode().attachChild(menuGuiNode);
         soundModel.update();
         radarViewModel.update();
         debugViewModel.update();
         showDialog(mainDialog());
+        inputManager.setCursorVisible(true);
     }
 
     /**

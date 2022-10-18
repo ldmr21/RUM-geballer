@@ -3,7 +3,10 @@ package pp.droids.exporter;
 import com.jme3.app.SimpleApplication;
 import com.jme3.export.JmeExporter;
 import com.jme3.export.binary.BinaryExporter;
+import com.jme3.material.Material;
 import com.jme3.math.FastMath;
+import com.jme3.math.Matrix3f;
+import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.system.JmeContext;
@@ -32,6 +35,7 @@ public class ModelExporter extends SimpleApplication {
     /**
      * Overrides  {@link com.jme3.app.SimpleApplication#simpleInitApp()}.
      * It initializes a simple app by exporting robots and rocks.
+     * added dog model for exporting
      */
     @Override
     public void simpleInitApp() {
@@ -39,6 +43,7 @@ public class ModelExporter extends SimpleApplication {
         export(setUpRobot2(), new File("Robot2.j3o")); //NON-NLS
         export(setUpRock(), new File("Rock.j3o")); //NON-NLS
         export(setUpFlag(), new File("Flag.j3o")); //NON-NLS
+        export(setUpDog(), new File("Dog.j3o"));
 
         stop();
     }
@@ -79,6 +84,19 @@ public class ModelExporter extends SimpleApplication {
         final Spatial rock = getAssetManager().loadModel("Models/Rock/Rock.obj"); //NON-NLS
         rock.setLocalScale(0.3f);
         return rock;
+    }
+
+    /**
+     * Sets up a dog.
+     *
+     * @return spatial of the dog
+     */
+    private Spatial setUpDog() {
+        final Spatial dog = getAssetManager().loadModel("Models/Dog/Dog.obj"); //NON-NLS
+        dog.setLocalScale(0.05f);
+        Material mat_default = new Material(assetManager, "Common/MatDefs/Misc/ShowNormals.j3md");
+        dog.setMaterial(mat_default);
+        return dog;
     }
 
     private Node loadModel(String name, String nodeName, float scale) {

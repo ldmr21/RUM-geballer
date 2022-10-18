@@ -145,7 +145,7 @@ public class Droid extends Shooter implements Navigable<Segment>, Debugee {
     }
 
     /**
-     * Sets both forward state and turn state of the droid to stop.
+     * Sets forward state, turn state and side step state of the droid to stop.
      */
     private void resetState() {
         forwardState = ForwardState.STOP;
@@ -262,6 +262,7 @@ public class Droid extends Shooter implements Navigable<Segment>, Debugee {
 
     /**
      * Actually moves the droid
+     * Die Methode kann nun die SideStep-Bewegung berechnen und den Droid bewegen.
      *
      * @param delta time in seconds since the last update call
      */
