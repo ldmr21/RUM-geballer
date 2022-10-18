@@ -74,7 +74,7 @@ public class GameSound extends AbstractAppState {
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
         this.app = (DroidsApp) app;
-        background_music = new AudioNode(app.getAssetManager(), "Sound/Music/PIRATES.wav", DataType.Stream);//7b step1: background music eingefügt/definiert
+        background_music = new AudioNode(app.getAssetManager(), "Sound/Music/PIRATES.ogg", DataType.Stream);//7b step1: background music eingefügt/definiert
         background_music.setLooping(true);
         background_music.setVolume(1);
         background_music.setPositional(false);

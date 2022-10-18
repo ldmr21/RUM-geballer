@@ -1,5 +1,6 @@
 package pp.droids.model;
 
+import pp.util.CircularEntity;
 import pp.util.Position;
 import pp.util.Segment;
 import pp.util.map.Observation;
@@ -11,7 +12,9 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
+
 
 import static pp.util.Angle.normalizeAngle;
 import static pp.util.FloatMath.FLT_EPSILON;
@@ -20,7 +23,8 @@ import static pp.util.FloatMath.atan2;
 import static pp.util.FloatMath.cos;
 import static pp.util.FloatMath.sin;
 
-public class Dog extends BoundedItem{
+public class Dog extends BoundedItem {
+
 
     /**
      * A private enum containing states for searching or following.
@@ -46,7 +50,7 @@ public class Dog extends BoundedItem{
      * The categories of all entities that are collected in observation maps.
      */
     private static final Set<String> MAP_CATEGORIES = Set.of(Category.WALL, Category.OUTER_WALL,
-                                                             Category.OBSTACLE, Category.EXIT);
+                                                             Category.OBSTACLE, Category.EXIT, Category.CHARACTER);
 
     /**
      * The categories that are contained in observations,
@@ -167,11 +171,32 @@ public class Dog extends BoundedItem{
         };
     }
 
+    private int z = 0;
+
     @Override
     public void update(float delta) {
         updateMovement(delta);
         observe();
-        resetState();
+        for (CircularEntity c : this.getMap().getEntities()) {
+            if (Objects.equals(c.cat(), Category.CHARACTER)) {
+                z++;
+            }
+        }
+            if(z == 0) {
+                setRotation(getRotation() + PI * 0.01f);
+            }
+            z = 0;
+            resetState();
+    }
+
+    @Override
+    public <T> T accept(Visitor<T> v) {
+        return v.visit(this);
+    }
+
+    @Override
+    public void accept(VoidVisitor v) {
+
     }
 
     /**
@@ -329,22 +354,4 @@ public class Dog extends BoundedItem{
         latestObservation = getObservation(FOLLOWING_CATS);
         latestObservation.getTriangles().forEach(getMap()::add);
     }
-
-    /**
-     * Accept method of the visitor pattern.
-     */
-    @Override
-    public <T> T accept(Visitor<T> v) {
-        return v.visit(this);
-    }
-
-    /**
-     * Accept method of the {@link pp.droids.model.VoidVisitor}.
-     */
-    @Override
-    public void accept(VoidVisitor v) {
-        v.visit(this);
-    }
-
-
 }

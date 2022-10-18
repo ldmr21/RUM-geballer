@@ -21,18 +21,26 @@ import pp.util.Segment;
 import java.lang.System.Logger;
 import java.lang.System.Logger.Level;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import static pp.droids.view.CoordinateTransformation.modelToView;
 import static pp.droids.view.CoordinateTransformation.viewToModel;
 
-public class DogPath extends AbstractAppState {
+public class DogPath extends AbstractAppState implements Future {
 
     private static final Logger LOGGER = System.getLogger(DogPath.class.getName());
     private DroidsApp app;
     private Future<List<Segment>> futurePath;
     private Dog dog;
+    private Boolean doneBol = false;
+
+    private void setDoneBol(boolean Bool){
+        doneBol = Bool;
+    }
 
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
@@ -46,10 +54,27 @@ public class DogPath extends AbstractAppState {
      */
     private void navigate() {
         for (CircularEntity c : dog.getMap().getEntities()){
-            if(c.cat() == Category.CHARACTER){
-                navigateTo(new FloatPoint(getDroid().getX(),getDroid().getY()));
+            if(Objects.equals(c.cat(), Category.CHARACTER)){
+                navigateTo(new FloatPoint(c.getX(),c.getY()));
             }
         }
+        /* final Vector3f origin = app.getCamera().getWorldCoordinates(app.getInputManager().getCursorPosition(), 0.0f);
+        final Vector3f direction = app.getCamera().getWorldCoordinates(app.getInputManager().getCursorPosition(), 0.3f);
+        direction.subtractLocal(origin).normalizeLocal();
+
+        final Ray ray = new Ray(origin, direction);
+        final CollisionResults results = new CollisionResults();
+        getGameState().getItemNode().collideWith(ray, results);
+        for (int i = 0; i < results.size(); i++) {
+            final CollisionResult collision = results.getCollision(i);
+            // look for the first hit of the floor
+            if (collision.getGeometry().getName().equals(GameState.FLOOR_NAME)) {
+                navigateTo(viewToModel(collision.getContactPoint()));
+                return;
+            }
+        }
+
+         */
     }
 
     /**
@@ -97,7 +122,7 @@ public class DogPath extends AbstractAppState {
         super.update(tpf);
         navigate();
         // Check whether a path has been computed after navigateTo(Position) had been called
-        if (futurePath != null && futurePath.isDone()) {
+         if (futurePath != null && futurePath.isDone()) {
             try {
                 final List<Segment> newPath = futurePath.get();
                 LOGGER.log(Level.TRACE, "found path {0}", newPath); //NON-NLS
@@ -115,6 +140,32 @@ public class DogPath extends AbstractAppState {
             }
             futurePath = null;
         }
+
+
     }
 
+    @Override
+    public boolean cancel(boolean mayInterruptIfRunning) {
+        return false;
+    }
+
+    @Override
+    public boolean isCancelled() {
+        return false;
+    }
+
+    @Override
+    public boolean isDone() {
+        return doneBol;
+    }
+
+    @Override
+    public Object get() throws InterruptedException, ExecutionException {
+        return null;
+    }
+
+    @Override
+    public Object get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
+        return null;
+    }
 }
