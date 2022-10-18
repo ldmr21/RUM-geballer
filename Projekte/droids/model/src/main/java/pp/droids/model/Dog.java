@@ -73,7 +73,6 @@ public class Dog extends BoundedItem {
 
     private static final float BOUNDING_RADIUS = 0.4f;
 
-
     private TurnState turnState;
     private FollowState followState;
 
@@ -81,7 +80,6 @@ public class Dog extends BoundedItem {
      * The latest observation by the dog
      */
     private Observation latestObservation;
-
 
     public Dog(DroidsModel model) {
         super(model, BOUNDING_RADIUS);
@@ -309,7 +307,6 @@ public class Dog extends BoundedItem {
         newPath.stream().map(Segment::to).forEach(path::add);
     }
 
-
     /**
      * Returns a navigator that can be used to compute an optimal path for this
      * item to any postion.
@@ -326,7 +323,6 @@ public class Dog extends BoundedItem {
     public ObservationMap getMap() {
         return observationMap.computeIfAbsent(getLevel(), l -> new ObservationMap(MAP_CATEGORIES));
     }
-
 
     /**
      * Returns the latest observation by the droid.
