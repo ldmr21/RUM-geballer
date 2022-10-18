@@ -63,7 +63,7 @@ public class Dog extends BoundedItem {
     /**
      * Maps each level to an ObservationMap of its own.
      */
-    private final Map<MapLevel, ObservationMap> observationMap = new HashMap<>();
+    private Map<MapLevel, ObservationMap> observationMap = new HashMap<>();
 
     /**
      * The navigation path. The dog will follow this path to its end
@@ -115,7 +115,7 @@ public class Dog extends BoundedItem {
     /**
      * Sets following state of the dog to stop.
      */
-    private void resetState() {
+    public void resetState() {
         followState = FollowState.STOP;
         turnState = TurnState.STOP;
     }
@@ -177,16 +177,7 @@ public class Dog extends BoundedItem {
     public void update(float delta) {
         updateMovement(delta);
         observe();
-        for (CircularEntity c : this.getMap().getEntities()) {
-            if (Objects.equals(c.cat(), Category.CHARACTER)) {
-                z++;
-            }
-        }
-            if(z == 0) {
-                setRotation(getRotation() + PI * 0.01f);
-            }
-            z = 0;
-            resetState();
+        resetState();
     }
 
     @Override
@@ -342,6 +333,10 @@ public class Dog extends BoundedItem {
      */
     public Observation getLatestObservation() {
         return latestObservation;
+    }
+
+    public void clearObservationMap(){
+        observationMap = new HashMap<>();
     }
 
 

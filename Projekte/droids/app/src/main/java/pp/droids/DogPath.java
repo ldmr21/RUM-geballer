@@ -29,6 +29,7 @@ import java.util.concurrent.TimeoutException;
 
 import static pp.droids.view.CoordinateTransformation.modelToView;
 import static pp.droids.view.CoordinateTransformation.viewToModel;
+import static pp.util.FloatMath.PI;
 
 public class DogPath extends AbstractAppState implements Future {
 
@@ -37,9 +38,14 @@ public class DogPath extends AbstractAppState implements Future {
     private Future<List<Segment>> futurePath;
     private Dog dog;
     private Boolean doneBol = false;
+    private Boolean cancBol = true;
 
     private void setDoneBol(boolean Bool){
         doneBol = Bool;
+    }
+
+    private void setCancBol(boolean Bool){
+        cancBol = Bool;
     }
 
     @Override
@@ -55,8 +61,19 @@ public class DogPath extends AbstractAppState implements Future {
     private void navigate() {
         for (CircularEntity c : dog.getMap().getEntities()){
             if(Objects.equals(c.cat(), Category.CHARACTER)){
-                navigateTo(new FloatPoint(c.getX(),c.getY()));
+                if(!isDone()) {
+                    navigateTo(new FloatPoint(c.getX(), c.getY()));
+                    setCancBol(false);
+                }
+                if(new FloatPoint(dog.getX(), dog.getY()).equals(new FloatPoint(c.getX(), c.getY()))){
+                    setDoneBol(true);
+                    setCancBol(true);
+                    dog.clearObservationMap();
+
+
+                }
             }
+        }
         }
         /* final Vector3f origin = app.getCamera().getWorldCoordinates(app.getInputManager().getCursorPosition(), 0.0f);
         final Vector3f direction = app.getCamera().getWorldCoordinates(app.getInputManager().getCursorPosition(), 0.3f);
@@ -75,6 +92,12 @@ public class DogPath extends AbstractAppState implements Future {
         }
 
          */
+
+    private void search(){
+        if(cancBol){
+            dog.setRotation(dog.getRotation() + PI * 0.01f);
+            setDoneBol(false);
+        }
     }
 
     /**
@@ -121,6 +144,7 @@ public class DogPath extends AbstractAppState implements Future {
     public void update(float tpf) {
         super.update(tpf);
         navigate();
+        search();
         // Check whether a path has been computed after navigateTo(Position) had been called
          if (futurePath != null && futurePath.isDone()) {
             try {
@@ -151,7 +175,7 @@ public class DogPath extends AbstractAppState implements Future {
 
     @Override
     public boolean isCancelled() {
-        return false;
+        return cancBol;
     }
 
     @Override
