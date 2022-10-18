@@ -15,6 +15,11 @@ public class DroidsMap {
     private Droid droid;
 
     /**
+     * The dog of this droids map.
+     */
+    private Dog dog;
+
+    /**
      * A list of all items contained in this droids map.
      */
     private final List<Item> items = new ArrayList<>();
@@ -60,6 +65,26 @@ public class DroidsMap {
      */
     public Droid getDroid() {
         return Objects.requireNonNull(droid, "The droid has not yet been set");
+    }
+
+    /**
+     * Returns the dog
+     *
+     * @return dog
+     */
+    public Dog getDog() {
+        return Objects.requireNonNull(dog, "The dog has not yet been set");
+    }
+
+    /**
+     * Sets the dog in this map.
+     * This method must not be called twice for the same map.
+     * @param dog the dog for this level
+     */
+    public void setDog(Dog dog) {
+        if (this.dog != null)
+            throw new RuntimeException("The dog must not be reset");
+        this.dog = dog;
     }
 
     /**
@@ -111,6 +136,8 @@ public class DroidsMap {
         // destroyed.
         if (droid != null)
             droid.update(deltaTime);
+        if (dog != null)
+            dog.update(deltaTime);
         // Update all the other items
         for (Item item : items)
             if (item != droid)

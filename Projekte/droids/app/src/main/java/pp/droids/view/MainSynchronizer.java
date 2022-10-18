@@ -31,6 +31,8 @@ import pp.util.TypedSegment;
 
 import static com.jme3.math.FastMath.HALF_PI;
 import static com.jme3.math.Vector3f.UNIT_Y;
+import static com.jme3.math.Vector3f.UNIT_Z;
+import static com.jme3.math.Vector3f.ZERO;
 import static pp.droids.view.CoordinateTransformation.modelToView;
 import static pp.droids.view.CoordinateTransformation.modelToViewX;
 import static pp.droids.view.CoordinateTransformation.modelToViewY;
