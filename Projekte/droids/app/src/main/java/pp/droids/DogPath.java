@@ -29,23 +29,25 @@ import java.util.concurrent.TimeoutException;
 
 import static pp.droids.view.CoordinateTransformation.modelToView;
 import static pp.droids.view.CoordinateTransformation.viewToModel;
-import static pp.util.FloatMath.PI;
+import static pp.util.FloatMath.cos;
+import static pp.util.FloatMath.sin;
 
-public class DogPath extends AbstractAppState implements Future {
+public class DogPath extends AbstractAppState implements Future{
 
     private static final Logger LOGGER = System.getLogger(DogPath.class.getName());
+    private static final float PI = 3.1415f;
     private DroidsApp app;
     private Future<List<Segment>> futurePath;
     private Dog dog;
-    private Boolean doneBol = false;
-    private Boolean cancBol = true;
+    private Boolean done = false;
+    public Boolean cancelled = true;
 
-    private void setDoneBol(boolean Bool){
-        doneBol = Bool;
+    private void setDoneBoolean(boolean bool){
+        done = bool;
     }
 
-    private void setCancBol(boolean Bool){
-        cancBol = Bool;
+    private void setCancelledBoolean(boolean bool){
+        cancelled = bool;
     }
 
     @Override
@@ -60,13 +62,13 @@ public class DogPath extends AbstractAppState implements Future {
      */
     private void navigate() {
         for (CircularEntity c : dog.getMap().getEntities()){
-            if(Objects.equals(c.cat(), Category.CHARACTER)){
-                if(!isDone()) {
-                    navigateTo(new FloatPoint(c.getX(), c.getY()));
+            if(Objects.equals(c.cat(), Category.DROID)){
+                if(!isDone()){
+                    navigateTo(new FloatPoint((c.getX() - cos(c.getRotation())), (c.getY() - sin(c.getRotation()))));
                 }
-                if(new FloatPoint(dog.getX(), dog.getY()).equals(new FloatPoint(c.getX(), c.getY()))){
-                    setDoneBol(true);
-                    setCancBol(true);
+                if(new FloatPoint(dog.getX(), dog.getY()).equals(new FloatPoint((c.getX() - cos(c.getRotation())), (c.getY() - sin(c.getRotation()))))){
+                    setDoneBoolean(true);
+                    setCancelledBoolean(true);
                     dog.clearObservationMap();
                     break;
                 }
@@ -74,11 +76,10 @@ public class DogPath extends AbstractAppState implements Future {
         }
     }
 
-
     private void search(){
-        if(cancBol){
+        if(cancelled){
             dog.setRotation(dog.getRotation() + PI * 0.01f);
-            setDoneBol(false);
+            setDoneBoolean(false);
         }
     }
 
@@ -128,7 +129,7 @@ public class DogPath extends AbstractAppState implements Future {
         navigate();
         search();
         // Check whether a path has been computed after navigateTo(Position) had been called
-         if (futurePath != null && futurePath.isDone()) {
+        if (futurePath != null && futurePath.isDone()) {
             try {
                 final List<Segment> newPath = futurePath.get();
                 LOGGER.log(Level.TRACE, "found path {0}", newPath); //NON-NLS
@@ -146,8 +147,6 @@ public class DogPath extends AbstractAppState implements Future {
             }
             futurePath = null;
         }
-
-
     }
 
     @Override
@@ -157,12 +156,12 @@ public class DogPath extends AbstractAppState implements Future {
 
     @Override
     public boolean isCancelled() {
-        return cancBol;
+        return cancelled;
     }
 
     @Override
     public boolean isDone() {
-        return doneBol;
+        return done;
     }
 
     @Override

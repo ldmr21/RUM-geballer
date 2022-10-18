@@ -31,9 +31,6 @@ import pp.droids.model.DroidsMap;
 import pp.droids.model.DroidsModel;
 import pp.droids.notifications.GameEventAdapter;
 import pp.droids.view.MainSynchronizer;
-import com.jme3.scene.shape.Quad;
-import pp.droids.MenuState.*;
-
 
 import java.lang.System.Logger;
 import java.lang.System.Logger.Level;
@@ -45,7 +42,6 @@ import static pp.droids.view.CoordinateTransformation.modelToViewX;
 import static pp.droids.view.CoordinateTransformation.modelToViewY;
 import static pp.droids.view.CoordinateTransformation.modelToViewZ;
 import static pp.droids.view.CoordinateTransformation.viewToModel;
-
 
 /**
  * <code>GameState</code> extends the class {@link com.jme3.app.state.AbstractAppState}.
@@ -171,6 +167,7 @@ public class GameState extends AbstractAppState {
         app.getRootNode().attachChild(viewNode);
         viewNode.attachChild(itemNode);
         app.getStateManager().getState(GameSound.class).register(model);
+        app.getStateManager().getState(GameMusic.class).register(model);
         model.addGameEventListener(new GameEventAdapter() {
             @Override
             public void mapChanged(DroidsMap oldMap, DroidsMap newMap) {
@@ -348,10 +345,8 @@ public class GameState extends AbstractAppState {
     public void setEnabled(boolean enabled) {
         if (isEnabled() == enabled) return;
         super.setEnabled(enabled);
-        if (app != null) {
-            enableState(enabled);
-
-        }
+        if (app != null) enableState(enabled);
+        dog = new DogPath();
     }
 
     /**
@@ -432,8 +427,6 @@ public class GameState extends AbstractAppState {
     Node getItemNode() {
         return itemNode;
     }
-
-
 
     /**
      * Gives the game input from the state manager of the app.

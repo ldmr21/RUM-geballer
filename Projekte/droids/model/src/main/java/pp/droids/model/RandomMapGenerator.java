@@ -143,6 +143,7 @@ public class RandomMapGenerator {
                 setDroid();
                 setDog();
             }
+
         }
 
         private void setDog(){

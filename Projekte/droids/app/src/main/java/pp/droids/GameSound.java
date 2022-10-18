@@ -4,7 +4,6 @@ import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.audio.AudioData;
-import com.jme3.audio.AudioData.DataType;
 import com.jme3.audio.AudioNode;
 import pp.droids.model.DamageReceiver;
 import pp.droids.model.DroidsModel;
@@ -28,9 +27,6 @@ public class GameSound extends AbstractAppState {
     private static final Logger LOGGER = System.getLogger(GameSound.class.getName());
     private static final Preferences PREFS = Prefs.getPreferences(GameSound.class);
     private static final String ENABLED_PREF = "enabled"; //NON-NLS
-
-    /** background_music initalize AudioNode for background music */
-    private AudioNode background_music;
     private DroidsApp app;
     private AudioNode gunSound;
     private AudioNode killedSound;
@@ -64,9 +60,6 @@ public class GameSound extends AbstractAppState {
     /**
      * Initializes different sounds.
      * It overrides {@link com.jme3.app.state.AbstractAppState#initialize(com.jme3.app.state.AppStateManager, com.jme3.app.Application)}
-     * <p>
-     * Backgroundmusic wird definiert, die Lautstärke auf eins gesetzt, die Audiodatei wird dauerhaft wiederholt und sie soll Global hörbar sein.
-     *
      * @param stateManager The state manager
      * @param app          The application
      */
@@ -74,20 +67,9 @@ public class GameSound extends AbstractAppState {
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
         this.app = (DroidsApp) app;
-        background_music = new AudioNode(app.getAssetManager(), "Sound/Music/PIRATES.ogg", DataType.Stream);//7b step1: background music eingefügt/definiert
-        background_music.setLooping(true);
-        background_music.setVolume(1);
-        background_music.setPositional(false);
-        background_music.play();
         gunSound = loadSound("Sound/Effects/Gun.wav"); //NON-NLS
         killedSound = loadSound("Sound/Effects/killed.wav"); //NON-NLS
         hitSound = loadSound("Sound/Effects/hit.wav"); //NON-NLS
-    }
-    /**Getter, um die Hintergrundmusik abrufen zu können
-     * @return background_music vom Typ AudioNode
-     */
-    public AudioNode getBackground_music(){
-        return background_music;
     }
 
     /**

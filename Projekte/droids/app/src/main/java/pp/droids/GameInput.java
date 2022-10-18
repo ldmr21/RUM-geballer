@@ -115,7 +115,6 @@ class GameInput extends AbstractAppState {
                 enableState();
             else
                 disableState();
-
         }
     }
 
@@ -132,11 +131,9 @@ class GameInput extends AbstractAppState {
      * Disables a GameInput.
      */
     private void disableState() {
-        final GameSound music = app.getStateManager().getState(GameSound.class);
         final InputManager inputManager = app.getInputManager();
         inputManager.removeListener(actionListener);
         inputManager.removeListener(analogListener);
-        inputManager.addListener(actionListener, MUSIC);
     }
 
     /**
@@ -208,26 +205,11 @@ class GameInput extends AbstractAppState {
     }
 
     /**
-     * Methode um Musik an und aus zu stellen. Es wird auf die GameSound klasse zugegriffen und mit dem Getter die Musik verändert.
+     * Methode um Musik über setEnable an und aus zu stellen. Es wird auf die GameMusic klasse zugegriffen welche wie GameSound funkioniert
      */
     private void toggleMusic(){
-        final GameSound music = app.getStateManager().getState(GameSound.class);
-        if(music.getBackground_music().getVolume() > 0){
-        music.getBackground_music().setVolume(0);
-        }
-        else
-            music.getBackground_music().setVolume(.5f);
-    }
-
-    private void setMusicOn(){
-        final GameSound music = app.getStateManager().getState(GameSound.class);
-        music.getBackground_music().play();
-        music.getBackground_music().setVolume(.5f);
-    }
-
-    private void setMusicOff(){
-        final GameSound music = app.getStateManager().getState(GameSound.class);
-        music.getBackground_music().setVolume(0);
+        final GameMusic music = app.getStateManager().getState(GameMusic.class);
+        music.setEnabled((!music.isEnabled()));
     }
     /**
      * Methode um zwischen 1st- und 3rd-Person-Ansicht zu wechseln

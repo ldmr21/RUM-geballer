@@ -1,6 +1,5 @@
 package pp.droids.model;
 
-import pp.util.CircularEntity;
 import pp.util.Position;
 import pp.util.Segment;
 import pp.util.map.Observation;
@@ -12,9 +11,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
-
 
 import static pp.util.Angle.normalizeAngle;
 import static pp.util.FloatMath.FLT_EPSILON;
@@ -23,8 +20,7 @@ import static pp.util.FloatMath.atan2;
 import static pp.util.FloatMath.cos;
 import static pp.util.FloatMath.sin;
 
-public class Dog extends BoundedItem {
-
+public class Dog extends BoundedItem{
 
     /**
      * A private enum containing states for searching or following.
@@ -50,7 +46,7 @@ public class Dog extends BoundedItem {
      * The categories of all entities that are collected in observation maps.
      */
     private static final Set<String> MAP_CATEGORIES = Set.of(Category.WALL, Category.OUTER_WALL,
-                                                             Category.OBSTACLE, Category.EXIT, Category.CHARACTER);
+                                                             Category.OBSTACLE, Category.EXIT, Category.DROID);
 
     /**
      * The categories that are contained in observations,
@@ -73,6 +69,7 @@ public class Dog extends BoundedItem {
 
     private static final float BOUNDING_RADIUS = 0.4f;
 
+
     private TurnState turnState;
     private FollowState followState;
 
@@ -80,6 +77,7 @@ public class Dog extends BoundedItem {
      * The latest observation by the dog
      */
     private Observation latestObservation;
+
 
     public Dog(DroidsModel model) {
         super(model, BOUNDING_RADIUS);
@@ -110,6 +108,10 @@ public class Dog extends BoundedItem {
     @Override
     public String cat() {return Category.DOG;}
 
+    public void clearObservationMap(){
+        observationMap = new HashMap<>();
+    }
+
     /**
      * Sets following state of the dog to stop.
      */
@@ -125,16 +127,6 @@ public class Dog extends BoundedItem {
         followState = switch (followState) {
             case STOP -> FollowState.FOLLOW;
             case FOLLOW -> FollowState.STOP;
-        };
-    }
-
-    /**
-     * Handles a turn left command.
-     */
-    public void turnLeft() {
-        turnState = switch (turnState) {
-            case LEFT, STOP -> TurnState.LEFT;
-            case RIGHT -> TurnState.STOP;
         };
     }
 
@@ -169,23 +161,11 @@ public class Dog extends BoundedItem {
         };
     }
 
-    private int z = 0;
-
     @Override
     public void update(float delta) {
         updateMovement(delta);
         observe();
         resetState();
-    }
-
-    @Override
-    public <T> T accept(Visitor<T> v) {
-        return v.visit(this);
-    }
-
-    @Override
-    public void accept(VoidVisitor v) {
-
     }
 
     /**
@@ -307,6 +287,7 @@ public class Dog extends BoundedItem {
         newPath.stream().map(Segment::to).forEach(path::add);
     }
 
+
     /**
      * Returns a navigator that can be used to compute an optimal path for this
      * item to any postion.
@@ -324,15 +305,12 @@ public class Dog extends BoundedItem {
         return observationMap.computeIfAbsent(getLevel(), l -> new ObservationMap(MAP_CATEGORIES));
     }
 
+
     /**
      * Returns the latest observation by the droid.
      */
     public Observation getLatestObservation() {
         return latestObservation;
-    }
-
-    public void clearObservationMap(){
-        observationMap = new HashMap<>();
     }
 
 
@@ -345,4 +323,22 @@ public class Dog extends BoundedItem {
         latestObservation = getObservation(FOLLOWING_CATS);
         latestObservation.getTriangles().forEach(getMap()::add);
     }
+
+    /**
+     * Accept method of the visitor pattern.
+     */
+    @Override
+    public <T> T accept(Visitor<T> v) {
+        return v.visit(this);
+    }
+
+    /**
+     * Accept method of the {@link pp.droids.model.VoidVisitor}.
+     */
+    @Override
+    public void accept(VoidVisitor v) {
+        v.visit(this);
+    }
+
+
 }
