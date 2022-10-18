@@ -29,6 +29,8 @@ import java.util.concurrent.TimeoutException;
 
 import static pp.droids.view.CoordinateTransformation.modelToView;
 import static pp.droids.view.CoordinateTransformation.viewToModel;
+import static pp.util.FloatMath.cos;
+import static pp.util.FloatMath.sin;
 
 public class DogPath extends AbstractAppState implements Future{
 
@@ -62,9 +64,9 @@ public class DogPath extends AbstractAppState implements Future{
         for (CircularEntity c : dog.getMap().getEntities()){
             if(Objects.equals(c.cat(), Category.CHARACTER)){
                 if(!isDone()){
-                    navigateTo(new FloatPoint(c.getX(), c.getY()));
+                    navigateTo(new FloatPoint((c.getX() - cos(c.getRotation())), (c.getY() - sin(c.getRotation()))));
                 }
-                if(new FloatPoint(dog.getX(), dog.getY()).equals(new FloatPoint(c.getX(),c.getY()))){
+                if(new FloatPoint(dog.getX(), dog.getY()).equals(new FloatPoint((c.getX() - cos(c.getRotation())), (c.getY() - sin(c.getRotation()))))){
                     setDoneBoolean(true);
                     setCancelledBoolean(true);
                     dog.clearObservationMap();
