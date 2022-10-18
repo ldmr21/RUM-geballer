@@ -127,9 +127,6 @@ public class RandomMapGenerator {
             for (int i = 0; i < config.getNumObstacles(); i++)
                 addBoundedItem(new Obstacle(model));
 
-            // add a dog at random position
-            addBoundedItem(new Dog(model));
-
             // add enemies at random positions
             for (int i = 0; i < config.getNumEnemies(); i++)
                 addBoundedItem(new Enemy(model));
@@ -144,7 +141,15 @@ public class RandomMapGenerator {
                 for (int i = 0; i < config.getNumFlags(); i++)
                     addBoundedItem(new Flag(model));
                 setDroid();
+                setDog();
             }
+        }
+
+        private void setDog(){
+            final Dog dog = new Dog(model);
+            addBoundedItem(dog);
+            map.setDog(dog);
+            // add a dog at random position
         }
 
         /**

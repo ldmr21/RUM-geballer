@@ -5,6 +5,8 @@ import com.jme3.export.JmeExporter;
 import com.jme3.export.binary.BinaryExporter;
 import com.jme3.material.Material;
 import com.jme3.math.FastMath;
+import com.jme3.math.Matrix3f;
+import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.system.JmeContext;
@@ -90,7 +92,7 @@ public class ModelExporter extends SimpleApplication {
      * @return spatial of the dog
      */
     private Spatial setUpDog() {
-        final Spatial dog = getAssetManager().loadModel("Models/Dog/dog.obj"); //NON-NLS
+        final Spatial dog = getAssetManager().loadModel("Models/Dog/Dog.obj"); //NON-NLS
         dog.setLocalScale(0.05f);
         Material mat_default = new Material(assetManager, "Common/MatDefs/Misc/ShowNormals.j3md");
         dog.setMaterial(mat_default);

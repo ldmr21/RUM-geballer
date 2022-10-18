@@ -9,7 +9,9 @@ import pp.droids.model.Flag;
 
 import static com.jme3.math.FastMath.PI;
 import static com.jme3.math.FastMath.sin;
+import static com.jme3.math.Vector3f.UNIT_X;
 import static com.jme3.math.Vector3f.UNIT_Y;
+import static com.jme3.math.Vector3f.UNIT_Z;
 import static pp.droids.view.CoordinateTransformation.modelToViewX;
 import static pp.droids.view.CoordinateTransformation.modelToViewY;
 import static pp.droids.view.CoordinateTransformation.modelToViewZ;
