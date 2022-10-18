@@ -168,11 +168,7 @@ class ToModelVisitor implements Visitor {
         addItem(new Exit(model, item.radius), item);
     }
 
-    @Override
-    public void visit(ExternalDog item){
-        final Dog dog = new Dog(model);
-        addItem(dog, item);
-    }
+
 
     /**
      * Adds the specified (model) item to the map based on the information stored in the

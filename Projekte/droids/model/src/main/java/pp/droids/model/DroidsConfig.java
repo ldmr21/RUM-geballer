@@ -66,12 +66,6 @@ public class DroidsConfig {
     @JsonProperty("viewing area") //NON-NLS
     private float viewingArea = 120;
 
-    @JsonProperty("lives")
-    private int lives = 10;
-
-    @JsonIgnore
-    public int getLives(){ return lives; }
-
     /**
      * Returns the number of levels the random map generator shall generate.
      */

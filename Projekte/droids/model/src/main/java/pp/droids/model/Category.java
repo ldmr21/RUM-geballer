@@ -71,5 +71,4 @@ public class Category {
      */
     public static final String INFINITY = Triangle.INFINITY;
 
-    public static final String DOG = "DOG";
 }

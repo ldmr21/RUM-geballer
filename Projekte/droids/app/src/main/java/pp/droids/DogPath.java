@@ -21,18 +21,32 @@ import pp.util.Segment;
 import java.lang.System.Logger;
 import java.lang.System.Logger.Level;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import static pp.droids.view.CoordinateTransformation.modelToView;
 import static pp.droids.view.CoordinateTransformation.viewToModel;
 
-public class DogPath extends AbstractAppState {
+public class DogPath extends AbstractAppState implements Future{
 
     private static final Logger LOGGER = System.getLogger(DogPath.class.getName());
+    private static final float PI = 3.1415f;
     private DroidsApp app;
     private Future<List<Segment>> futurePath;
     private Dog dog;
+    private Boolean done = false;
+    public Boolean cancelled = true;
+
+    private void setDoneBoolean(boolean bool){
+        done = bool;
+    }
+
+    private void setCancelledBoolean(boolean bool){
+        cancelled = bool;
+    }
 
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
@@ -46,9 +60,24 @@ public class DogPath extends AbstractAppState {
      */
     private void navigate() {
         for (CircularEntity c : dog.getMap().getEntities()){
-            if(c.cat() == Category.CHARACTER){
-                navigateTo(new FloatPoint(getDroid().getX(),getDroid().getY()));
+            if(Objects.equals(c.cat(), Category.CHARACTER)){
+                if(!isDone()){
+                    navigateTo(new FloatPoint(c.getX(), c.getY()));
+                }
+                if(new FloatPoint(dog.getX(), dog.getY()).equals(new FloatPoint(c.getX(),c.getY()))){
+                    setDoneBoolean(true);
+                    setCancelledBoolean(true);
+                    dog.clearObservationMap();
+                    break;
+                }
             }
+        }
+    }
+
+    private void search(){
+        if(cancelled){
+            dog.setRotation(dog.getRotation() + PI * 0.01f);
+            setDoneBoolean(false);
         }
     }
 
@@ -96,6 +125,7 @@ public class DogPath extends AbstractAppState {
     public void update(float tpf) {
         super.update(tpf);
         navigate();
+        search();
         // Check whether a path has been computed after navigateTo(Position) had been called
         if (futurePath != null && futurePath.isDone()) {
             try {
@@ -117,4 +147,28 @@ public class DogPath extends AbstractAppState {
         }
     }
 
+    @Override
+    public boolean cancel(boolean mayInterruptIfRunning) {
+        return false;
+    }
+
+    @Override
+    public boolean isCancelled() {
+        return cancelled;
+    }
+
+    @Override
+    public boolean isDone() {
+        return done;
+    }
+
+    @Override
+    public Object get() throws InterruptedException, ExecutionException {
+        return null;
+    }
+
+    @Override
+    public Object get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
+        return null;
+    }
 }
