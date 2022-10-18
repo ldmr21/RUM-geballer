@@ -5,8 +5,6 @@ import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
-import com.jme3.input.CameraInput;
-import com.jme3.input.FlyByCamera;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
 import com.jme3.input.MouseInput;
@@ -25,7 +23,6 @@ import pp.util.Segment;
 
 import java.lang.System.Logger;
 import java.lang.System.Logger.Level;
-import java.security.Key;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -111,8 +108,9 @@ class GameInput extends AbstractAppState {
         if (isEnabled() == enabled) return;
         super.setEnabled(enabled);
         if (app != null) {
-            if (enabled)
+            if (enabled) {
                 enableState();
+            }
             else
                 disableState();
         }
@@ -134,6 +132,7 @@ class GameInput extends AbstractAppState {
         final InputManager inputManager = app.getInputManager();
         inputManager.removeListener(actionListener);
         inputManager.removeListener(analogListener);
+        inputManager.addListener(actionListener, MUSIC, MUTE);
     }
 
     /**
@@ -202,6 +201,8 @@ class GameInput extends AbstractAppState {
     private void toggleMuted() {
         final GameSound sound = app.getStateManager().getState(GameSound.class);
         sound.setEnabled(!sound.isEnabled());
+        final MenuState menuState = app.getStateManager().getState(MenuState.class);
+        menuState.getSoundModel().update();
     }
 
     /**
@@ -210,6 +211,8 @@ class GameInput extends AbstractAppState {
     private void toggleMusic(){
         final GameMusic music = app.getStateManager().getState(GameMusic.class);
         music.setEnabled((!music.isEnabled()));
+        final MenuState menuState = app.getStateManager().getState(MenuState.class);
+        menuState.getMusicModel().update();
     }
     /**
      * Methode um zwischen 1st- und 3rd-Person-Ansicht zu wechseln

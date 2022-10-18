@@ -319,8 +319,16 @@ public class MenuState extends AbstractAppState {
      *
      * @return music class.
      */
-    private GameMusic getMusic() {
+    public GameMusic getMusic() {
         return app.getStateManager().getState(GameMusic.class);
+    }
+
+    public MusicModel getMusicModel(){
+        return musicModel;
+    }
+
+    public SoundModel getSoundModel(){
+        return soundModel;
     }
 
     /**
@@ -345,7 +353,7 @@ public class MenuState extends AbstractAppState {
      * The class simplifies saving and changing the sound.
      * It extends {@link com.simsilica.lemur.DefaultCheckboxModel}.
      */
-    private class SoundModel extends DefaultCheckboxModel {
+    protected class SoundModel extends DefaultCheckboxModel {
         public SoundModel() {
             super(getSound().isEnabled());
         }
@@ -365,7 +373,7 @@ public class MenuState extends AbstractAppState {
      * The class simplifies saving and changing the music.
      * It extends {@link com.simsilica.lemur.DefaultCheckboxModel}.
      */
-    public class MusicModel extends DefaultCheckboxModel {
+    protected class MusicModel extends DefaultCheckboxModel {
         public MusicModel() {
             super(getMusic().isEnabled());
         }

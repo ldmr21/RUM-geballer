@@ -139,7 +139,7 @@ public class DroidsApp extends SimpleApplication {
         stateManager.attachAll(gameState, menuState, textOverlay, gameSound, gameMusic, gameInput, radarView, debugView);
         gameState.setEnabled(false);
         textOverlay.setEnabled(false);
-        gameInput.setEnabled(false);
+        gameInput.setEnabled(true);
         gameSound.setEnabled(GameSound.enabledInPreferences());
         gameMusic.setEnabled(true);
         radarView.setEnabled(RadarView.enabledInPreferences());
