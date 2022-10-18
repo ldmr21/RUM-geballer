@@ -63,35 +63,17 @@ public class DogPath extends AbstractAppState implements Future {
             if(Objects.equals(c.cat(), Category.CHARACTER)){
                 if(!isDone()) {
                     navigateTo(new FloatPoint(c.getX(), c.getY()));
-                    setCancBol(false);
                 }
                 if(new FloatPoint(dog.getX(), dog.getY()).equals(new FloatPoint(c.getX(), c.getY()))){
                     setDoneBol(true);
                     setCancBol(true);
                     dog.clearObservationMap();
-
-
+                    break;
                 }
             }
         }
-        }
-        /* final Vector3f origin = app.getCamera().getWorldCoordinates(app.getInputManager().getCursorPosition(), 0.0f);
-        final Vector3f direction = app.getCamera().getWorldCoordinates(app.getInputManager().getCursorPosition(), 0.3f);
-        direction.subtractLocal(origin).normalizeLocal();
+    }
 
-        final Ray ray = new Ray(origin, direction);
-        final CollisionResults results = new CollisionResults();
-        getGameState().getItemNode().collideWith(ray, results);
-        for (int i = 0; i < results.size(); i++) {
-            final CollisionResult collision = results.getCollision(i);
-            // look for the first hit of the floor
-            if (collision.getGeometry().getName().equals(GameState.FLOOR_NAME)) {
-                navigateTo(viewToModel(collision.getContactPoint()));
-                return;
-            }
-        }
-
-         */
 
     private void search(){
         if(cancBol){
