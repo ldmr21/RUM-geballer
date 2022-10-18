@@ -31,7 +31,7 @@ import static pp.util.FloatMath.ZERO_TOLERANCE;
 
 /**
  * Visitor for obtaining a collection of segments that represent the current setting
- * from an observing item.
+ * from an observing item
  */
 class SegmentCollector implements VoidVisitor {
     /**
