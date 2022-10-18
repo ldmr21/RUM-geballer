@@ -46,7 +46,7 @@ public class Dog extends BoundedItem{
      * The categories of all entities that are collected in observation maps.
      */
     private static final Set<String> MAP_CATEGORIES = Set.of(Category.WALL, Category.OUTER_WALL,
-                                                             Category.OBSTACLE, Category.EXIT);
+                                                             Category.OBSTACLE, Category.EXIT, Category.DROID);
 
     /**
      * The categories that are contained in observations,
@@ -59,7 +59,7 @@ public class Dog extends BoundedItem{
     /**
      * Maps each level to an ObservationMap of its own.
      */
-    private final Map<MapLevel, ObservationMap> observationMap = new HashMap<>();
+    private Map<MapLevel, ObservationMap> observationMap = new HashMap<>();
 
     /**
      * The navigation path. The dog will follow this path to its end
@@ -108,10 +108,14 @@ public class Dog extends BoundedItem{
     @Override
     public String cat() {return Category.DOG;}
 
+    public void clearObservationMap(){
+        observationMap = new HashMap<>();
+    }
+
     /**
      * Sets following state of the dog to stop.
      */
-    private void resetState() {
+    public void resetState() {
         followState = FollowState.STOP;
         turnState = TurnState.STOP;
     }
@@ -123,16 +127,6 @@ public class Dog extends BoundedItem{
         followState = switch (followState) {
             case STOP -> FollowState.FOLLOW;
             case FOLLOW -> FollowState.STOP;
-        };
-    }
-
-    /**
-     * Handles a turn left command.
-     */
-    public void turnLeft() {
-        turnState = switch (turnState) {
-            case LEFT, STOP -> TurnState.LEFT;
-            case RIGHT -> TurnState.STOP;
         };
     }
 

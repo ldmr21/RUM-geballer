@@ -21,6 +21,8 @@ public class Category {
      */
     public static final String CHARACTER = "CHARACTER";
 
+    public static final String DROID = "DROID";     //Maybe benoetigt fuer die unterscheidung enemy/droid
+
     /**
      * The category used for outer walls around the map.
      */
@@ -70,4 +72,5 @@ public class Category {
      * The category indicating that this triangle provides an infinite view.
      */
     public static final String INFINITY = Triangle.INFINITY;
+
 }

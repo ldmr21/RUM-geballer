@@ -346,6 +346,7 @@ public class GameState extends AbstractAppState {
         if (isEnabled() == enabled) return;
         super.setEnabled(enabled);
         if (app != null) enableState(enabled);
+        dog = new DogPath();
     }
 
     /**

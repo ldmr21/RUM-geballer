@@ -37,7 +37,7 @@ public class DogControl extends AbstractControl {
     @Override
     protected void controlUpdate(float tpf) {
         if (spatial != null) {
-            final float angle = PI + dog.getRotation();
+            final float angle = dog.getRotation();
             spatial.getLocalRotation().fromAngleAxis(angle, UNIT_Y);
             spatial.setLocalTranslation(modelToViewX(dog),
                                         modelToViewY(dog),

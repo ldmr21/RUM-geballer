@@ -35,6 +35,9 @@ public class DroidsConfig {
     @JsonProperty("number of enemies") //NON-NLS
     private int numEnemies = 2;
 
+    @JsonProperty("number of dogs") //NON-NLS
+    private int numDogs = 1;
+
     /**
      * The number of obstacles in each level of a random map.
      */
@@ -96,6 +99,14 @@ public class DroidsConfig {
     @JsonIgnore
     public int getNumEnemies() {
         return numEnemies;
+    }
+
+    /**
+     * Returns the number of dogs created in each level of a random map.
+     */
+    @JsonIgnore
+    public int getNumDogs() {
+        return numDogs;
     }
 
     /**

@@ -13,6 +13,7 @@
   "map height": 25,
   "number of levels": 2,
   "number of enemies": 2,
+  "number of dogs": 1,
   "number of obstacles": 10,
   "viewing area": 120,
   "number of droid lives": 20
