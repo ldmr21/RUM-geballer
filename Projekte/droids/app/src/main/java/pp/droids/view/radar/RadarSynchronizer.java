@@ -147,6 +147,11 @@ class RadarSynchronizer extends ModelViewSynchronizer implements Visitor<Spatial
         return getPicture(exit, EXIT);
     }
 
+    /**
+     *
+     * @param dog The handed over dog
+     * @return PNG for radar for the dog
+     */
     @Override
     public Spatial visit(Dog dog){
         return getPicture(dog, DOG);

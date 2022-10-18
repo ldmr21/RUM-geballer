@@ -68,7 +68,8 @@ public class GameMusic extends AbstractAppState {
         background_music = loadMusic("Sound/Music/PIRATES.ogg");
     }
 
-    /**ändert volume von Backgroundmusic auf 0 oder 1 um sie ein- oder auszuschalten
+    /**
+     * Ändert volume von Backgroundmusic auf 0 oder 1 um sie ein- oder auszuschalten
      *
      */
     public void muteBackgroundMusic(){
