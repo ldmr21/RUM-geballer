@@ -98,6 +98,9 @@ public class GameState extends AbstractAppState {
     private DroidsModel model;
     private final ModelViewSynchronizer synchronizer = new MainSynchronizer(this, itemNode);
 
+    /**
+     *
+     */
     private DogPath dog;
 
     /**

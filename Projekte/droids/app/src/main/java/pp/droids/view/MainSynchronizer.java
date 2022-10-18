@@ -4,7 +4,6 @@ import com.jme3.material.Material;
 import com.jme3.material.RenderState;
 import com.jme3.material.RenderState.BlendMode;
 import com.jme3.math.ColorRGBA;
-import com.jme3.math.Matrix3f;
 import com.jme3.math.Vector2f;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.Geometry;
@@ -31,8 +30,6 @@ import pp.util.TypedSegment;
 
 import static com.jme3.math.FastMath.HALF_PI;
 import static com.jme3.math.Vector3f.UNIT_Y;
-import static com.jme3.math.Vector3f.UNIT_Z;
-import static com.jme3.math.Vector3f.ZERO;
 import static pp.droids.view.CoordinateTransformation.modelToView;
 import static pp.droids.view.CoordinateTransformation.modelToViewX;
 import static pp.droids.view.CoordinateTransformation.modelToViewY;
@@ -40,6 +37,7 @@ import static pp.droids.view.CoordinateTransformation.modelToViewZ;
 
 /**
  * This class is the main synchronizes of droids.
+ * Added dog
  */
 public class MainSynchronizer extends ModelViewSynchronizer implements Visitor<Spatial> {
     public static final String DROID = "Droid"; //NON-NLS
@@ -212,6 +210,11 @@ public class MainSynchronizer extends ModelViewSynchronizer implements Visitor<S
         return spatial;
     }
 
+    /**
+     *
+     * @param dog The dog handed over
+     * @return It returns the dog
+     */
     @Override
     public Spatial visit(Dog dog){
         final Spatial spatial = gameState.getApp().getAssetManager().loadModel(DOG_MODEL);

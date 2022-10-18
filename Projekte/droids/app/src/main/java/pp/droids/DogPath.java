@@ -50,6 +50,12 @@ public class DogPath extends AbstractAppState implements Future{
         cancelled = bool;
     }
 
+    /**
+     * Initialize Dog
+     *
+     * @param stateManager StateManager of the game
+     * @param app DroidsApp
+     */
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
@@ -152,26 +158,49 @@ public class DogPath extends AbstractAppState implements Future{
         }
     }
 
+    /**
+     * @param mayInterruptIfRunning I dont even know
+     * @returns false
+     */
     @Override
     public boolean cancel(boolean mayInterruptIfRunning) {
         return false;
     }
 
+    /**
+     * @returns cancelled
+     */
     @Override
     public boolean isCancelled() {
         return cancelled;
     }
 
+    /**
+     * @returns done
+     */
     @Override
     public boolean isDone() {
         return done;
     }
 
+    /**
+     * @returns null
+     * @throws InterruptedException
+     * @throws ExecutionException
+     */
     @Override
     public Object get() throws InterruptedException, ExecutionException {
         return null;
     }
 
+    /**
+     * @param timeout isnt used
+     * @param unit isnt used
+     * @returns null
+     * @throws InterruptedException
+     * @throws ExecutionException
+     * @throws TimeoutException
+     */
     @Override
     public Object get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
         return null;

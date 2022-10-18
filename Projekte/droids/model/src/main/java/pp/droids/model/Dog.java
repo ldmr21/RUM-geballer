@@ -33,12 +33,12 @@ public class Dog extends BoundedItem{
     private enum TurnState {STOP, LEFT, RIGHT}
 
     /**
-     * The turn speed of the droid in radians per second.
+     * The turn speed of the dog in radians per second.
      */
     private static final float TURN_SPEED = 3.5f;
 
     /**
-     * The forward speed of the droid in length units per second.
+     * The forward speed of the dog in length units per second.
      */
     private static final float FORWARD_SPEED = 4f;
 
@@ -50,7 +50,7 @@ public class Dog extends BoundedItem{
 
     /**
      * The categories that are contained in observations,
-     * additionally to all those items a droid etc. would collide with.
+     * additionally to all those items a dog etc. would collide with.
      *
      * @see BoundedItem#getObservation(java.util.Set)
      */
@@ -108,6 +108,9 @@ public class Dog extends BoundedItem{
     @Override
     public String cat() {return Category.DOG;}
 
+    /**
+     * resets the observationMap of the Dog
+     */
     public void clearObservationMap(){
         observationMap = new HashMap<>();
     }
@@ -141,7 +144,7 @@ public class Dog extends BoundedItem{
     }
 
     /**
-     * Returns the specific forward speed of the droid.
+     * Returns the specific forward speed of the dog.
      */
     private float getSpeed() {
         return switch (followState) {
@@ -151,7 +154,7 @@ public class Dog extends BoundedItem{
     }
 
     /**
-     * Returns the specific turn speed of the droid.
+     * Returns the specific turn speed of the dog.
      */
     private float getTurnSpeed() {
         return switch (turnState) {
@@ -190,11 +193,11 @@ public class Dog extends BoundedItem{
     }
 
     /**
-     * Sets the droid to the specified position if it doesn't collide with anything
-     * else there. The droid is not moved if there were a collision.
+     * Sets the dog to the specified position if it doesn't collide with anything
+     * else there. The dog is not moved if there were a collision.
      *
      * @param p the new position
-     * @return true if the droid has been moved to the new position
+     * @return true if the dog has been moved to the new position
      * @see #setPosAvoidingCollisions(float, float)
      */
     private boolean setPosAvoidingCollisions(Position p) {
@@ -202,12 +205,12 @@ public class Dog extends BoundedItem{
     }
 
     /**
-     * Sets the droid to the specified position if it doesn't collide with anything
-     * else there. The droid is not moved if there were a collision.
+     * Sets the dog to the specified position if it doesn't collide with anything
+     * else there. The dog is not moved if there were a collision.
      *
      * @param newX x-coordinate of the new position
      * @param newY y-coordinate of the new position
-     * @return true if the droid has been moved to the new position
+     * @return true if the dog has been moved to the new position
      * @see #setPosAvoidingCollisions(pp.util.Position)
      */
     private boolean setPosAvoidingCollisions(float newX, float newY) {
@@ -236,14 +239,14 @@ public class Dog extends BoundedItem{
         final float bearing = atan2(target.getY() - getY(),
                                     target.getX() - getX());
         float needToTurnBy = normalizeAngle(bearing - getRotation());
-        // we need to turn the droid such that its rotation coincides with the bearing of the next path point
+        // we need to turn the dog such that its rotation coincides with the bearing of the next path point
         if (Math.abs(needToTurnBy) >= delta * TURN_SPEED) {
             // we are turning during the rest of this time slot
             setRotation(getRotation() + Math.signum(needToTurnBy) * delta * TURN_SPEED);
             return 0f;
         }
 
-        // we first turn the droid
+        // we first turn the dog
         setRotation(bearing);
         // and there is some time left in this time slot
         delta -= Math.abs(needToTurnBy) / TURN_SPEED;
@@ -268,7 +271,7 @@ public class Dog extends BoundedItem{
     }
 
     /**
-     * Returns the path the droid shall follow.
+     * Returns the path the dog shall follow.
      * The path is set by {@linkplain #setPath(java.util.List)}.
      */
     public List<Position> getPath() {
@@ -276,11 +279,11 @@ public class Dog extends BoundedItem{
     }
 
     /**
-     * Sets a navigation path. The droid will then follow this path to its end
+     * Sets a navigation path. The dog will then follow this path to its end
      * as long as it doesn't collide on its way. Following the path is immediately
-     * stopped if the droid's movement is controlled "manually".
+     * stopped if the dog's movement is controlled "manually".
      *
-     * @param newPath the path the droid shall follow
+     * @param newPath the path the dog shall follow
      */
     public void setPath(List<Segment> newPath) {
         path.clear();
@@ -299,7 +302,7 @@ public class Dog extends BoundedItem{
     }
 
     /**
-     * Returns the ObservationMap for the level where the droid currently is.
+     * Returns the ObservationMap for the level where the dog currently is.
      */
     public ObservationMap getMap() {
         return observationMap.computeIfAbsent(getLevel(), l -> new ObservationMap(MAP_CATEGORIES));
@@ -307,7 +310,7 @@ public class Dog extends BoundedItem{
 
 
     /**
-     * Returns the latest observation by the droid.
+     * Returns the latest observation by the dog.
      */
     public Observation getLatestObservation() {
         return latestObservation;
@@ -315,7 +318,7 @@ public class Dog extends BoundedItem{
 
 
     /**
-     * This method lets the droid observe its surrounding in its current level.
+     * This method lets the dog observe its surrounding in its current level.
      * Results can be obtained by {@linkplain #getObservation()} and
      * {@linkplain #getMap()}.
      */
