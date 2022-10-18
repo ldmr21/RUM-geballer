@@ -70,7 +70,7 @@ public class Droid extends Shooter implements Navigable<Segment>, Debugee {
      * The categories of all entities that are collected in observation maps.
      */
     private static final Set<String> MAP_CATEGORIES = Set.of(Category.WALL, Category.OUTER_WALL,
-                                                             Category.OBSTACLE, Category.EXIT);
+                                                             Category.OBSTACLE, Category.EXIT, Category.DROID);
     /**
      * The categories that are contained in observations,
      * additionally to all those items a droid etc. would collide with.
@@ -141,7 +141,7 @@ public class Droid extends Shooter implements Navigable<Segment>, Debugee {
      */
     @Override
     public String cat() {
-        return Category.CHARACTER;
+        return Category.DROID;
     }
 
     /**

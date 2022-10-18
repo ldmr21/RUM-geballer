@@ -46,7 +46,7 @@ public class Dog extends BoundedItem{
      * The categories of all entities that are collected in observation maps.
      */
     private static final Set<String> MAP_CATEGORIES = Set.of(Category.WALL, Category.OUTER_WALL,
-                                                             Category.OBSTACLE, Category.EXIT, Category.CHARACTER);
+                                                             Category.OBSTACLE, Category.EXIT, Category.DROID);
 
     /**
      * The categories that are contained in observations,

@@ -62,7 +62,7 @@ public class DogPath extends AbstractAppState implements Future{
      */
     private void navigate() {
         for (CircularEntity c : dog.getMap().getEntities()){
-            if(Objects.equals(c.cat(), Category.CHARACTER)){
+            if(Objects.equals(c.cat(), Category.DROID)){
                 if(!isDone()){
                     navigateTo(new FloatPoint((c.getX() - cos(c.getRotation())), (c.getY() - sin(c.getRotation()))));
                 }
