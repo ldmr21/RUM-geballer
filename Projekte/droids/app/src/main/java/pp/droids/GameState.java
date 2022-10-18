@@ -4,11 +4,14 @@ import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
+import com.jme3.collision.CollisionResult;
+import com.jme3.collision.CollisionResults;
 import com.jme3.input.InputManager;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Ray;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
@@ -38,6 +41,7 @@ import static pp.droids.view.CoordinateTransformation.modelToView;
 import static pp.droids.view.CoordinateTransformation.modelToViewX;
 import static pp.droids.view.CoordinateTransformation.modelToViewY;
 import static pp.droids.view.CoordinateTransformation.modelToViewZ;
+import static pp.droids.view.CoordinateTransformation.viewToModel;
 
 /**
  * <code>GameState</code> extends the class {@link com.jme3.app.state.AbstractAppState}.
@@ -93,6 +97,8 @@ public class GameState extends AbstractAppState {
     private final Node itemNode = new Node("items"); //NON-NLS
     private DroidsModel model;
     private final ModelViewSynchronizer synchronizer = new MainSynchronizer(this, itemNode);
+
+    private DogPath dog;
 
     /**
      * Droids camera starts with third person state
@@ -172,6 +178,8 @@ public class GameState extends AbstractAppState {
         createLagoonSky();
         reset();
         resetCamera();
+        dog = new DogPath();
+        stateManager.attach(dog);
         if (isEnabled()) enableState(true);
     }
 
@@ -399,6 +407,15 @@ public class GameState extends AbstractAppState {
         Spatial sky = SkyFactory.createSky(assetManager, west, east, north, south, up, down); //NON-NLS
         sky.setName("Sky"); //NON-NLS
         viewNode.attachChild(sky);
+    }
+
+    /**
+     * Gets the game state from the app.
+     *
+     * @return game state
+     */
+    private GameState getGameState() {
+        return app.getStateManager().getState(GameState.class);
     }
 
     /**
