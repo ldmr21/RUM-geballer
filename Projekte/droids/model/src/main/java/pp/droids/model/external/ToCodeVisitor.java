@@ -104,6 +104,10 @@ class ToCodeVisitor implements Visitor {
         addItem(item);
     }
 
+    /**
+     *
+     * @param item ExternalDog
+     */
     @Override
     public void visit(ExternalDog item) {
         sb.append(format(Locale.US, "final Dog %s = new Dog(model);%n", item.id)); //NON-NLS
@@ -120,7 +124,7 @@ class ToCodeVisitor implements Visitor {
      * Adds the specified (model) item to the map based on the information stored in the
      * specified external item.
      *
-     * @param item the  external item
+     * @param item the external item
      */
     private void addItem(ExternalBoundedItem item) {
         setPos(item);
