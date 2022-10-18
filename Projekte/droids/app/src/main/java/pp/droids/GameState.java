@@ -346,7 +346,6 @@ public class GameState extends AbstractAppState {
         if (isEnabled() == enabled) return;
         super.setEnabled(enabled);
         if (app != null) enableState(enabled);
-        dog = new DogPath();
     }
 
     /**
@@ -358,6 +357,7 @@ public class GameState extends AbstractAppState {
         getTextOverlay().setEnabled(enabled);
         getGameInput().setEnabled(enabled);
         inputManager.setCursorVisible(false);
+        dog.initialize(new AppStateManager(app), getApp());
     }
 
     /**
