@@ -98,6 +98,9 @@ public class GameState extends AbstractAppState {
     private DroidsModel model;
     private final ModelViewSynchronizer synchronizer = new MainSynchronizer(this, itemNode);
 
+    /**
+     *
+     */
     private DogPath dog;
 
     /**
@@ -351,6 +354,7 @@ public class GameState extends AbstractAppState {
     /**
      * Permits a game state.
      * Nun wenn GameState aktiviert ist, wird der Maus-Pointer unsichtbar.
+     * Initializes the dogs for the random maps
      */
     private void enableState(boolean enabled) {
         final InputManager inputManager = app.getInputManager();

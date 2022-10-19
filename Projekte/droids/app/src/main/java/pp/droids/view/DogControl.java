@@ -2,20 +2,13 @@ package pp.droids.view;
 
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
-import com.jme3.scene.Spatial.CullHint;
 import com.jme3.scene.control.AbstractControl;
 import pp.droids.model.Dog;
-import pp.droids.model.Flag;
 
-import static com.jme3.math.FastMath.PI;
-import static com.jme3.math.FastMath.sin;
-import static com.jme3.math.Vector3f.UNIT_X;
 import static com.jme3.math.Vector3f.UNIT_Y;
-import static com.jme3.math.Vector3f.UNIT_Z;
 import static pp.droids.view.CoordinateTransformation.modelToViewX;
 import static pp.droids.view.CoordinateTransformation.modelToViewY;
 import static pp.droids.view.CoordinateTransformation.modelToViewZ;
-import static pp.util.Angle.normalizeAngle;
 
 public class DogControl extends AbstractControl {
 

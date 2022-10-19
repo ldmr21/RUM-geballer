@@ -113,6 +113,7 @@ public class RandomMapGenerator {
 
         /**
          * Generates items in the level
+         * Not the dog, he is initialized in another method
          */
         private void makeLevel() {
             final DroidsConfig config = model.getConfig();
@@ -146,6 +147,9 @@ public class RandomMapGenerator {
 
         }
 
+        /**
+         * Sets the dog to a certain position of the level
+         */
         private void setDog(){
             final Dog dog = new Dog(model);
             addBoundedItem(dog);

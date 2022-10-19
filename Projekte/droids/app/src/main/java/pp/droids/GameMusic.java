@@ -47,7 +47,7 @@ public class GameMusic extends AbstractAppState {
     public void setEnabled(boolean enabled) {
         if (isEnabled() == enabled) return;
         super.setEnabled(enabled);
-        muteBackgroundMusic();
+        if (background_music!=null) muteBackgroundMusic();
         LOGGER.log(Level.INFO, "Music enabled: {0}", enabled); //NON-NLS
         PREFS.put(ENABLED_PREF, String.valueOf(enabled));
     }
@@ -68,10 +68,12 @@ public class GameMusic extends AbstractAppState {
         background_music = loadMusic("Sound/Music/PIRATES.ogg");
     }
 
-    /**ändert volume von Backgroundmusic auf 0 oder 1 um sie ein- oder auszuschalten
+    /**
+     * Ändert volume von Backgroundmusic auf 0 oder 1 um sie ein- oder auszuschalten
      *
      */
     public void muteBackgroundMusic(){
+        //if (background_music==null) return;
         if(background_music.getVolume() > 0){
             background_music.setVolume(0);
         }

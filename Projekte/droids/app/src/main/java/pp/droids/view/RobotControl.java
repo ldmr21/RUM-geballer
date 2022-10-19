@@ -71,6 +71,6 @@ class RobotControl extends AbstractControl {
      */
     @Override
     protected void controlRender(RenderManager rm, ViewPort vp) {
-        // nothingzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
+        // nothing
     }
 }

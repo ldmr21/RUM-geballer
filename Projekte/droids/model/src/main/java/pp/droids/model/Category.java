@@ -21,6 +21,9 @@ public class Category {
      */
     public static final String CHARACTER = "CHARACTER";
 
+    /**
+     * The category droid has the purpose to differentiate droid from an enemy
+     */
     public static final String DROID = "DROID";     //Maybe benoetigt fuer die unterscheidung enemy/droid
 
     /**

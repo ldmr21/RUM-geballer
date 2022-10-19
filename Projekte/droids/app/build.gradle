@@ -5,7 +5,9 @@ plugins {
 }
 
 description = 'Droids app (view & controller)'
-
+/**
+ * Added the implementation for the OGG Vorbis file type, after that we had to refresh the gradle
+ */
 dependencies {
     implementation "org.jmonkeyengine:jme3-lwjgl3:$jmeVer"
     implementation "org.jmonkeyengine:jme3-plugins:$jmeVer"
