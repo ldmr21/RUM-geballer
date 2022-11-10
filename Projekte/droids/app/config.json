@@ -16,5 +16,5 @@
   "number of dogs": 1,
   "number of obstacles": 10,
   "viewing area": 120,
-  "number of droid lives": 20
+  "number of lives": 20
 }

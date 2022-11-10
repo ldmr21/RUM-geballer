@@ -32,6 +32,7 @@ import pp.droids.view.MainSynchronizer;
 import java.lang.System.Logger;
 import java.lang.System.Logger.Level;
 
+import static com.jme3.math.FastMath.PI;
 import static com.jme3.math.FastMath.cos;
 import static com.jme3.math.FastMath.sin;
 import static pp.droids.view.CoordinateTransformation.modelToView;
@@ -57,7 +58,7 @@ public class GameState extends AbstractAppState {
     /**
      * Distance of the camera position in front of the droid
      */
-    private static final float FRONT_DROID = 0.1f;
+    private static final float FRONT_DROID = -0.15f;
     /**
      * Height of the camera position above ground
      */
@@ -73,7 +74,7 @@ public class GameState extends AbstractAppState {
     /**
      * Rotation speed of the camera in Y-Axis
      */
-    private static final float ROTATE_SPEED = 0.002f;
+    private static final float ROTATE_SPEED = 0.004f;
     /**
      * Camera transformation speed in Y-Axis
      */
@@ -121,6 +122,11 @@ public class GameState extends AbstractAppState {
     private float camCurrentHeight = 0f;
     private final float camMaxHeight = 0f;
     private final float camMinHeight = -1.5f;
+
+    /**
+     * private variables containing camera's near plane
+     */
+    private final float nearPlane = 0.01f;
 
     /**
      * Returns the droids app.
@@ -273,10 +279,10 @@ public class GameState extends AbstractAppState {
 
         if(camState == CamState.FIRST){
             camCurrentAngle = ensureRange(camCurrentAngle + getRotateSpeed(), camMinAngle, camMaxAngle);
-            cos = FRONT_DROID * cos(angle);
-            sin = FRONT_DROID * sin(angle);
-            final float x = droid.getX() - cos;
-            final float y = droid.getY() - sin;
+            cos = FRONT_DROID * cos(angle + PI);
+            sin = FRONT_DROID * sin(angle + PI);
+            final float x = droid.getX() + cos;
+            final float y = droid.getY() + sin;
             camera.setLocation(new Vector3f(modelToViewX(x, y),
                                             modelToViewY(x, y) + DROID_HEIGHT,
                                             modelToViewZ(x, y)));
@@ -284,6 +290,8 @@ public class GameState extends AbstractAppState {
                                                      camCurrentAngle,
                                                      modelToViewZ(cos, sin)),
                                         Vector3f.UNIT_Y);
+            camera.setFrustumPerspective(camera.getFov(), camera.getAspect(), nearPlane, camera.getFrustumFar());
+
         }else{
             camCurrentHeight = ensureRange(camCurrentHeight + getDeclineSpeed(), camMinHeight, camMaxHeight);
             camCurrentAngle = ensureRange(camCurrentAngle + getRotateSpeed() * 3, 0, 2 * camMaxAngle);
