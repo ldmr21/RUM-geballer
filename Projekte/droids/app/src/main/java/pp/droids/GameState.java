@@ -4,14 +4,11 @@ import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
-import com.jme3.collision.CollisionResult;
-import com.jme3.collision.CollisionResults;
 import com.jme3.input.InputManager;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
-import com.jme3.math.Ray;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
@@ -41,7 +38,6 @@ import static pp.droids.view.CoordinateTransformation.modelToView;
 import static pp.droids.view.CoordinateTransformation.modelToViewX;
 import static pp.droids.view.CoordinateTransformation.modelToViewY;
 import static pp.droids.view.CoordinateTransformation.modelToViewZ;
-import static pp.droids.view.CoordinateTransformation.viewToModel;
 
 /**
  * <code>GameState</code> extends the class {@link com.jme3.app.state.AbstractAppState}.
@@ -288,7 +284,6 @@ public class GameState extends AbstractAppState {
                                                      camCurrentAngle,
                                                      modelToViewZ(cos, sin)),
                                         Vector3f.UNIT_Y);
-            camera.distanceToNearPlane(new Vector3f(0.001f,0.001f,0.001f));
         }else{
             camCurrentHeight = ensureRange(camCurrentHeight + getDeclineSpeed(), camMinHeight, camMaxHeight);
             camCurrentAngle = ensureRange(camCurrentAngle + getRotateSpeed() * 3, 0, 2 * camMaxAngle);
