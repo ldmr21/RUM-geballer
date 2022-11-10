@@ -288,6 +288,7 @@ public class GameState extends AbstractAppState {
                                                      camCurrentAngle,
                                                      modelToViewZ(cos, sin)),
                                         Vector3f.UNIT_Y);
+            camera.distanceToNearPlane(new Vector3f(0.001f,0.001f,0.001f));
         }else{
             camCurrentHeight = ensureRange(camCurrentHeight + getDeclineSpeed(), camMinHeight, camMaxHeight);
             camCurrentAngle = ensureRange(camCurrentAngle + getRotateSpeed() * 3, 0, 2 * camMaxAngle);

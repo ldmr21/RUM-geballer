@@ -267,23 +267,19 @@ public class Droid extends Shooter implements Navigable<Segment>, Debugee {
      * @param delta time in seconds since the last update call
      */
     private void updateMovement(float delta) {
-        if(getX() <= 0){
-            resetState();
-            setPos(getX() + 1 ,getY());
+        if(getX() < 0){
+            setPos(0 ,getY());
         }
-        if(getY() <= 0){
-            resetState();
-            setPos(getX() ,getY() + 1);
+        if(getY() < 0){
+            setPos(getX() ,0);
         }
 
-        if(getX() >= model.getDroidsMap().getXMax()){
-            resetState();
-            setPos(getX() - 1 ,getY());
+        if(getX() > model.getDroidsMap().getXMax()){
+            setPos(model.getDroidsMap().getXMax() ,getY());
         }
 
-        if(getY() >= model.getDroidsMap().getYMax()) {
-            resetState();
-            setPos(getX() ,getY() - 1);
+        if(getY() > model.getDroidsMap().getYMax()) {
+            setPos(getX() ,model.getDroidsMap().getYMax());
         }
         if (getSpeed() != 0f) {
             setPosAvoidingCollisions(getX() + getSpeed() * delta * cos(getRotation()),
