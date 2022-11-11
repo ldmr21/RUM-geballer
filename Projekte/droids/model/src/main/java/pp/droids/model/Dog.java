@@ -6,7 +6,6 @@ import pp.util.map.Observation;
 import pp.util.map.ObservationMap;
 import pp.util.navigation.Navigator;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -15,7 +14,6 @@ import java.util.Set;
 
 import static pp.util.Angle.normalizeAngle;
 import static pp.util.FloatMath.FLT_EPSILON;
-import static pp.util.FloatMath.PI;
 import static pp.util.FloatMath.atan2;
 import static pp.util.FloatMath.cos;
 import static pp.util.FloatMath.sin;
@@ -121,26 +119,6 @@ public class Dog extends BoundedItem{
     public void resetState() {
         followState = FollowState.STOP;
         turnState = TurnState.STOP;
-    }
-
-    /**
-     * Handles a forward command.
-     */
-    public void switchFollowState() {
-        followState = switch (followState) {
-            case STOP -> FollowState.FOLLOW;
-            case FOLLOW -> FollowState.STOP;
-        };
-    }
-
-    /**
-     * Handles a turn right command.
-     */
-    public void turnRight() {
-        turnState = switch (turnState) {
-            case RIGHT, STOP -> TurnState.RIGHT;
-            case LEFT -> TurnState.STOP;
-        };
     }
 
     /**
@@ -271,14 +249,6 @@ public class Dog extends BoundedItem{
     }
 
     /**
-     * Returns the path the dog shall follow.
-     * The path is set by {@linkplain #setPath(java.util.List)}.
-     */
-    public List<Position> getPath() {
-        return Collections.unmodifiableList(path);
-    }
-
-    /**
      * Sets a navigation path. The dog will then follow this path to its end
      * as long as it doesn't collide on its way. Following the path is immediately
      * stopped if the dog's movement is controlled "manually".
@@ -307,15 +277,6 @@ public class Dog extends BoundedItem{
     public ObservationMap getMap() {
         return observationMap.computeIfAbsent(getLevel(), l -> new ObservationMap(MAP_CATEGORIES));
     }
-
-
-    /**
-     * Returns the latest observation by the dog.
-     */
-    public Observation getLatestObservation() {
-        return latestObservation;
-    }
-
 
     /**
      * This method lets the dog observe its surrounding in its current level.

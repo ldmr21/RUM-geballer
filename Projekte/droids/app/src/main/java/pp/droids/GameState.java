@@ -183,8 +183,8 @@ public class GameState extends AbstractAppState {
         createLagoonSky();
         reset();
         resetCamera();
-        dog = new DogPath();
-        stateManager.attach(dog);
+        //dog = new DogPath();
+        //stateManager.attach(dog);
         if (isEnabled()) enableState(true);
     }
 
@@ -365,7 +365,7 @@ public class GameState extends AbstractAppState {
         getTextOverlay().setEnabled(enabled);
         getGameInput().setEnabled(enabled);
         inputManager.setCursorVisible(false);
-        dog.initialize(new AppStateManager(app), getApp());
+        //dog.initialize(new AppStateManager(app), getApp());
     }
 
     /**

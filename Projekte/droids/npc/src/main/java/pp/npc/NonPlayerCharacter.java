@@ -36,6 +36,16 @@ public interface NonPlayerCharacter extends Navigable<Segment> {
     float getRotation();
 
     /**
+     * returns X coordinate of the npc
+     */
+    float getX();
+
+    /**
+     * returns Y coordinate of the npc
+     */
+    float getY();
+
+    /**
      * Sets the rotation of a npc.
      *
      * @param rotation the rotation the npc will be given
