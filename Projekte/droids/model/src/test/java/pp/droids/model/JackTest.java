@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
@@ -15,6 +16,7 @@ import static pp.droids.model.GamePlayTest.enemy;
 import static pp.droids.model.GamePlayTest.obstacle;
 import static pp.util.FloatMath.ZERO_TOLERANCE;
 import static pp.util.FloatPoint.ZERO;
+//import pp.droids.model.collisions.collisions.*;
 
 public class JackTest {
 
@@ -26,6 +28,9 @@ public class JackTest {
     private Enemy enemy;
     private Flag flag;
     private Exit exit;
+    private Obstacle obstacle;
+
+    //private Projectile projectile;
     private float updateTime = 1;
 
     @Before
@@ -40,8 +45,13 @@ public class JackTest {
         Jack = new Droid(gameModel);
         Jack.setPos(dx, dh);
         enemy = enemy(gameModel, 0f, 0f);
+        enemy.setPos(dx, dh);
+        enemy = new Enemy(gameModel);
         flag = flag(gameModel, dx, height - 1);
         exit = exit(gameModel, width - 1, dx);
+        obstacle = obstacle(gameModel, 0f, 0f);
+        obstacle.setPos(dx, dh);
+        obstacle = new Obstacle(gameModel);
         map.setDroid(Jack, level);
         map.register(enemy, level);
         map.register(enemy(gameModel, width - 1, height - 1), level);
@@ -61,6 +71,7 @@ public class JackTest {
         assertPositionEquals(sx, sy, gameModel.getDroidsMap().getDroid(), EPS);
     }
 
+
     @Test //T001
     public void testBewegenVorne(){
         Position start = new FloatPoint(Jack.getX(), Jack.getY());
@@ -79,6 +90,38 @@ public class JackTest {
         Jack.update(updateTime);
         //gameModel.update(updateTime);
         assertEquals((map.getWidth()/2)-(4*updateTime), Jack.getX(), 3);
+    }
+    @Test // T009
+    public void testFernkampf(){
+        Position start = new FloatPoint(Jack.getX(), Jack.getY());
+        enemy.setPos(start.getX()+1,start.getY());
+        //if( munition < 0) {
+        for(int i = 0; i < 4; i++)
+        {
+        Jack.fire();
+        Jack.update(0.1f);
+        map.addRegisteredItems();
+        map.update(0.1f);
+        gameModel.update(0.1f);
+        //assertTrue(Jack.isReloading());
+        }
+        assertTrue(enemy.isDestroyed());
+
+
+        //}
+    }
+    @Test //T010 unfinished
+    public void testKollisionJack(){
+        Position start = new FloatPoint(Jack.getX(), Jack.getY());
+        enemy.setPos(start.getX()+1, start.getY());
+        Jack.goForward();
+        gameModel.update(updateTime);
+        map.update(updateTime);
+        assertFalse(Jack.collidesWithAnyOtherItem());
+        assertEquals(0.1f,Jack.getX(), EPS);
+        //Jack.goBackward();
+        //Jack.update(updateTime);
+        // assertEquals(0.1f,Jack.getX(), EPS);
     }
 
     static void assertPositionEquals(BoundedItem expected, BoundedItem actual, float eps) {
