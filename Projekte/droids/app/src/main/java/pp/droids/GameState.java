@@ -87,6 +87,8 @@ public class GameState extends AbstractAppState {
     /**
      * A private enum containing states for the change of Y-Axis of the camera.
      */
+
+
     private enum UpState{UP, DOWN, STOP}
 
     private DroidsApp app;

@@ -32,7 +32,7 @@ import static pp.droids.view.CoordinateTransformation.viewToModel;
 /**
  * Handles input by the user as an app state.
  */
-class GameInput extends AbstractAppState {
+public class GameInput extends AbstractAppState {
     private static final Logger LOGGER = System.getLogger(GameInput.class.getName());
     private static final String SHOOT = "SHOOT";
     private static final String LEFT = "LEFT";

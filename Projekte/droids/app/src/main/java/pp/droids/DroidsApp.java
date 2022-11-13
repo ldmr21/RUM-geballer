@@ -60,7 +60,7 @@ public class DroidsApp extends SimpleApplication {
      *
      * @param config the configuration used in the game.
      */
-    private DroidsApp(DroidsAppConfig config) {
+    public DroidsApp(DroidsAppConfig config) {
         this.config = config;
         setShowSettings(config.getShowSettings() && !isMac());
         setSettings(config.getSettings());
