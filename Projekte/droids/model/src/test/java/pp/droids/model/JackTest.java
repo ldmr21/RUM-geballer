@@ -28,6 +28,9 @@ public class JackTest {
     private Enemy enemy;
     private Flag flag;
     private Exit exit;
+    private Obstacle obstacle;
+
+    //private Projectile projectile;
     private float updateTime = 1;
 
     @Before
@@ -43,13 +46,17 @@ public class JackTest {
         Jack.setPos(dx, dh);
         Jack.setRotation(0);
         enemy = enemy(gameModel, 0f, 0f);
+        enemy = new Enemy(gameModel);
+        enemy.setPos(dx+4,dh);
         flag = new Flag(gameModel);
         flag.setPos(15,16);
         exit = exit(gameModel, 15, 23);
+        obstacle = new Obstacle(gameModel);
+        obstacle.setPos(dx-4, dh);
         map.setDroid(Jack, level);
         map.register(enemy, level);
         map.register(enemy(gameModel, width - 1, height - 1), level);
-        map.register(obstacle(gameModel, dx, dh), level);
+        map.register(obstacle(gameModel, dx, 0f), level);
         map.register(flag, level);
         map.register(exit, level);
         map.addRegisteredItems();
@@ -137,6 +144,38 @@ public class JackTest {
         assertTrue(!Jack.hasFlag()); //Fehler: Jack hat die Flagge nicht abgegeben
         assertTrue(gameModel.isGameOver()); //Spiel ist Gewonnen (Test wird hier noch raus gelöscht und in System verschoben)
         assertTrue(gameModel.isGameWon());
+    }
+    @Test // T009
+    public void testFernkampf(){
+        Position start = new FloatPoint(Jack.getX(), Jack.getY());
+        enemy.setPos(start.getX()+1,start.getY());
+        //if( munition < 0) {
+        for(int i = 0; i < 4; i++)
+        {
+        Jack.fire();
+        Jack.update(0.1f);
+        map.addRegisteredItems();
+        map.update(0.1f);
+        gameModel.update(0.1f);
+        //assertTrue(Jack.isReloading());
+        }
+        assertTrue(enemy.isDestroyed());
+
+
+        //}
+    }
+    @Test //T010 unfinished
+    public void testKollisionJack(){
+        Position start = new FloatPoint(Jack.getX(), Jack.getY());
+        enemy.setPos(start.getX()+1, start.getY());
+        Jack.goForward();
+        gameModel.update(updateTime);
+        map.update(updateTime);
+        assertFalse(Jack.collidesWithAnyOtherItem());
+        assertEquals(0.1f,Jack.getX(), EPS);
+        //Jack.goBackward();
+        //Jack.update(updateTime);
+        // assertEquals(0.1f,Jack.getX(), EPS);
     }
 
     static void assertPositionEquals(BoundedItem expected, BoundedItem actual, float eps) {
