@@ -1,5 +1,6 @@
 package pp.droids.model;
 
+import org.junit.jupiter.api.BeforeEach;
 import pp.util.FloatPoint;
 import pp.util.Position;
 
@@ -7,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
@@ -47,16 +49,18 @@ public class JackTest {
         Jack.setRotation(0);
         enemy = enemy(gameModel, 0f, 0f);
         enemy = new Enemy(gameModel);
-        enemy.setPos(dx+4,dh);
+        enemy.setPos(19,15);
         flag = new Flag(gameModel);
         flag.setPos(15,16);
         exit = exit(gameModel, 15, 23);
+        obstacle = obstacle(gameModel, 0f, 0f);
         obstacle = new Obstacle(gameModel);
-        obstacle.setPos(dx-4, dh);
+        obstacle.setPos(11, 15);
         map.setDroid(Jack, level);
         map.register(enemy, level);
-        map.register(enemy(gameModel, width - 1, height - 1), level);
-        map.register(obstacle(gameModel, dx, 0f), level);
+        //map.register(enemy(gameModel, width - 1, height - 1), level);
+        //map.register(obstacle(gameModel, 11, 15), level);
+        map.register(obstacle, level);
         map.register(flag, level);
         map.register(exit, level);
         map.addRegisteredItems();
@@ -164,15 +168,18 @@ public class JackTest {
 
         //}
     }
-    @Test //T010 unfinished
+    @Test //T010
     public void testKollisionJack(){
-        Position start = new FloatPoint(Jack.getX(), Jack.getY());
-        enemy.setPos(start.getX()+1, start.getY());
+        Position start = new FloatPoint(15, 15);
+        Jack.setPos(start.getX(), start.getY());
         Jack.goForward();
-        gameModel.update(updateTime);
-        map.update(updateTime);
-        assertFalse(Jack.collidesWithAnyOtherItem());
-        assertEquals(0.1f,Jack.getX(), EPS);
+        Jack.update(updateTime);
+        Jack.update(updateTime);
+        //assertFalse(Jack.collidesWithAnyOtherItem());
+        assertEquals(start.getX(),Jack.getX(), EPS);
+        Jack.goBackward();
+        Jack.update(updateTime);
+        assertEquals(start.getX(),Jack.getX(), EPS);
         //Jack.goBackward();
         //Jack.update(updateTime);
         // assertEquals(0.1f,Jack.getX(), EPS);
