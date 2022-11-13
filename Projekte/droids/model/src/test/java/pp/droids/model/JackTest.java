@@ -15,6 +15,8 @@ import static pp.droids.model.GamePlayTest.enemy;
 import static pp.droids.model.GamePlayTest.obstacle;
 import static pp.util.FloatMath.ZERO_TOLERANCE;
 import static pp.util.FloatPoint.ZERO;
+import java.math.*;
+import static pp.util.Angle.normalizeAngle;
 
 public class JackTest {
 
@@ -39,13 +41,15 @@ public class JackTest {
         final int dh = height / 2;
         Jack = new Droid(gameModel);
         Jack.setPos(dx, dh);
+        Jack.setRotation(0);
         enemy = enemy(gameModel, 0f, 0f);
-        flag = flag(gameModel, dx, height - 1);
-        exit = exit(gameModel, width - 1, dx);
+        flag = new Flag(gameModel);
+        flag.setPos(15,16);
+        exit = exit(gameModel, 15, 23);
         map.setDroid(Jack, level);
         map.register(enemy, level);
         map.register(enemy(gameModel, width - 1, height - 1), level);
-        map.register(obstacle(gameModel, dx, 0f), level);
+        map.register(obstacle(gameModel, dx, dh), level);
         map.register(flag, level);
         map.register(exit, level);
         map.addRegisteredItems();
@@ -60,25 +64,79 @@ public class JackTest {
         // Check, if droid on the right position
         assertPositionEquals(sx, sy, gameModel.getDroidsMap().getDroid(), EPS);
     }
-
     @Test //T001
     public void testBewegenVorne(){
         Position start = new FloatPoint(Jack.getX(), Jack.getY());
-        navigateTo(new FloatPoint(0,0));
         Jack.goForward();
         Jack.update(updateTime);
         //gameModel.update(updateTime);
-        assertEquals((map.getWidth()/2)+(4*updateTime), Jack.getX(), 3);
+        assertEquals(start.getX()+(4*updateTime), Jack.getX(), EPS);
     }
 
     @Test //T002
     public void testBewegenHinten(){
         Position start = new FloatPoint(Jack.getX(), Jack.getY());
-        navigateTo(new FloatPoint(0,0));
         Jack.goBackward();
         Jack.update(updateTime);
         //gameModel.update(updateTime);
-        assertEquals((map.getWidth()/2)-(4*updateTime), Jack.getX(), 3);
+        assertEquals(start.getX()-(4*updateTime), Jack.getX(), EPS);
+    }
+
+    @Test //T003
+    public void testBewegenRechts(){
+        Position start = new FloatPoint(Jack.getX(), Jack.getY());
+        Jack.stepRight();
+        Jack.update(updateTime);
+        //gameModel.update(updateTime);
+        assertEquals(start.getY()-(4*updateTime), Jack.getY(), EPS);
+    }
+
+    @Test //T004
+    public void testBewegenLinks(){
+        Position start = new FloatPoint(Jack.getX(), Jack.getY());
+        Jack.stepLeft();
+        Jack.update(updateTime);
+        //gameModel.update(updateTime);
+        assertEquals(start.getY()+(4*updateTime), Jack.getY(), EPS);
+    }
+
+    @Test //014
+    public void testDrehen() {
+        float rototo = Jack.getRotation(); //Irgendwie muss ich ja kommentieren
+        Jack.turnLeft(); //Jack dreht sich einmal nach links
+        Jack.update(updateTime);
+        assertEquals(normalizeAngle(rototo+updateTime*3.5f), Jack.getRotation(), EPS); //normalize wird benutzt in Angleberechnungen
+        float rototo2 = Jack.getRotation();
+        Jack.turnRight();
+        Jack.update(updateTime*2); //Doppelt zurück drehen um zu schauen ob andere seite genau so funktioniert
+        assertEquals(normalizeAngle(rototo2-updateTime*2*3.5f), Jack.getRotation(), EPS);
+    }
+
+    @Test //T013
+    public void testFlaggeSammeln(){
+        Jack.stepLeft();
+        gameModel.update(updateTime);
+        Jack.update(updateTime);
+        assertEquals(16f,flag.getY(),EPS);
+        assertEquals(16f,Jack.getY(),EPS);
+        assertTrue(Jack.hasFlag()); //Besitzt Jack Flagge?
+        Jack.stepLeft();
+        Jack.update(updateTime);
+        assertEquals(20f, flag.getY(), EPS); //Nimmt er Flagge mit?
+        assertPositionEquals(flag, Jack, EPS); //double check
+    }
+
+    @Test //T015
+    public void testFlaggeAbgeben(){
+        testFlaggeSammeln();
+        assertPositionEquals(15,23,exit,EPS);
+        Jack.stepLeft();
+        Jack.update(updateTime);
+        map.update(updateTime);
+        assertPositionEquals(exit,Jack,EPS); //Jack stoppt nicht im Ziel
+        assertTrue(!Jack.hasFlag()); //Fehler: Jack hat die Flagge nicht abgegeben
+        assertTrue(gameModel.isGameOver()); //Spiel ist Gewonnen (Test wird hier noch raus gelöscht und in System verschoben)
+        assertTrue(gameModel.isGameWon());
     }
 
     static void assertPositionEquals(BoundedItem expected, BoundedItem actual, float eps) {
